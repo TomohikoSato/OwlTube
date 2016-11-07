@@ -1,10 +1,14 @@
 package com.example.tomohiko_sato.mytube.presentation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,6 +36,9 @@ public class SearchResultActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_result);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+		setSupportActionBar(toolbar);
+
 		ListView listView = (ListView) findViewById(R.id.list_view);
 		adapter = new SearchResultListAdapter(this);
 		listView.setAdapter(adapter);
@@ -41,6 +48,25 @@ public class SearchResultActivity extends AppCompatActivity {
 				PlayerActivity.startPlayerActivity(SearchResultActivity.this, adapter.getItem(position).id.videoId);
 			}
 		});
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_main, menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_main_search:
+				startActivity(new Intent(this, SearchActivity.class));
+				return true;
+		}
+
+
+		return false;
 	}
 
 	static class SearchResultListAdapter extends BaseAdapter {

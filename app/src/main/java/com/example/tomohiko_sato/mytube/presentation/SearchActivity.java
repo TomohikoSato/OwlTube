@@ -1,5 +1,6 @@
 package com.example.tomohiko_sato.mytube.presentation;
 
+import android.os.Build;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ public class SearchActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
 	}
 
 	@Override
@@ -28,9 +30,15 @@ public class SearchActivity extends AppCompatActivity {
 		getMenuInflater().inflate(R.menu.menu_search, menu);
 
 		MenuItem item = menu.findItem(R.id.menu_search_search);
-		SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
 
+		SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
 		searchView.setIconifiedByDefault(false);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			item.expandActionView();
+		}
+		searchView.setFocusable(true);
+		searchView.setQuery("dir", true);
+		searchView.requestFocusFromTouch();
 
 		return true;
 	}

@@ -12,18 +12,24 @@
         android:theme="@style/AppTheme">
         <activity android:name=".presentation.SearchResultActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                       android:resource="@xml/searchable"/>
         </activity>
         <activity android:name=".presentation.PlayerActivity">
         </activity>
         <activity
             android:name=".presentation.SearchActivity"
             android:windowSoftInputMode="stateVisible">
-
-
+            <meta-data android:name="android.app.default_searchable"
+                       android:value=".presentation.SearchResultActivity" />
+        </activity>
+        <activity android:name=".presentation.TopActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
     </application>
 

@@ -1,5 +1,7 @@
 package com.example.tomohiko_sato.mytube.presentation;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +28,11 @@ public class SearchActivity extends AppCompatActivity {
 //		getMenuInflater().inflate(R.menu.menu_search, menu);
 		//MenuItem item = menu.findItem(R.id.menu_search_search);
 		SearchView searchView = (SearchView) findViewById(R.id.search_search_view);
+
+		SearchManager searchManager =
+				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		searchView.setSearchableInfo(
+				searchManager.getSearchableInfo(getComponentName()));
 		searchView.setIconifiedByDefault(false);
 /*
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {

@@ -23,11 +23,8 @@ public class SearchActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_search, menu);
-
+//		getMenuInflater().inflate(R.menu.menu_search, menu);
 		//MenuItem item = menu.findItem(R.id.menu_search_search);
-
-
 		SearchView searchView = (SearchView) findViewById(R.id.search_search_view);
 		searchView.setIconifiedByDefault(false);
 /*
@@ -39,10 +36,6 @@ public class SearchActivity extends AppCompatActivity {
 		searchView.setQueryHint("Search Music");
 		searchView.requestFocusFromTouch();
 
-
-
 		return true;
 	}
-
-
 }

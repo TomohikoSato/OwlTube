@@ -1,13 +1,11 @@
 package com.example.tomohiko_sato.mytube.presentation;
 
 import android.os.Build;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.example.tomohiko_sato.mytube.R;
 
@@ -21,24 +19,27 @@ public class SearchActivity extends AppCompatActivity {
 
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_search, menu);
 
-		MenuItem item = menu.findItem(R.id.menu_search_search);
+		//MenuItem item = menu.findItem(R.id.menu_search_search);
 
-		SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+
+		SearchView searchView = (SearchView) findViewById(R.id.search_search_view);
 		searchView.setIconifiedByDefault(false);
+/*
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			item.expandActionView();
+			searchView.expandActionView();
 		}
+*/
 		searchView.setFocusable(true);
-		searchView.setQuery("dir", true);
+		searchView.setQueryHint("Search Music");
 		searchView.requestFocusFromTouch();
+
+
 
 		return true;
 	}

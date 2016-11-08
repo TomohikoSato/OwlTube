@@ -52,7 +52,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_main, menu);
+		//getMenuInflater().inflate(R.menu.menu_main, menu);
 		return true;
 	}
 
@@ -61,7 +61,7 @@ public class SearchResultActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_main_search:
-				startActivity(new Intent(this, SearchActivity.class));
+//				startActivity(new Intent(this, SearchActivity.class));
 				return true;
 		}
 

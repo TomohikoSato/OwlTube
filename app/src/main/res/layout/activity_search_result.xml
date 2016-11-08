@@ -17,7 +17,14 @@
         android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
         android:elevation="8dp"
-        app:theme="@style/AppTheme"/>
+        app:theme="@style/AppTheme">
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/search_search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </android.support.v7.widget.Toolbar>
 
     <ListView
         android:id="@+id/list_view"

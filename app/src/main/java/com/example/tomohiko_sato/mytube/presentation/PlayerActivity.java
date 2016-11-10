@@ -2,7 +2,12 @@ package com.example.tomohiko_sato.mytube.presentation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.config.Key;
@@ -32,8 +37,36 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			throw new IllegalArgumentException("KEY_INTENT_EXTRA_VIDEO_ID must set");
 		}
 
-		playerView = (YouTubePlayerView) findViewById(R.id.youtube_view);
+		playerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 		playerView.initialize(Key.Youtube.API_KEY, this);
+
+		Button external = (Button) findViewById(R.id.button_external);
+		external.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				LayoutInflater layoutInflater = LayoutInflater.from(PlayerActivity.this);
+
+				// 重ね合わせするViewの設定を行う
+				WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+						WindowManager.LayoutParams.WRAP_CONTENT,
+						WindowManager.LayoutParams.WRAP_CONTENT,
+						WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+						WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+						PixelFormat.TRANSLUCENT);
+
+				// WindowManagerを取得する
+				WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+
+				// レイアウトファイルから重ね合わせするViewを作成する
+				View view = layoutInflater.inflate(R.layout.small_player , null);
+				YouTubePlayerView smallPlayerView = (YouTubePlayerView) view.findViewById(R.id.small_youtube_player);
+				smallPlayerView.initialize(Key.Youtube.API_KEY, PlayerActivity.this);
+
+				// Viewを画面上に重ね合わせする
+				wm.addView(view, params);
+
+			}
+		});
 	}
 
 	@Override

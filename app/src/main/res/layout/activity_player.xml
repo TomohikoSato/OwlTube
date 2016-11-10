@@ -12,8 +12,17 @@
     tools:context="com.example.tomohiko_sato.mytube.presentation.PlayerActivity">
 
     <com.google.android.youtube.player.YouTubePlayerView
-        android:id="@+id/youtube_view"
+        android:id="@+id/youtube_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/button_external"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="External"/>
 
 </RelativeLayout>

@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -56,10 +55,20 @@ public class SearchActivity extends AppCompatActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SearchView searchView = (SearchView) findViewById(R.id.search_search_view);
 
+		int searchImgId = getResources().getIdentifier("android:id/search_button", null, null);
+		ImageView v = (ImageView) searchView.findViewById(searchImgId);
+		v.setImageResource(R.drawable.search_white);
+
 		searchView.setIconifiedByDefault(false);
 		searchView.setFocusable(true);
 		searchView.setQueryHint("Search Music");
 		searchView.requestFocusFromTouch();
+
+		int id = searchView.getContext()
+				.getResources()
+				.getIdentifier("android:id/search_src_text", null, null);
+		TextView textView = (TextView) searchView.findViewById(id);
+		///textView.setTextColor(getResources().getColor(whi);
 
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override

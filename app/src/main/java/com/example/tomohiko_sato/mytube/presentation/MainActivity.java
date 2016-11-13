@@ -9,12 +9,15 @@ import android.view.MenuItem;
 
 import com.example.tomohiko_sato.mytube.R;
 
-public class TopActivity extends AppCompatActivity {
+/**
+ * 起動後最初に表示されるメインの画面
+ */
+public class MainActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_top);
+		setContentView(R.layout.activity_main);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
 		setSupportActionBar(toolbar);
 	}

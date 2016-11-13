@@ -5,9 +5,11 @@
               android:layout_height="wrap_content">
 
 
+<!--
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/external_youtube_player"
         android:layout_width="200dp"
         android:layout_height="110dp"/>
+-->
 
 </LinearLayout>

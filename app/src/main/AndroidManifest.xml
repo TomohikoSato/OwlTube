@@ -15,7 +15,7 @@
         </activity>
         <activity android:name=".presentation.PlayerActivity">
         </activity>
-        <activity android:name=".presentation.TopActivity">
+        <activity android:name=".presentation.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

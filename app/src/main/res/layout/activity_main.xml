@@ -6,7 +6,7 @@
     android:id="@+id/activity_top"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.tomohiko_sato.mytube.presentation.TopActivity">
+    tools:context="com.example.tomohiko_sato.mytube.presentation.MainActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
@@ -16,6 +16,6 @@
         android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
         android:elevation="8dp"
-        app:theme="@style/AppTheme"/>
+        app:theme="@style/ToolBarStyle"/>
 
 </RelativeLayout>

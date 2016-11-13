@@ -24,6 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tool_bar"
         android:background="?attr/colorPrimary"
+        app:tabTextColor="@color/tabUnselected"
+        app:tabSelectedTextColor="@color/tabSelected"
         app:theme="@style/TabBarStyle"
         />
 

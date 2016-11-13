@@ -1,10 +1,12 @@
 package com.example.tomohiko_sato.mytube.presentation;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,21 +33,37 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 		Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
 		setSupportActionBar(toolbar);
 
-		LayoutInflater inflater = LayoutInflater.from(this);
-
 		ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
 		viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
 
-		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-		/*
-		View tabItem = inflater.inflate(R.layout.tab_item, null);
-		tabLayout.addTab(tabLayout.newTab().setCustomView(tabItem));
-		tabLayout.addTab(tabLayout.newTab().setCustomView(tabItem));
-		*/
+		final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
 		tabLayout.setupWithViewPager(viewPager);
+		tabLayout.addOnTabSelectedListener(
+				new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
 
-		tabLayout.getTabAt(0).setText("Top").setIcon(R.drawable.top);
+					@Override
+					public void onTabSelected(TabLayout.Tab tab) {
+						super.onTabSelected(tab);
+						int tabIconColor = ContextCompat.getColor(MainActivity.this, R.color.tabSelected);
+						tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+					}
+
+					@Override
+					public void onTabUnselected(TabLayout.Tab tab) {
+						super.onTabUnselected(tab);
+						int tabIconColor = ContextCompat.getColor(MainActivity.this, R.color.tabUnselected);
+						tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+					}
+
+					@Override
+					public void onTabReselected(TabLayout.Tab tab) {
+						super.onTabReselected(tab);
+					}
+				}
+		);
+
+		tabLayout.getTabAt(0).setText("Top").setIcon(R.drawable.top).select();
 		tabLayout.getTabAt(1).setText("Recent").setIcon(R.drawable.recent);
 	}
 

@@ -1,25 +1,19 @@
 package com.example.tomohiko_sato.mytube.presentation;
 
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.presentation.dummy.DummyContent;
-
-import java.util.zip.Inflater;
 
 /**
  * 起動後最初に表示されるメインの画面
@@ -37,8 +31,8 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 		viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
 
 		final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-
 		tabLayout.setupWithViewPager(viewPager);
+/*
 		tabLayout.addOnTabSelectedListener(
 				new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
 
@@ -62,9 +56,10 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 					}
 				}
 		);
+*/
 
-		tabLayout.getTabAt(0).setText("Top").setIcon(R.drawable.top).select();
-		tabLayout.getTabAt(1).setText("Recent").setIcon(R.drawable.recent);
+		tabLayout.getTabAt(0).setText("Top").setIcon(R.drawable.main_tab_top).select();
+		tabLayout.getTabAt(1).setText("Recent").setIcon(R.drawable.main_tab_recent);
 	}
 
 	@Override
@@ -87,19 +82,6 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 		public int getCount() {
 			return 2;
 		}
-
-/*		@Override
-		public CharSequence getPageTitle(int position) {
-
-			switch (position) {
-				case 0:
-					return "hoge";
-				case 1:
-					return "fuga";
-			}
-
-			return null;
-		}*/
 	}
 
 	@Override

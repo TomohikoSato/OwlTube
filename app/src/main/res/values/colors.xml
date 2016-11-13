@@ -5,5 +5,5 @@
     <color name="colorAccent">#9a1f1f</color>
 
     <color name="tabSelected">#ffffff</color>
-    <color name="tabUnselected">#ababab</color>
+    <color name="tabUnselected">#c9c9c9</color>
 </resources>

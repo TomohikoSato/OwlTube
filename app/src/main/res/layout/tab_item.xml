@@ -8,7 +8,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/top"
+        app:srcCompat="@drawable/main_tab_top"
         android:id="@+id/imageView2"/>
     <TextView
         android:layout_width="match_parent"

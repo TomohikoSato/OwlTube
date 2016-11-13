@@ -55,9 +55,11 @@ public class SearchActivity extends AppCompatActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SearchView searchView = (SearchView) findViewById(R.id.search_search_view);
 
+/*
 		int searchImgId = getResources().getIdentifier("android:id/search_button", null, null);
 		ImageView v = (ImageView) searchView.findViewById(searchImgId);
 		v.setImageResource(R.drawable.search_white);
+*/
 
 		searchView.setIconifiedByDefault(false);
 		searchView.setFocusable(true);

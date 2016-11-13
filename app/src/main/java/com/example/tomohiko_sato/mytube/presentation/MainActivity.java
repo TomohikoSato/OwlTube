@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.presentation.dummy.DummyContent;
+import com.example.tomohiko_sato.mytube.presentation.dummy.SettingActivity;
 
 /**
  * 起動後最初に表示されるメインの画面
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 			case R.id.menu_main_search:
 				startActivity(new Intent(this, SearchActivity.class));
 				return true;
-			case R.id.menu_main_search:
+			case R.id.menu_main_setting:
 				startActivity(new Intent(this, SettingActivity.class));
 				return true;
 		}

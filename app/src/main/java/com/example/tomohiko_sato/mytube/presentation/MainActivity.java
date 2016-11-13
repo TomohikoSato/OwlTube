@@ -32,31 +32,6 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 
 		final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		tabLayout.setupWithViewPager(viewPager);
-/*
-		tabLayout.addOnTabSelectedListener(
-				new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
-
-					@Override
-					public void onTabSelected(TabLayout.Tab tab) {
-						super.onTabSelected(tab);
-						int tabIconColor = ContextCompat.getColor(MainActivity.this, R.color.tabSelected);
-						tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
-					}
-
-					@Override
-					public void onTabUnselected(TabLayout.Tab tab) {
-						super.onTabUnselected(tab);
-						int tabIconColor = ContextCompat.getColor(MainActivity.this, R.color.tabUnselected);
-						tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
-					}
-
-					@Override
-					public void onTabReselected(TabLayout.Tab tab) {
-						super.onTabReselected(tab);
-					}
-				}
-		);
-*/
 
 		tabLayout.getTabAt(0).setText("Top").setIcon(R.drawable.main_tab_top).select();
 		tabLayout.getTabAt(1).setText("Recent").setIcon(R.drawable.main_tab_recent);
@@ -95,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 		switch (item.getItemId()) {
 			case R.id.menu_main_search:
 				startActivity(new Intent(this, SearchActivity.class));
+				return true;
+			case R.id.menu_main_search:
+				startActivity(new Intent(this, SettingActivity.class));
 				return true;
 		}
 		return false;

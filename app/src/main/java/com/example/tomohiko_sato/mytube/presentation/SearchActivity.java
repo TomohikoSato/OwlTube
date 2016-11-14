@@ -21,6 +21,7 @@ import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Snippet;
+import com.example.tomohiko_sato.mytube.api.youtube.data.videolist.VideoList;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class SearchActivity extends AppCompatActivity {
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				PlayerActivity.startPlayerActivity(SearchActivity.this, adapter.getItem(position).id.videoId);
+				PlayerActivity.startPlayerActivity(SearchActivity.this, adapter.getItem(position).id);
 			}
 		});
 	}
@@ -71,7 +72,13 @@ public class SearchActivity extends AppCompatActivity {
 					@Override
 					public void onResponse(Call<Search> call, Response<Search> response) {
 						final List<Item> items = response.body().items;
-						adapter.setItems(items);
+
+						final List<SearchResultViewModel> searchResultViewModels = new ArrayList<>();
+						for (Item item : items) {
+							searchResultViewModels.add(new SearchResultViewModel(item.id.videoId, item.snippet.title, item.snippet.channelTitle, null, item.snippet.thumbnails.medium.url));
+						}
+
+						adapter.setViewModels(searchResultViewModels);
 
 						final StringBuilder stringBuilder = new StringBuilder();
 						final String separator = ",";
@@ -81,7 +88,22 @@ public class SearchActivity extends AppCompatActivity {
 								stringBuilder.append(separator);
 							}
 						}
+
 						final String ids = stringBuilder.toString();
+						youtubeRequest.videoListAsync(ids, new Callback<VideoList>() {
+							@Override
+							public void onResponse(Call<VideoList> call, Response<VideoList> response) {
+								for (int i = 0; i < response.body().items.size(); i++) {
+									searchResultViewModels.get(i).viewCount = response.body().items.get(i).statistics.viewCount;
+								}
+
+								adapter.setViewModels(searchResultViewModels);
+							}
+
+							@Override
+							public void onFailure(Call<VideoList> call, Throwable t) {
+							}
+						});
 
 					}
 
@@ -103,8 +125,24 @@ public class SearchActivity extends AppCompatActivity {
 		return true;
 	}
 
-	static class SearchResultListAdapter extends ArrayAdapter<Item> {
-		private List<Item> items = new ArrayList<>();
+	static class SearchResultViewModel {
+		String id;
+		String title;
+		String channelTitle;
+		String viewCount;
+		String thumbnailUrl;
+
+		SearchResultViewModel(String id , String title, String channelTitle, String viewCount, String thumbnailUrl) {
+			this.id = id;
+			this.title = title;
+			this.channelTitle = channelTitle;
+			this.viewCount = viewCount;
+			this.thumbnailUrl = thumbnailUrl;
+		}
+	}
+
+	static class SearchResultListAdapter extends ArrayAdapter<SearchResultViewModel> {
+		private List<SearchResultViewModel> viewModels = new ArrayList<>();
 		private final Context context;
 		private final LayoutInflater inflater;
 
@@ -114,19 +152,19 @@ public class SearchActivity extends AppCompatActivity {
 			this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
 		}
 
-		public void setItems(List<Item> items) {
-			this.items = items;
+		public void setViewModels(List<SearchResultViewModel> viewModels) {
+			this.viewModels = viewModels;
 			notifyDataSetChanged();
 		}
 
 		@Override
 		public int getCount() {
-			return items.size();
+			return viewModels.size();
 		}
 
 		@Override
-		public Item getItem(int position) {
-			return items.get(position);
+		public SearchResultViewModel getItem(int position) {
+			return viewModels.get(position);
 		}
 
 		@Override
@@ -146,11 +184,11 @@ public class SearchActivity extends AppCompatActivity {
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			Snippet snippet = items.get(position).snippet;
-			holder.title.setText(snippet.title);
-			holder.publishedAt.setText(snippet.publishedAt);
-			holder.channelTitle.setText(snippet.channelTitle);
-			Picasso.with(context).load(snippet.thumbnails.medium.url).into(holder.thumbnail);
+			SearchResultViewModel viewModel = viewModels.get(position);
+			holder.title.setText(viewModel.title);
+			holder.viewCount.setText(viewModel.viewCount);
+			holder.channelTitle.setText(viewModel.channelTitle);
+			Picasso.with(context).load(viewModel.thumbnailUrl).into(holder.thumbnail);
 
 			return convertView;
 		}
@@ -158,13 +196,13 @@ public class SearchActivity extends AppCompatActivity {
 		static class ViewHolder {
 			TextView title;
 			TextView channelTitle;
-			TextView publishedAt;
+			TextView viewCount;
 			ImageView thumbnail;
 
-			ViewHolder(TextView title, TextView channelTitle, TextView createdAt, ImageView thumbnail) {
+			ViewHolder(TextView title, TextView channelTitle, TextView viewCount, ImageView thumbnail) {
 				this.title = title;
 				this.channelTitle = channelTitle;
-				this.publishedAt = createdAt;
+				this.viewCount = viewCount;
 				this.thumbnail = thumbnail;
 			}
 		}

@@ -3,6 +3,7 @@ package com.example.tomohiko_sato.mytube.api.youtube;
 import android.util.Log;
 
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
+import com.example.tomohiko_sato.mytube.api.youtube.data.videolist.VideoList;
 
 import java.io.IOException;
 
@@ -27,6 +28,11 @@ public class YoutubeRequest {
 		request = retrofit.create(YoutubeAPI.class);
 	}
 
+	public void searchAsync(String keyword, Callback<Search> callback) {
+		Call<Search> repo = request.search(keyword);
+		repo.enqueue(callback);
+	}
+
 	public Response<Search> searchSync(String keyword) {
 		Log.d(TAG, "keyword: " + keyword);
 
@@ -41,8 +47,8 @@ public class YoutubeRequest {
 		return response;
 	}
 
-	public void searchAsync(String keyword, Callback<Search> callback) {
-		Call<Search> repo = request.search(keyword);
+	public void videoListAsync(String videoIds, Callback<VideoList> callback) {
+		Call<VideoList> repo = request.videoListStatistics(videoIds);
 		repo.enqueue(callback);
 	}
 }

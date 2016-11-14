@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
@@ -26,6 +27,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SearchActivity extends AppCompatActivity {
 	private static final String TAG = SearchActivity.class.getSimpleName();
@@ -64,19 +69,17 @@ public class SearchActivity extends AppCompatActivity {
 			@Override
 			public boolean onQueryTextSubmit(final String query) {
 				final YoutubeRequest youtubeRequest = new YoutubeRequest();
-				final Handler handler = new Handler();
-				new Thread(new Runnable() {
+				youtubeRequest.searchAsync(query, new Callback<Search>() {
 					@Override
-					public void run() {
-						final Search result = youtubeRequest.searchSync(query).body();
-						handler.post(new Runnable() {
-							@Override
-							public void run() {
-								adapter.setItems(result.items);
-							}
-						});
+					public void onResponse(Call<Search> call, Response<Search> response) {
+						adapter.setItems(response.body().items);
 					}
-				}).start();
+					@Override
+					public void onFailure(Call<Search> call, Throwable t) {
+						Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
+					}
+				});
+
 				return false;
 			}
 

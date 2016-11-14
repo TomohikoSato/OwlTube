@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -54,23 +55,10 @@ public class SearchActivity extends AppCompatActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SearchView searchView = (SearchView) findViewById(R.id.search_search_view);
-
-/*
-		int searchImgId = getResources().getIdentifier("android:id/search_button", null, null);
-		ImageView v = (ImageView) searchView.findViewById(searchImgId);
-		v.setImageResource(R.drawable.search_white);
-*/
-
 		searchView.setIconifiedByDefault(false);
 		searchView.setFocusable(true);
 		searchView.setQueryHint("Search Music");
 		searchView.requestFocusFromTouch();
-
-		int id = searchView.getContext()
-				.getResources()
-				.getIdentifier("android:id/search_src_text", null, null);
-		TextView textView = (TextView) searchView.findViewById(id);
-		///textView.setTextColor(getResources().getColor(whi);
 
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
@@ -101,25 +89,13 @@ public class SearchActivity extends AppCompatActivity {
 		return true;
 	}
 
-/*
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.menu_main_search:
-//				startActivity(new Intent(this, SearchActivity.class));
-				return true;
-		}
-
-		return false;
-	}
-*/
-
-	static class SearchResultListAdapter extends BaseAdapter {
-		private List<Item> items = new ArrayList<Item>();
+	static class SearchResultListAdapter extends ArrayAdapter<Item> {
+		private List<Item> items = new ArrayList<>();
 		private final Context context;
 		private final LayoutInflater inflater;
 
 		public SearchResultListAdapter(Context context) {
+			super(context, R.layout.search_result_list_item);
 			this.context = context;
 			this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
 		}
@@ -137,12 +113,6 @@ public class SearchActivity extends AppCompatActivity {
 		@Override
 		public Item getItem(int position) {
 			return items.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			//TODO: 本当はvideoIdを適切にlong化したほうがよさそう
-			return position;
 		}
 
 		@Override
@@ -184,13 +154,5 @@ public class SearchActivity extends AppCompatActivity {
 				this.thumbnail = thumbnail;
 			}
 		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-
-
 	}
 }

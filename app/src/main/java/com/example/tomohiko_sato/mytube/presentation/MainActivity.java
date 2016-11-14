@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.tomohiko_sato.mytube.R;
-import com.example.tomohiko_sato.mytube.presentation.dummy.DummyContent;
+import com.example.tomohiko_sato.mytube.api.youtube.data.Item;
 import com.example.tomohiko_sato.mytube.presentation.dummy.SettingActivity;
 
 /**
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
     }
 
     @Override
-    public void onTopFragmentInteraction(DummyContent.DummyItem item) {
+    public void onTopFragmentInteraction(Item item) {
 
     }
 

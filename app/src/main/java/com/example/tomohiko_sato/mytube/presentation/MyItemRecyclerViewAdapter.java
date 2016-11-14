@@ -8,24 +8,28 @@ import android.widget.TextView;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.presentation.TopFragment.OnTopFragmentInteractionListener;
-import com.example.tomohiko_sato.mytube.presentation.dummy.DummyContent.DummyItem;
-
 import java.util.List;
+import com.example.tomohiko_sato.mytube.api.youtube.data.Item;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Item} and makes a call to the
  * specified {@link OnTopFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnTopFragmentInteractionListener mListener;
+    private List<Item> items;
+    private final OnTopFragmentInteractionListener listener;
 
-    public MyItemRecyclerViewAdapter(List<DummyItem> items, OnTopFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public MyItemRecyclerViewAdapter(List<Item> items, OnTopFragmentInteractionListener listener) {
+        this.items = items;
+        this.listener = listener;
     }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,32 +40,32 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = items.get(position);
+        holder.mIdView.setText(items.get(position).id.videoId);
+        holder.mContentView.setText(items.get(position).kind);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
+                if (null != listener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onTopFragmentInteraction(holder.mItem);
                 }
+                    listener.onTopFragmentInteraction(holder.mItem);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return items.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public Item mItem;
 
         public ViewHolder(View view) {
             super(view);

@@ -2,7 +2,6 @@ package com.example.tomohiko_sato.mytube.presentation;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -128,7 +126,7 @@ public class SearchActivity extends AppCompatActivity {
 			if (convertView.getTag() == null) {
 				TextView title = (TextView) convertView.findViewById(R.id.title);
 				TextView channelTitle = (TextView) convertView.findViewById(R.id.channel_title);
-				TextView createdAt = (TextView) convertView.findViewById(R.id.created_at);
+				TextView createdAt = (TextView) convertView.findViewById(R.id.view_count);
 				ImageView thumbnail = (ImageView) convertView.findViewById(R.id.thumbnail);
 				holder = new ViewHolder(title, channelTitle, createdAt, thumbnail);
 			} else {

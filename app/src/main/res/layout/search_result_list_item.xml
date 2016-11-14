@@ -9,11 +9,11 @@
         android:id="@+id/thumbnail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        app:srcCompat="@mipmap/ic_launcher"
-
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"/>
+
+        android:layout_weight="2"
+        app:srcCompat="@mipmap/ic_launcher"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
@@ -25,23 +25,24 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="タイトル"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textSize="14sp"
+            android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:layout_marginTop="8dp"/>
+            android:text="タイトル"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/channel_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:text="チャンネルタイトル"/>
 
         <TextView
-            android:id="@+id/created_at"
+            android:id="@+id/view_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="何時間前"/>
+            android:text="視聴回数 "/>
     </LinearLayout>
 </LinearLayout>

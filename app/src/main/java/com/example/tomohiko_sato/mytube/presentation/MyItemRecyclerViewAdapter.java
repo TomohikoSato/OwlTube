@@ -8,7 +8,9 @@ import android.widget.TextView;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.presentation.TopFragment.OnTopFragmentInteractionListener;
+
 import java.util.List;
+
 import com.example.tomohiko_sato.mytube.api.youtube.data.Item;
 
 /**
@@ -18,65 +20,65 @@ import com.example.tomohiko_sato.mytube.api.youtube.data.Item;
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private List<Item> items;
-    private final OnTopFragmentInteractionListener listener;
+	private List<Item> items;
+	private final OnTopFragmentInteractionListener listener;
 
-    public MyItemRecyclerViewAdapter(List<Item> items, OnTopFragmentInteractionListener listener) {
-        this.items = items;
-        this.listener = listener;
-    }
+	public MyItemRecyclerViewAdapter(List<Item> items, OnTopFragmentInteractionListener listener) {
+		this.items = items;
+		this.listener = listener;
+	}
 
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
+	public void setItems(List<Item> items) {
+		this.items = items;
+	}
 
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item, parent, false);
-        return new ViewHolder(view);
-    }
+	@Override
+	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		View view = LayoutInflater.from(parent.getContext())
+				.inflate(R.layout.fragment_item, parent, false);
+		return new ViewHolder(view);
+	}
 
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = items.get(position);
-        holder.mIdView.setText(items.get(position).id.videoId);
-        holder.mContentView.setText(items.get(position).kind);
+	@Override
+	public void onBindViewHolder(final ViewHolder holder, int position) {
+		holder.mItem = items.get(position);
+		holder.mIdView.setText(items.get(position).id.videoId);
+		holder.mContentView.setText(items.get(position).kind);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != listener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                }
-                    listener.onTopFragmentInteraction(holder.mItem);
-            }
-        });
-    }
+		holder.mView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (null != listener) {
+					// Notify the active callbacks interface (the activity, if the
+					// fragment is attached to one) that an item has been selected.
+				}
+				listener.onTopFragmentInteraction(holder.mItem);
+			}
+		});
+	}
 
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
+	@Override
+	public int getItemCount() {
+		return items.size();
+	}
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public Item mItem;
+	public class ViewHolder extends RecyclerView.ViewHolder {
+		public final View mView;
+		public final TextView mIdView;
+		public final TextView mContentView;
+		public Item mItem;
 
-        public ViewHolder(View view) {
-            super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
-        }
+		public ViewHolder(View view) {
+			super(view);
+			mView = view;
+			mIdView = (TextView) view.findViewById(R.id.id);
+			mContentView = (TextView) view.findViewById(R.id.content);
+		}
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }
-    }
+		@Override
+		public String toString() {
+			return super.toString() + " '" + mContentView.getText() + "'";
+		}
+	}
 }

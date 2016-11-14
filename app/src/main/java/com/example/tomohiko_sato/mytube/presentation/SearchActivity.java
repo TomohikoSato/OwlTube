@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -71,6 +72,7 @@ public class SearchActivity extends AppCompatActivity {
 				youtubeRequest.searchAsync(query, new Callback<Search>() {
 					@Override
 					public void onResponse(Call<Search> call, Response<Search> response) {
+						Log.e(TAG, "Search onResponse");
 						final List<Item> items = response.body().items;
 
 						final List<SearchResultViewModel> searchResultViewModels = new ArrayList<>();
@@ -83,7 +85,7 @@ public class SearchActivity extends AppCompatActivity {
 						final StringBuilder stringBuilder = new StringBuilder();
 						final String separator = ",";
 						for (Item item : items) {
-							stringBuilder.append(item.id);
+							stringBuilder.append(item.id.videoId);
 							if (!items.equals(items.get(items.size() - 1))) {
 								stringBuilder.append(separator);
 							}
@@ -93,8 +95,10 @@ public class SearchActivity extends AppCompatActivity {
 						youtubeRequest.videoListAsync(ids, new Callback<VideoList>() {
 							@Override
 							public void onResponse(Call<VideoList> call, Response<VideoList> response) {
+								Log.e(TAG, "VideoList onResponse");
 								for (int i = 0; i < response.body().items.size(); i++) {
-									searchResultViewModels.get(i).viewCount = response.body().items.get(i).statistics.viewCount;
+									String viewCount = response.body().items.get(i).statistics.viewCount;
+									searchResultViewModels.get(i).setViewCount(viewCount);
 								}
 
 								adapter.setViewModels(searchResultViewModels);
@@ -102,6 +106,8 @@ public class SearchActivity extends AppCompatActivity {
 
 							@Override
 							public void onFailure(Call<VideoList> call, Throwable t) {
+								Log.e(TAG, "VideoList onFailure " + t);
+								Toast.makeText(SearchActivity.this, "再生回数の取得に失敗しました", Toast.LENGTH_LONG).show();
 							}
 						});
 
@@ -109,6 +115,7 @@ public class SearchActivity extends AppCompatActivity {
 
 					@Override
 					public void onFailure(Call<Search> call, Throwable t) {
+						Log.e(TAG, "Search onFailure " + t);
 						Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
 					}
 				});
@@ -125,6 +132,7 @@ public class SearchActivity extends AppCompatActivity {
 		return true;
 	}
 
+
 	static class SearchResultViewModel {
 		String id;
 		String title;
@@ -136,8 +144,17 @@ public class SearchActivity extends AppCompatActivity {
 			this.id = id;
 			this.title = title;
 			this.channelTitle = channelTitle;
-			this.viewCount = viewCount;
+			this.viewCount = convertDisplayViewCount(viewCount);
 			this.thumbnailUrl = thumbnailUrl;
+		}
+
+		public void setViewCount (String viewCount) {
+			this.viewCount = convertDisplayViewCount(viewCount);
+		}
+
+		String convertDisplayViewCount(String viewCount) {
+			//TODO: 何千回みたいなフォーマットにする
+			return viewCount;
 		}
 	}
 

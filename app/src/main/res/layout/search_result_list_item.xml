@@ -39,10 +39,32 @@
             android:ellipsize="end"
             android:text="チャンネルタイトル"/>
 
-        <TextView
-            android:id="@+id/view_count"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="視聴回数 "/>
+            android:layout_height="32dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/view_count_pre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="視聴回数 "
+                />
+
+            <TextView
+                android:id="@+id/view_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                />
+
+            <TextView
+                android:id="@+id/view_count_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="回"
+                />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

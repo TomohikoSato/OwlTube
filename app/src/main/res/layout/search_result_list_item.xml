@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:layout_height="64dp"
+              android:layout_height="wrap_content"
               android:orientation="horizontal">
 
     <ImageView
@@ -10,11 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="2"
-        app:srcCompat="@mipmap/ic_launcher"/>
+        app:srcCompat="@mipmap/ic_launcher"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
-                  android:layout_height="match_parent"
+                  android:layout_height="88dp"
                   android:layout_weight="1"
                   android:orientation="vertical">
 
@@ -23,7 +26,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="タイトル"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="14sp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:layout_marginTop="8dp"/>
 
         <TextView
             android:id="@+id/channel_title"

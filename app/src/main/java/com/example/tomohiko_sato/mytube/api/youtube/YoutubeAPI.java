@@ -1,6 +1,6 @@
 package com.example.tomohiko_sato.mytube.api.youtube;
 
-import com.example.tomohiko_sato.mytube.api.youtube.data.Search;
+import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

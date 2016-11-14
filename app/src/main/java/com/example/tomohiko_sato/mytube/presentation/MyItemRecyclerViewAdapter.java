@@ -11,7 +11,7 @@ import com.example.tomohiko_sato.mytube.presentation.TopFragment.OnTopFragmentIn
 
 import java.util.List;
 
-import com.example.tomohiko_sato.mytube.api.youtube.data.Item;
+import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Item} and makes a call to the

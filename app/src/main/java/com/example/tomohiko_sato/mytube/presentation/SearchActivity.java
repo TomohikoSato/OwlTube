@@ -18,9 +18,9 @@ import android.widget.Toast;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
-import com.example.tomohiko_sato.mytube.api.youtube.data.Item;
-import com.example.tomohiko_sato.mytube.api.youtube.data.Search;
-import com.example.tomohiko_sato.mytube.api.youtube.data.Snippet;
+import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
+import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
+import com.example.tomohiko_sato.mytube.api.youtube.data.search.Snippet;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class SearchActivity extends AppCompatActivity {
 							}
 						}
 						final String ids = stringBuilder.toString();
-						
+
 					}
 
 					@Override

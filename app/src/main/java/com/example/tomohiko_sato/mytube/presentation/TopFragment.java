@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
-import com.example.tomohiko_sato.mytube.api.youtube.data.Item;
-import com.example.tomohiko_sato.mytube.api.youtube.data.Search;
+import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
+import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
 
 import java.util.ArrayList;
 

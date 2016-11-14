@@ -70,8 +70,21 @@ public class SearchActivity extends AppCompatActivity {
 				youtubeRequest.searchAsync(query, new Callback<Search>() {
 					@Override
 					public void onResponse(Call<Search> call, Response<Search> response) {
-						adapter.setItems(response.body().items);
+						final List<Item> items = response.body().items;
+						adapter.setItems(items);
+
+						final StringBuilder stringBuilder = new StringBuilder();
+						final String separator = ",";
+						for (Item item : items) {
+							stringBuilder.append(item.id);
+							if (!items.equals(items.get(items.size() - 1))) {
+								stringBuilder.append(separator);
+							}
+						}
+						final String ids = stringBuilder.toString();
+						
 					}
+
 					@Override
 					public void onFailure(Call<Search> call, Throwable t) {
 						Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();

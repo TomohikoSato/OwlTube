@@ -2,6 +2,7 @@ package com.example.tomohiko_sato.mytube.presentation;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -78,7 +79,7 @@ public class SearchActivity extends AppCompatActivity {
 
 						final List<SearchResultViewModel> searchResultViewModels = new ArrayList<>();
 						for (Item item : items) {
-							searchResultViewModels.add(new SearchResultViewModel(item.id.videoId, item.snippet.title, item.snippet.channelTitle, null, item.snippet.thumbnails.medium.url));
+							searchResultViewModels.add(new SearchResultViewModel(item.id.videoId, item.snippet.title, item.snippet.channelTitle, item.snippet.thumbnails.medium.url));
 						}
 
 						adapter.setViewModels(searchResultViewModels);
@@ -133,19 +134,18 @@ public class SearchActivity extends AppCompatActivity {
 		return true;
 	}
 
-
-	static class SearchResultViewModel {
-		String id;
-		String title;
-		String channelTitle;
+	@VisibleForTesting
+	public static class SearchResultViewModel {
+		final String id;
+		final String title;
+		final String channelTitle;
 		String viewCount;
-		String thumbnailUrl;
+		final String thumbnailUrl;
 
-		SearchResultViewModel(String id, String title, String channelTitle, String viewCount, String thumbnailUrl) {
+		public SearchResultViewModel(String id, String title, String channelTitle, String thumbnailUrl) {
 			this.id = id;
 			this.title = title;
 			this.channelTitle = channelTitle;
-			this.viewCount = convertDisplayViewCount(viewCount);
 			this.thumbnailUrl = thumbnailUrl;
 		}
 
@@ -153,7 +153,8 @@ public class SearchActivity extends AppCompatActivity {
 			this.viewCount = convertDisplayViewCount(viewCount);
 		}
 
-		String convertDisplayViewCount(String viewCount) {
+		@VisibleForTesting
+		public String convertDisplayViewCount(String viewCount) {
 			if (viewCount == null || viewCount.equals("")) {
 				return "0";
 			}
@@ -164,9 +165,12 @@ public class SearchActivity extends AppCompatActivity {
 				return String.format(Locale.JAPAN, "%.1f万", intViewCount / 10000f);
 			} else if (intViewCount >= 1000) {
 				return String.format(Locale.JAPAN, "%d千", intViewCount / 1000);
+			} else if (intViewCount >= 100) {
+				return String.format(Locale.JAPAN, "%d", intViewCount / 100 * 100);
+			} else if (intViewCount >= 10) {
+				return String.format(Locale.JAPAN, "%d", intViewCount / 10 * 10);
 			}
 
-			//TODO: 何千回みたいなフォーマットにする
 			return viewCount;
 		}
 	}

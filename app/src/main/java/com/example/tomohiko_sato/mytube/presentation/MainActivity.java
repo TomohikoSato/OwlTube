@@ -14,7 +14,6 @@ import android.view.MenuItem;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
-import com.example.tomohiko_sato.mytube.presentation.dummy.SettingActivity;
 
 /**
  * 起動後最初に表示されるメインの画面

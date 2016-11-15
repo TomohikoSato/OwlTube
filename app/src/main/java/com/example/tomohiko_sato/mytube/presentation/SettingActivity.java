@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.mytube.presentation.dummy;
+package com.example.tomohiko_sato.mytube.presentation;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

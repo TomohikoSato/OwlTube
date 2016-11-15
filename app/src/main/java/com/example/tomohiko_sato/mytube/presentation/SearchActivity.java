@@ -1,8 +1,12 @@
 package com.example.tomohiko_sato.mytube.presentation;
 
 import android.content.Context;
+import android.database.MatrixCursor;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -22,7 +26,6 @@ import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
-import com.example.tomohiko_sato.mytube.api.youtube.data.search.Snippet;
 import com.example.tomohiko_sato.mytube.api.youtube.data.videolist.VideoList;
 import com.squareup.picasso.Picasso;
 
@@ -67,6 +70,18 @@ public class SearchActivity extends AppCompatActivity {
 		searchView.setQueryHint("Search Music");
 		searchView.requestFocusFromTouch();
 
+		final String[] from = new String[]{"cityName"};
+		final int[] to = new int[]{android.R.id.text1};
+
+		final SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(this,
+				android.R.layout.simple_list_item_1,
+				null,
+				from,
+				to,
+				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+
+		searchView.setSuggestionsAdapter(simpleCursorAdapter);
+
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(final String query) {
@@ -74,7 +89,7 @@ public class SearchActivity extends AppCompatActivity {
 				youtubeRequest.searchAsync(query, new Callback<Search>() {
 					@Override
 					public void onResponse(Call<Search> call, Response<Search> response) {
-						Log.e(TAG, "Search onResponse");
+						Log.d(TAG, "Search onResponse");
 						final List<Item> items = response.body().items;
 
 						final List<SearchResultViewModel> searchResultViewModels = new ArrayList<>();
@@ -97,7 +112,7 @@ public class SearchActivity extends AppCompatActivity {
 						youtubeRequest.videoListAsync(ids, new Callback<VideoList>() {
 							@Override
 							public void onResponse(Call<VideoList> call, Response<VideoList> response) {
-								Log.e(TAG, "VideoList onResponse");
+								Log.d(TAG, "VideoList onResponse");
 								for (int i = 0; i < response.body().items.size(); i++) {
 									String viewCount = response.body().items.get(i).statistics.viewCount;
 									searchResultViewModels.get(i).setViewCount(viewCount);
@@ -127,11 +142,29 @@ public class SearchActivity extends AppCompatActivity {
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
+				Log.d(TAG, "query text change" + newText);
+				populateAdapter(newText, simpleCursorAdapter);
 				return false;
 			}
 		});
-
 		return true;
+	}
+
+
+	private static final String[] SUGGESTIONS = {
+			"Bauru", "Sao Paulo", "Rio de Janeiro",
+			"Bahia", "Mato Grosso", "Minas Gerais",
+			"Tocantins", "Rio Grande do Sul"
+	};
+
+	// You must implements your logic to get data using OrmLite
+	private void populateAdapter(String query, CursorAdapter hogeadapter) {
+		final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "cityName"});
+		for (int i = 0; i < SUGGESTIONS.length; i++) {
+			if (SUGGESTIONS[i].toLowerCase().startsWith(query.toLowerCase()))
+				c.addRow(new Object[]{i, SUGGESTIONS[i]});
+		}
+		hogeadapter.changeCursor(c);
 	}
 
 	@VisibleForTesting

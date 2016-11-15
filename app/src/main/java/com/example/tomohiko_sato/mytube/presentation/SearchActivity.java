@@ -27,6 +27,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -140,7 +141,7 @@ public class SearchActivity extends AppCompatActivity {
 		String viewCount;
 		String thumbnailUrl;
 
-		SearchResultViewModel(String id , String title, String channelTitle, String viewCount, String thumbnailUrl) {
+		SearchResultViewModel(String id, String title, String channelTitle, String viewCount, String thumbnailUrl) {
 			this.id = id;
 			this.title = title;
 			this.channelTitle = channelTitle;
@@ -148,11 +149,23 @@ public class SearchActivity extends AppCompatActivity {
 			this.thumbnailUrl = thumbnailUrl;
 		}
 
-		public void setViewCount (String viewCount) {
+		void setViewCount(String viewCount) {
 			this.viewCount = convertDisplayViewCount(viewCount);
 		}
 
 		String convertDisplayViewCount(String viewCount) {
+			if (viewCount == null || viewCount.equals("")) {
+				return "0";
+			}
+
+			int intViewCount = Integer.parseInt(viewCount);
+
+			if (intViewCount >= 10000) {
+				return String.format(Locale.JAPAN, "%.1f万", intViewCount / 10000f);
+			} else if (intViewCount >= 1000) {
+				return String.format(Locale.JAPAN, "%d千", intViewCount / 1000);
+			}
+
 			//TODO: 何千回みたいなフォーマットにする
 			return viewCount;
 		}

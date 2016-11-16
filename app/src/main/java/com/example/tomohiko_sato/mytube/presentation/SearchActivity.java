@@ -30,6 +30,7 @@ import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
 import com.example.tomohiko_sato.mytube.api.youtube.data.videolist.VideoList;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -173,7 +174,24 @@ public class SearchActivity extends AppCompatActivity {
 
 	// You must implements your logic to get data using OrmLite
 	private void populateAdapter(String query, CursorAdapter hogeadapter) {
-		googleRequest.fetchSuggestKeywordForYoutube(query, suggestKeywordCallback);
+		/*try {*/
+			//GoogleRequest.SuggestResponse response= new GoogleRequest.SuggestResponse();
+			googleRequest.fetchSuggestKeywordForYoutube(query, new Callback<List<GoogleRequest.RetrofitSuggestKeywordResponse>>() {
+				@Override
+				public void onResponse(Call<List<GoogleRequest.RetrofitSuggestKeywordResponse>> call, Response<List<GoogleRequest.RetrofitSuggestKeywordResponse>> response) {
+					Log.d(TAG, response.raw().toString());
+				}
+
+				@Override
+				public void onFailure(Call<List<GoogleRequest.RetrofitSuggestKeywordResponse>> call, Throwable t) {
+					t.printStackTrace();
+				}
+			});
+/*
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+*/
 
 
 		final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "cityName"});

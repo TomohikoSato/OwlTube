@@ -18,5 +18,5 @@ interface GoogleAPI {
 	 * ds=yt でyoutube向けのsuggestにしている
 	 */
 	@GET("search?client=firefox&ds=yt")
-	Call<List<List<String>>> suggestKeywordForYoutube(@Query("q") String q);
+	Call<List<GoogleRequest.RetrofitSuggestKeywordResponse>> suggestKeywordForYoutube(@Query("q") String q);
 }

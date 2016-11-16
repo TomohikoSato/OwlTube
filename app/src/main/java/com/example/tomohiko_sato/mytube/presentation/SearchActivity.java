@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tomohiko_sato.mytube.R;
+import com.example.tomohiko_sato.mytube.api.google.GoogleRequest;
 import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
@@ -157,8 +158,24 @@ public class SearchActivity extends AppCompatActivity {
 			"Tocantins", "Rio Grande do Sul"
 	};
 
+	private final GoogleRequest googleRequest = new GoogleRequest();
+	private final Callback<List<List<String>>> suggestKeywordCallback = new Callback<List<List<String>>>() {
+		@Override
+		public void onResponse(Call<List<List<String>>> call, Response<List<List<String>>> response) {
+			Log.d(TAG, response.raw().toString());
+		}
+
+		@Override
+		public void onFailure(Call<List<List<String>>> call, Throwable t) {
+			t.printStackTrace();
+		}
+	};
+
 	// You must implements your logic to get data using OrmLite
 	private void populateAdapter(String query, CursorAdapter hogeadapter) {
+		googleRequest.fetchSuggestKeywordForYoutube(query, suggestKeywordCallback);
+
+
 		final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "cityName"});
 		for (int i = 0; i < SUGGESTIONS.length; i++) {
 			if (SUGGESTIONS[i].toLowerCase().startsWith(query.toLowerCase()))

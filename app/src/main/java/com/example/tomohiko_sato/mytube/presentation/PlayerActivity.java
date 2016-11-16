@@ -18,9 +18,11 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 	private static final String KEY_INTENT_EXTRA_VIDEO_ID = "VIDEO_ID";
-	private static final int REQUEST_CODE_RECOVERY_DIALOG = 22;
+	private static final int REQUEST_CODE_PLAYER_RECOVERY_DIALOG = 22;
+	private static final int REQUEST_CODE_EXTERNAL_PLAYER_RECOVERY_DIALOG = 23;
 	private String videoId;
 	private YouTubePlayerView playerView;
+	private YouTubePlayerView externalPlayerView;
 
 	public static void startPlayerActivity(Context context, String videoId) {
 		Intent intent = new Intent(context, PlayerActivity.class);
@@ -58,13 +60,12 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 				WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
 				// レイアウトファイルから重ね合わせするViewを作成する
-				View view = layoutInflater.inflate(R.layout.small_player , null);
-				YouTubePlayerView smallPlayerView = (YouTubePlayerView) view.findViewById(R.id.small_youtube_player);
-				smallPlayerView.initialize(Key.Youtube.API_KEY, PlayerActivity.this);
+				View view = layoutInflater.inflate(R.layout.external_player, null);
+				externalPlayerView = (YouTubePlayerView) view.findViewById(R.id.external_youtube_player);
+				externalPlayerView.initialize(Key.Youtube.API_KEY, PlayerActivity.this);
 
 				// Viewを画面上に重ね合わせする
 				wm.addView(view, params);
-
 			}
 		});
 	}
@@ -77,14 +78,20 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	@Override
 	public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
 		if (errorReason.isUserRecoverableError()) {
-			errorReason.getErrorDialog(this, REQUEST_CODE_RECOVERY_DIALOG);
+			if (provider.equals(playerView)) {
+				errorReason.getErrorDialog(this, REQUEST_CODE_PLAYER_RECOVERY_DIALOG);
+			} else if (provider.equals(externalPlayerView)) {
+				errorReason.getErrorDialog(this, REQUEST_CODE_EXTERNAL_PLAYER_RECOVERY_DIALOG);
+			}
 		}
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == REQUEST_CODE_RECOVERY_DIALOG) {
+		if (requestCode == REQUEST_CODE_PLAYER_RECOVERY_DIALOG) {
 			playerView.initialize(Key.Youtube.API_KEY, this);
+		} else if (requestCode == REQUEST_CODE_EXTERNAL_PLAYER_RECOVERY_DIALOG) {
+			externalPlayerView.initialize(Key.Youtube.API_KEY, this);
 		}
 	}
 }

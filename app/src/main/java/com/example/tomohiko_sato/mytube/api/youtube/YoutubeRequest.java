@@ -47,7 +47,7 @@ public class YoutubeRequest {
 		return response;
 	}
 
-	public void videoListAsync(String videoIds, Callback<VideoList> callback) {
+	public void fetchStatistics(String videoIds, Callback<VideoList> callback) {
 		Call<VideoList> repo = request.videoListStatistics(videoIds);
 		repo.enqueue(callback);
 	}

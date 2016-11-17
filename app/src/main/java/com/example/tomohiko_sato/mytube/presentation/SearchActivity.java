@@ -109,7 +109,7 @@ public class SearchActivity extends AppCompatActivity {
 						}
 
 						final String ids = stringBuilder.toString();
-						youtubeRequest.videoListAsync(ids, new Callback<VideoList>() {
+						youtubeRequest.fetchStatistics(ids, new Callback<VideoList>() {
 							@Override
 							public void onResponse(Call<VideoList> call, Response<VideoList> response) {
 								Log.d(TAG, "VideoList onResponse");

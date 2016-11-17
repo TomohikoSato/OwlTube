@@ -27,7 +27,7 @@ import com.example.tomohiko_sato.mytube.api.google.GoogleRequest;
 import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
-import com.example.tomohiko_sato.mytube.api.youtube.data.videolist.VideoList;
+import com.example.tomohiko_sato.mytube.api.youtube.data.statistics.VideoList;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -111,7 +111,7 @@ public class SearchActivity extends AppCompatActivity {
 						}
 
 						final String ids = stringBuilder.toString();
-						youtubeRequest.videoListAsync(ids, new Callback<VideoList>() {
+						youtubeRequest.fetchStatistics(ids, new Callback<VideoList>() {
 							@Override
 							public void onResponse(Call<VideoList> call, Response<VideoList> response) {
 								Log.d(TAG, "VideoList onResponse");

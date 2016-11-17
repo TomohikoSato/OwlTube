@@ -1,9 +1,12 @@
 package com.example.tomohiko_sato.mytube.presentation;
 
+import android.content.Context;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tomohiko_sato.mytube.R;
@@ -11,7 +14,8 @@ import com.example.tomohiko_sato.mytube.presentation.TopFragment.OnTopFragmentIn
 
 import java.util.List;
 
-import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
+import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Item;
+import com.squareup.picasso.Picasso;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Item} and makes a call to the
@@ -22,10 +26,12 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
 	private List<Item> items;
 	private final OnTopFragmentInteractionListener listener;
+	private Context context;
 
-	public MyItemRecyclerViewAdapter(List<Item> items, OnTopFragmentInteractionListener listener) {
+	public MyItemRecyclerViewAdapter(List<Item> items, OnTopFragmentInteractionListener listener, Context context) {
 		this.items = items;
 		this.listener = listener;
+		this.context = context;
 	}
 
 	public void setItems(List<Item> items) {
@@ -36,17 +42,18 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.fragment_item, parent, false);
+				.inflate(R.layout.search_result_list_item, parent, false);
 		return new ViewHolder(view);
 	}
 
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, int position) {
-		holder.mItem = items.get(position);
-		holder.mIdView.setText(items.get(position).id.videoId);
-		holder.mContentView.setText(items.get(position).kind);
+		holder.title.setText(items.get(position).snippet.title);
+		holder.channelTitle.setText(items.get(position).snippet.channelTitle);
+		holder.viewCount.setText("0");
+		Picasso.with(context).load(items.get(position).snippet.thumbnails.medium.url).into(holder.thumbnail);
 
-		holder.mView.setOnClickListener(new View.OnClickListener() {
+		/*holder.mView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (null != listener) {
@@ -55,7 +62,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 				}
 				listener.onTopFragmentInteraction(holder.mItem);
 			}
-		});
+		});*/
 	}
 
 	@Override
@@ -64,21 +71,17 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 	}
 
 	public class ViewHolder extends RecyclerView.ViewHolder {
-		public final View mView;
-		public final TextView mIdView;
-		public final TextView mContentView;
-		public Item mItem;
+		TextView title;
+		TextView channelTitle;
+		TextView viewCount;
+		ImageView thumbnail;
 
 		public ViewHolder(View view) {
 			super(view);
-			mView = view;
-			mIdView = (TextView) view.findViewById(R.id.id);
-			mContentView = (TextView) view.findViewById(R.id.content);
-		}
-
-		@Override
-		public String toString() {
-			return super.toString() + " '" + mContentView.getText() + "'";
+			title = (TextView) view.findViewById(R.id.title);
+			channelTitle = (TextView) view.findViewById(R.id.channel_title);
+			viewCount = (TextView) view.findViewById(R.id.view_count);
+			thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
 		}
 	}
 }

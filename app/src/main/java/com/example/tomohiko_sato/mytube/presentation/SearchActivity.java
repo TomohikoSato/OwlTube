@@ -296,10 +296,10 @@ public class SearchActivity extends AppCompatActivity {
 		}
 
 		static class ViewHolder {
-			TextView title;
-			TextView channelTitle;
-			TextView viewCount;
-			ImageView thumbnail;
+			final TextView title;
+			final TextView channelTitle;
+			final TextView viewCount;
+			final ImageView thumbnail;
 
 			ViewHolder(TextView title, TextView channelTitle, TextView viewCount, ImageView thumbnail) {
 				this.title = title;

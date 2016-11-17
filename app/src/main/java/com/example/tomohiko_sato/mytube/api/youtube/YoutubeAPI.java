@@ -1,5 +1,6 @@
 package com.example.tomohiko_sato.mytube.api.youtube;
 
+import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Popular;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
 import com.example.tomohiko_sato.mytube.api.youtube.data.statistics.VideoList;
 
@@ -16,6 +17,6 @@ interface YoutubeAPI {
 	@GET("videos?part=statistics&key=" + API_KEY)
 	Call<VideoList> videoListStatistics(@Query("id") String videoIds);
 
-	@GET("videos?part=snippet&chart=mostPopular&regionCode=JP&key=" + API_KEY)
-	Call<VideoList> videoListPopular();
+	@GET("videos?part=snippet&chart=mostPopular&regionCode=JP&maxResults=20&key=" + API_KEY)
+	Call<Popular> videoListPopular();
 }

@@ -6,14 +6,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
-import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
-import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
+import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Item;
+import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Popular;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,7 @@ import retrofit2.Response;
  * interface.
  */
 public class TopFragment extends Fragment {
+    private final static String TAG = TopFragment.class.getSimpleName();
 
     // TODO: Customize parameters
     private int mColumnCount = 1;
@@ -79,26 +81,26 @@ public class TopFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            adapter = new MyItemRecyclerViewAdapter(new ArrayList<Item>(), mListener);
+            adapter = new MyItemRecyclerViewAdapter(new ArrayList<Item>(), mListener, context);
             recyclerView.setAdapter(adapter);
         }
 
-        new YoutubeRequest().searchAsync("dir en grey", new Callback<Search>() {
+        new YoutubeRequest().fetchPopular(new Callback<Popular>() {
             @Override
-            public void onResponse(Call<Search> call, Response<Search> response) {
+            public void onResponse(Call<Popular> call, Response<Popular> response) {
+                Log.d(TAG, "size " + response.body().items.size());
                 adapter.setItems(response.body().items);
                 adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(Call<Search> call, Throwable t) {
+            public void onFailure(Call<Popular> call, Throwable t) {
 
             }
         });
 
         return view;
     }
-
 
     @Override
     public void onAttach(Context context) {

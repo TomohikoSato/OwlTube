@@ -2,6 +2,7 @@ package com.example.tomohiko_sato.mytube.api.youtube;
 
 import android.util.Log;
 
+import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Popular;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
 import com.example.tomohiko_sato.mytube.api.youtube.data.statistics.VideoList;
 
@@ -52,9 +53,8 @@ public class YoutubeRequest {
 		repo.enqueue(callback);
 	}
 
-	public void fetchPopular(String videoIds, Callback<VideoList> callback) {
-		Call<VideoList> repo = request.videoListPopular();
+	public void fetchPopular(Callback<Popular> callback) {
+		Call<Popular> repo = request.videoListPopular();
 		repo.enqueue(callback);
 	}
-
 }

@@ -6,24 +6,16 @@ public class Item {
 	public String etag;
 	public String id;
 	public Snippet snippet;
+	public Statistics statistics;
 
-	/**
-	 * No args constructor for use in serialization
-	 */
 	public Item() {
 	}
 
-	/**
-	 * @param id
-	 * @param etag
-	 * @param snippet
-	 * @param kind
-	 */
-	public Item(String kind, String etag, String id, Snippet snippet) {
+	public Item(String kind, String etag, String id, Snippet snippet, Statistics statistics) {
 		this.kind = kind;
 		this.etag = etag;
 		this.id = id;
 		this.snippet = snippet;
+		this.statistics = statistics;
 	}
-
 }

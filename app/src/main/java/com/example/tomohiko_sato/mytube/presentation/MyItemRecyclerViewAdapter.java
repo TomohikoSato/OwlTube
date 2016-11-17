@@ -13,6 +13,7 @@ import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.presentation.TopFragment.OnTopFragmentInteractionListener;
 
 import java.util.List;
+import java.util.Locale;
 
 import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Item;
 import com.squareup.picasso.Picasso;
@@ -50,7 +51,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 	public void onBindViewHolder(final ViewHolder holder, int position) {
 		holder.title.setText(items.get(position).snippet.title);
 		holder.channelTitle.setText(items.get(position).snippet.channelTitle);
-		holder.viewCount.setText("0");
+		holder.viewCount.setText(convertDisplayViewCount(items.get(position).statistics.viewCount));
 		Picasso.with(context).load(items.get(position).snippet.thumbnails.medium.url).into(holder.thumbnail);
 
 		/*holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +65,28 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 			}
 		});*/
 	}
+
+	//TODO: 検索部分と被ってるのでなんとかする
+	public String convertDisplayViewCount(String viewCount) {
+		if (viewCount == null || viewCount.equals("")) {
+			return "0";
+		}
+
+		int intViewCount = Integer.parseInt(viewCount);
+
+		if (intViewCount >= 10000) {
+			return String.format(Locale.JAPAN, "%.1f万", intViewCount / 10000f);
+		} else if (intViewCount >= 1000) {
+			return String.format(Locale.JAPAN, "%d千", intViewCount / 1000);
+		} else if (intViewCount >= 100) {
+			return String.format(Locale.JAPAN, "%d", intViewCount / 100 * 100);
+		} else if (intViewCount >= 10) {
+			return String.format(Locale.JAPAN, "%d", intViewCount / 10 * 10);
+		}
+
+		return viewCount;
+	}
+
 
 	@Override
 	public int getItemCount() {

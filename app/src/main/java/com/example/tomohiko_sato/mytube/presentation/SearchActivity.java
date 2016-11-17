@@ -26,7 +26,7 @@ import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
-import com.example.tomohiko_sato.mytube.api.youtube.data.videolist.VideoList;
+import com.example.tomohiko_sato.mytube.api.youtube.data.statistics.VideoList;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.mytube.api.youtube.data.videolist;
+package com.example.tomohiko_sato.mytube.api.youtube.data.statistics;
 
 public class Item {
 

@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.mytube.api.youtube.data.videolist;
+package com.example.tomohiko_sato.mytube.api.youtube.data.statistics;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,10 @@
 
-package com.example.tomohiko_sato.mytube.api.youtube.data.top;
+package com.example.tomohiko_sato.mytube.api.youtube.data.popular;
 
 
 
 
-public class High {
+public class Medium {
 
     public String url;
     public Integer width;
@@ -14,7 +14,7 @@ public class High {
      * No args constructor for use in serialization
      * 
      */
-    public High() {
+    public Medium() {
     }
 
     /**
@@ -23,7 +23,7 @@ public class High {
      * @param width
      * @param url
      */
-    public High(String url, Integer width, Integer height) {
+    public Medium(String url, Integer width, Integer height) {
         this.url = url;
         this.width = width;
         this.height = height;

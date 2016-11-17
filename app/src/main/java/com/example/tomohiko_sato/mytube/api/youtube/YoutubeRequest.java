@@ -51,4 +51,10 @@ public class YoutubeRequest {
 		Call<VideoList> repo = request.videoListStatistics(videoIds);
 		repo.enqueue(callback);
 	}
+
+	public void fetchPopular(String videoIds, Callback<VideoList> callback) {
+		Call<VideoList> repo = request.videoListPopular();
+		repo.enqueue(callback);
+	}
+
 }

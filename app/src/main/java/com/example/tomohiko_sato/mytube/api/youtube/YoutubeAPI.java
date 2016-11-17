@@ -15,4 +15,7 @@ interface YoutubeAPI {
 
 	@GET("videos?part=statistics&key=" + API_KEY)
 	Call<VideoList> videoListStatistics(@Query("id") String videoIds);
+
+	@GET("videos?part=snippet&chart=mostPopular&regionCode=JP&key=" + API_KEY)
+	Call<VideoList> videoListPopular();
 }

@@ -1,5 +1,5 @@
 
-package com.example.tomohiko_sato.mytube.api.youtube.data.top;
+package com.example.tomohiko_sato.mytube.api.youtube.data.popular;
 
 
 

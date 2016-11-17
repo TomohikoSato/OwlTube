@@ -1,9 +1,9 @@
-package com.example.tomohiko_sato.mytube.api.youtube.data.top;
+package com.example.tomohiko_sato.mytube.api.youtube.data.popular;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Top {
+public class Popular {
 
 	public String kind;
 	public String etag;
@@ -14,7 +14,7 @@ public class Top {
 	/**
 	 * No args constructor for use in serialization
 	 */
-	public Top() {
+	public Popular() {
 	}
 
 	/**
@@ -24,7 +24,7 @@ public class Top {
 	 * @param nextPageToken
 	 * @param kind
 	 */
-	public Top(String kind, String etag, String nextPageToken, PageInfo pageInfo, List<Item> items) {
+	public Popular(String kind, String etag, String nextPageToken, PageInfo pageInfo, List<Item> items) {
 		this.kind = kind;
 		this.etag = etag;
 		this.nextPageToken = nextPageToken;

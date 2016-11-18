@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,6 +20,7 @@ import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Item;
  * 起動後最初に表示されるメインの画面
  */
 public class MainActivity extends AppCompatActivity implements TopFragment.OnTopFragmentInteractionListener {
+	private final static String TAG = MainActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 
 		@Override
 		public Fragment getItem(int position) {
+			Log.d(TAG, "position: " + position);
 			return TopFragment.newInstance(1);
 		}
 

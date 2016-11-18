@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 		});
 
 		tabLayout.getTabAt(0).setTag("Popular").setIcon(R.drawable.main_tab_top).select();
-		tabLayout.getTabAt(1).setTag("Recent").setIcon(R.drawable.main_tab_recent);
+		tabLayout.getTabAt(1).setTag("Recently Watched").setIcon(R.drawable.main_tab_recent);
 	}
 
 	@Override

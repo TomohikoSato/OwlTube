@@ -1,6 +1,7 @@
 package com.example.tomohiko_sato.mytube.presentation;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,12 +16,13 @@ import android.view.MenuItem;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Item;
+import com.example.tomohiko_sato.mytube.presentation.recentlywatched.RecentlyWatchedFragment;
 import com.example.tomohiko_sato.mytube.presentation.top.TopFragment;
 
 /**
  * 起動後最初に表示されるメインの画面
  */
-public class MainActivity extends AppCompatActivity implements TopFragment.OnTopFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements TopFragment.OnTopFragmentInteractionListener, RecentlyWatchedFragment.OnRecentlyWatchedFragmentInteractionListener {
 	private final static String TAG = MainActivity.class.getSimpleName();
 
 	@Override
@@ -61,6 +63,11 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 		PlayerActivity.startPlayerActivity(this, item.id);
 	}
 
+	@Override
+	public void onRecentlyWatchedFragmentInteraction(Uri uri) {
+		Log.d(TAG, "recently watched fragent interaction uri " + uri);
+	}
+
 	static class SectionPagerAdapter extends FragmentPagerAdapter {
 
 		public SectionPagerAdapter(FragmentManager fm) {
@@ -70,7 +77,15 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 		@Override
 		public Fragment getItem(int position) {
 			Log.d(TAG, "position: " + position);
-			return TopFragment.newInstance(1);
+
+			switch (position) {
+				case 0:
+					return TopFragment.newInstance();
+				case 1:
+					return RecentlyWatchedFragment.newInstance();
+				default:
+					throw new IllegalArgumentException("Illegal position: " + position);
+			}
 		}
 
 		@Override

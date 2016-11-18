@@ -84,7 +84,6 @@ public class TopItemAdapter extends RecyclerView.Adapter<TopItemAdapter.ViewHold
 		return viewCount;
 	}
 
-
 	@Override
 	public int getItemCount() {
 		return items.size();

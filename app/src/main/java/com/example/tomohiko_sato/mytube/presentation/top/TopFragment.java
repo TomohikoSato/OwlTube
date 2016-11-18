@@ -3,7 +3,6 @@ package com.example.tomohiko_sato.mytube.presentation.top;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,115 +21,74 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnTopFragmentInteractionListener}
- * interface.
- */
 public class TopFragment extends Fragment {
-    private final static String TAG = TopFragment.class.getSimpleName();
+	private final static String TAG = TopFragment.class.getSimpleName();
+	private OnTopFragmentInteractionListener mListener;
+	TopItemAdapter adapter;
 
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+	public static TopFragment newInstance() {
+		TopFragment fragment = new TopFragment();
+		return fragment;
+	}
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
+	public TopFragment() {
+	}
 
-    private OnTopFragmentInteractionListener mListener;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
 
-    // TODO: Customize parameter initialization
-    public static TopFragment newInstance(int columnCount) {
-        TopFragment fragment = new TopFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_item_list, container, false);
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public TopFragment() {
-    }
+		Context context = recyclerView.getContext();
+		recyclerView.setLayoutManager(new LinearLayoutManager(context));
+		adapter = new TopItemAdapter(new ArrayList<Item>(), mListener, context);
+		recyclerView.setAdapter(adapter);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+		new YoutubeRequest().fetchPopular(new Callback<Popular>() {
+			@Override
+			public void onResponse(Call<Popular> call, Response<Popular> response) {
+				Log.d(TAG, "size " + response.body().items.size());
+				adapter.setItems(response.body().items);
+				adapter.notifyDataSetChanged();
+			}
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+			@Override
+			public void onFailure(Call<Popular> call, Throwable t) {
+			}
+		});
 
-    }
+		return recyclerView;
+	}
 
-    TopItemAdapter adapter;
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		if (context instanceof OnTopFragmentInteractionListener) {
+			mListener = (OnTopFragmentInteractionListener) context;
+		} else {
+			throw new UnsupportedOperationException(context.toString()
+					+ " must implement OnTopFragmentInteractionListener to attached activity");
+		}
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mListener = null;
+	}
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            adapter = new TopItemAdapter(new ArrayList<Item>(), mListener, context);
-            recyclerView.setAdapter(adapter);
-        }
-
-        new YoutubeRequest().fetchPopular(new Callback<Popular>() {
-            @Override
-            public void onResponse(Call<Popular> call, Response<Popular> response) {
-                Log.d(TAG, "size " + response.body().items.size());
-                adapter.setItems(response.body().items);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<Popular> call, Throwable t) {
-
-            }
-        });
-
-        return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnTopFragmentInteractionListener) {
-            mListener = (OnTopFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnTopFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnTopFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onTopFragmentInteraction(Item item);
-    }
+	/**
+	 * This interface must be implemented by activities that contain this
+	 * fragment to allow an interaction in this fragment to be communicated
+	 * to the activity and potentially other fragments contained in that
+	 * activity.
+	 */
+	public interface OnTopFragmentInteractionListener {
+		void onTopFragmentInteraction(Item item);
+	}
 }

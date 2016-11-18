@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 	}
 
 	@Override
-	public void onRecentlyWatchedFragmentInteraction(Uri uri) {
-		Log.d(TAG, "recently watched fragent interaction uri " + uri);
+	public void onRecentlyWatchedFragmentInteraction(String videoId) {
+
 	}
 
 	static class SectionPagerAdapter extends FragmentPagerAdapter {

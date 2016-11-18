@@ -1,10 +1,22 @@
 package com.example.tomohiko_sato.mytube.presentation.recentlywatched;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.ArraySet;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+
+import com.example.tomohiko_sato.mytube.R;
+import com.example.tomohiko_sato.mytube.config.AppConst;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A simple {@link ListFragment} subclass.
@@ -28,6 +40,7 @@ public class RecentlyWatchedFragment extends ListFragment {
 		return fragment;
 	}
 
+
 /*
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,6 +48,16 @@ public class RecentlyWatchedFragment extends ListFragment {
 		return inflater.inflate(R.layout.fragment_recently_watched, container, false);
 	}
 */
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				listener.onRecentlyWatchedFragmentInteraction("some videoid");
+			}
+		});
+	}
 
 	@Override
 	public void onAttach(Context context) {
@@ -46,15 +69,16 @@ public class RecentlyWatchedFragment extends ListFragment {
 		super.onAttach(context);
 		// DBへデータ取りに行く
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, Data);
+		SharedPreferences recentlyWatchedSP = context.getSharedPreferences(AppConst.Pref.NAME_RECENTLY_WATCHED, 0);
+		HashSet<String> set = new HashSet<String>();
+		set.add("Im_u7DwWo0w");
+		Set<String> videoIds = recentlyWatchedSP.getStringSet(AppConst.Pref.KEY_RECENTLY_WATCHED, set);
+
+		ArrayList<String> list = new ArrayList<>();
+		list.addAll(videoIds);
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, list);
 		setListAdapter(adapter);
 		listener = (OnRecentlyWatchedFragmentInteractionListener) context;
-		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				listener.onRecentlyWatchedFragmentInteraction("some videoid");
-			}
-		});
 	}
 
 	@Override

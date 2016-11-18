@@ -20,77 +20,77 @@ import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Item;
  */
 public class MainActivity extends AppCompatActivity implements TopFragment.OnTopFragmentInteractionListener {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+		setSupportActionBar(toolbar);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
+		ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+		viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.setupWithViewPager(viewPager);
+		final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+		tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                getSupportActionBar().setTitle((String) tab.getTag());
-            }
+		tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+			@Override
+			public void onTabSelected(TabLayout.Tab tab) {
+				getSupportActionBar().setTitle((String) tab.getTag());
+			}
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) {
+			}
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                getSupportActionBar().setTitle((String) tab.getTag());
-            }
-        });
+			@Override
+			public void onTabReselected(TabLayout.Tab tab) {
+				getSupportActionBar().setTitle((String) tab.getTag());
+			}
+		});
 
-        tabLayout.getTabAt(0).setTag("Popular").setIcon(R.drawable.main_tab_top).select();
-        tabLayout.getTabAt(1).setTag("Recent").setIcon(R.drawable.main_tab_recent);
-    }
+		tabLayout.getTabAt(0).setTag("Popular").setIcon(R.drawable.main_tab_top).select();
+		tabLayout.getTabAt(1).setTag("Recent").setIcon(R.drawable.main_tab_recent);
+	}
 
-    @Override
-    public void onTopFragmentInteraction(Item item) {
+	@Override
+	public void onTopFragmentInteraction(Item item) {
+		PlayerActivity.startPlayerActivity(this, item.id);
+	}
 
-    }
+	static class SectionPagerAdapter extends FragmentPagerAdapter {
 
-    static class SectionPagerAdapter extends FragmentPagerAdapter {
+		public SectionPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
 
-        public SectionPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+		@Override
+		public Fragment getItem(int position) {
+			return TopFragment.newInstance(1);
+		}
 
-        @Override
-        public Fragment getItem(int position) {
-            return TopFragment.newInstance(1);
-        }
+		@Override
+		public int getCount() {
+			return 2;
+		}
+	}
 
-        @Override
-        public int getCount() {
-            return 2;
-        }
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_main, menu);
+		return true;
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_main_search:
-                startActivity(new Intent(this, SearchActivity.class));
-                return true;
-            case R.id.menu_main_setting:
-                startActivity(new Intent(this, SettingActivity.class));
-                return true;
-        }
-        return false;
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_main_search:
+				startActivity(new Intent(this, SearchActivity.class));
+				return true;
+			case R.id.menu_main_setting:
+				startActivity(new Intent(this, SettingActivity.class));
+				return true;
+		}
+		return false;
+	}
 }

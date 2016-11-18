@@ -49,21 +49,21 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, int position) {
+		holder.item = items.get(position);
 		holder.title.setText(items.get(position).snippet.title);
 		holder.channelTitle.setText(items.get(position).snippet.channelTitle);
 		holder.viewCount.setText(convertDisplayViewCount(items.get(position).statistics.viewCount));
 		Picasso.with(context).load(items.get(position).snippet.thumbnails.medium.url).into(holder.thumbnail);
 
-		/*holder.mView.setOnClickListener(new View.OnClickListener() {
+		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (null != listener) {
-					// Notify the active callbacks interface (the activity, if the
-					// fragment is attached to one) that an item has been selected.
+				if (listener == null || holder.item == null) {
+					return;
 				}
-				listener.onTopFragmentInteraction(holder.mItem);
+				listener.onTopFragmentInteraction(holder.item);
 			}
-		});*/
+		});
 	}
 
 	//TODO: 検索部分と被ってるのでなんとかする
@@ -94,6 +94,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 	}
 
 	public class ViewHolder extends RecyclerView.ViewHolder {
+		Item item;
+		View itemView;
 		TextView title;
 		TextView channelTitle;
 		TextView viewCount;
@@ -101,6 +103,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
 		public ViewHolder(View view) {
 			super(view);
+			this.item = item;
+			itemView = view;
 			title = (TextView) view.findViewById(R.id.title);
 			channelTitle = (TextView) view.findViewById(R.id.channel_title);
 			viewCount = (TextView) view.findViewById(R.id.view_count);

@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.mytube.presentation;
+package com.example.tomohiko_sato.mytube.presentation.top;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -65,7 +65,7 @@ public class TopFragment extends Fragment {
 
     }
 
-    MyItemRecyclerViewAdapter adapter;
+    TopItemAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,7 +81,7 @@ public class TopFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            adapter = new MyItemRecyclerViewAdapter(new ArrayList<Item>(), mListener, context);
+            adapter = new TopItemAdapter(new ArrayList<Item>(), mListener, context);
             recyclerView.setAdapter(adapter);
         }
 

@@ -49,6 +49,7 @@ public class RecentlyWatchedFragment extends Fragment {
 	}
 
 	List<Item> items = new ArrayList<>();
+	RecentlyWatchedRecyclerViewAdapter adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,9 +57,15 @@ public class RecentlyWatchedFragment extends Fragment {
 		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recentlywatched_list, container, false);
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
-		final RecentlyWatchedRecyclerViewAdapter adapter = new RecentlyWatchedRecyclerViewAdapter(items, listener, context);
-		recyclerView.setAdapter(adapter);
 
+		adapter = new RecentlyWatchedRecyclerViewAdapter(items, listener, context);
+		recyclerView.setAdapter(adapter);
+		refreshItem(context);
+
+		return recyclerView;
+	}
+
+	public void refreshItem(Context context) {
 		SharedPreferences recentlyWatchedSP = context.getSharedPreferences(AppConst.Pref.NAME, 0);
 		Set<String> set = recentlyWatchedSP.getStringSet(AppConst.Pref.KEY_RECENTLY_WATCHED, new HashSet<String>());
 
@@ -80,10 +87,7 @@ public class RecentlyWatchedFragment extends Fragment {
 				Log.d(TAG, "onfailure");
 			}
 		});
-
-		return recyclerView;
 	}
-
 
 	@Override
 	public void onAttach(Context context) {

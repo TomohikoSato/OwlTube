@@ -62,9 +62,9 @@ public class RecentlyWatchedFragment extends Fragment {
 		recyclerView.setAdapter(adapter);
 
 		SharedPreferences recentlyWatchedSP = context.getSharedPreferences(AppConst.Pref.NAME_RECENTLY_WATCHED, 0);
-		HashSet<String> set = new HashSet<String>();
+		HashSet<String> set = new HashSet<>();
 		set.add("Im_u7DwWo0w");
-		set.add("hogehoge");
+		set.add("a9n_4d64dUw");
 
 		final ArrayList<String> videoIdList = new ArrayList<>();
 		videoIdList.addAll(set);

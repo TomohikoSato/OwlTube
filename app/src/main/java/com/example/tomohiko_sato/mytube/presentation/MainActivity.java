@@ -15,9 +15,7 @@ import android.view.MenuItem;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Item;
-import com.example.tomohiko_sato.mytube.presentation.recentlywatched.OldRecentlyWatchedFragment;
 import com.example.tomohiko_sato.mytube.presentation.recentlywatched.RecentlyWatchedFragment;
-import com.example.tomohiko_sato.mytube.presentation.recentlywatched.dummy.DummyContent;
 import com.example.tomohiko_sato.mytube.presentation.top.TopFragment;
 
 /**

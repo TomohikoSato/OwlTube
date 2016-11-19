@@ -15,14 +15,11 @@ import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Item;
 import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Popular;
-import com.example.tomohiko_sato.mytube.api.youtube.data.statistics.VideoList;
 import com.example.tomohiko_sato.mytube.config.AppConst;
-import com.example.tomohiko_sato.mytube.presentation.recentlywatched.dummy.DummyContent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;

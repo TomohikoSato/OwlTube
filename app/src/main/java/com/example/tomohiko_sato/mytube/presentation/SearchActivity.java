@@ -28,6 +28,7 @@ import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
 import com.example.tomohiko_sato.mytube.api.youtube.data.statistics.VideoList;
+import com.example.tomohiko_sato.mytube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -218,28 +219,7 @@ public class SearchActivity extends AppCompatActivity {
 		}
 
 		void setViewCount(String viewCount) {
-			this.viewCount = convertDisplayViewCount(viewCount);
-		}
-
-		@VisibleForTesting
-		public String convertDisplayViewCount(String viewCount) {
-			if (viewCount == null || viewCount.equals("")) {
-				return "0";
-			}
-
-			int intViewCount = Integer.parseInt(viewCount);
-
-			if (intViewCount >= 10000) {
-				return String.format(Locale.JAPAN, "%.1f万", intViewCount / 10000f);
-			} else if (intViewCount >= 1000) {
-				return String.format(Locale.JAPAN, "%d千", intViewCount / 1000);
-			} else if (intViewCount >= 100) {
-				return String.format(Locale.JAPAN, "%d", intViewCount / 100 * 100);
-			} else if (intViewCount >= 10) {
-				return String.format(Locale.JAPAN, "%d", intViewCount / 10 * 10);
-			}
-
-			return viewCount;
+			this.viewCount = StringUtil.convertDisplayViewCount(viewCount);
 		}
 	}
 

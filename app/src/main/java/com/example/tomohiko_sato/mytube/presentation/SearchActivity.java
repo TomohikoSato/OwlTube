@@ -31,10 +31,8 @@ import com.example.tomohiko_sato.mytube.api.youtube.data.statistics.VideoList;
 import com.example.tomohiko_sato.mytube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -229,7 +227,7 @@ public class SearchActivity extends AppCompatActivity {
 		private final LayoutInflater inflater;
 
 		public SearchResultListAdapter(Context context) {
-			super(context, R.layout.search_result_list_item);
+			super(context, R.layout.video_list_item);
 			this.context = context;
 			this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
 		}
@@ -252,7 +250,7 @@ public class SearchActivity extends AppCompatActivity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.search_result_list_item, parent, false);
+				convertView = inflater.inflate(R.layout.video_list_item, parent, false);
 			}
 
 			ViewHolder holder;

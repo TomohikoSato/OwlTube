@@ -14,7 +14,6 @@ import com.example.tomohiko_sato.mytube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.Locale;
 
 public class RecentlyWatchedRecyclerViewAdapter extends RecyclerView.Adapter<RecentlyWatchedRecyclerViewAdapter.ViewHolder> {
 
@@ -31,7 +30,7 @@ public class RecentlyWatchedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.search_result_list_item, parent, false);
+				.inflate(R.layout.video_list_item, parent, false);
 		return new ViewHolder(view);
 	}
 

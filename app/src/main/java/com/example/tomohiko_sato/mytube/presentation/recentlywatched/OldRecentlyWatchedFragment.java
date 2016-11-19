@@ -75,7 +75,7 @@ public class OldRecentlyWatchedFragment extends ListFragment {
 
 		ArrayList<String> list = new ArrayList<>();
 		list.addAll(videoIds);
-		ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.search_result_list_item, R.id.channel_title, list);
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.video_list_item, R.id.channel_title, list);
 
 		setListAdapter(adapter);
 		listener = (OnRecentlyWatchedFragmentInteractionListener) context;

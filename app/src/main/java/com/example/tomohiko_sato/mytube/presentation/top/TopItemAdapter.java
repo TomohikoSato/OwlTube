@@ -15,7 +15,6 @@ import com.example.tomohiko_sato.mytube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Item} and makes a call to the
@@ -40,7 +39,7 @@ public class TopItemAdapter extends RecyclerView.Adapter<TopItemAdapter.ViewHold
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.search_result_list_item, parent, false);
+				.inflate(R.layout.video_list_item, parent, false);
 		return new ViewHolder(view);
 	}
 

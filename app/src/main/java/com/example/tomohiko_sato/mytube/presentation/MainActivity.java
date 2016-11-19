@@ -1,14 +1,13 @@
 package com.example.tomohiko_sato.mytube.presentation;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,7 +15,9 @@ import android.view.MenuItem;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Item;
+import com.example.tomohiko_sato.mytube.presentation.recentlywatched.OldRecentlyWatchedFragment;
 import com.example.tomohiko_sato.mytube.presentation.recentlywatched.RecentlyWatchedFragment;
+import com.example.tomohiko_sato.mytube.presentation.recentlywatched.dummy.DummyContent;
 import com.example.tomohiko_sato.mytube.presentation.top.TopFragment;
 
 /**

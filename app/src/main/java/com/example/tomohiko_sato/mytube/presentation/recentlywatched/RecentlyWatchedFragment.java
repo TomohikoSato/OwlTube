@@ -3,82 +3,98 @@ package com.example.tomohiko_sato.mytube.presentation.recentlywatched;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.util.ArraySet;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import com.example.tomohiko_sato.mytube.R;
+import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
+import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Item;
+import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Popular;
+import com.example.tomohiko_sato.mytube.api.youtube.data.statistics.VideoList;
 import com.example.tomohiko_sato.mytube.config.AppConst;
+import com.example.tomohiko_sato.mytube.presentation.recentlywatched.dummy.DummyContent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-/**
- * A simple {@link ListFragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnRecentlyWatchedFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RecentlyWatchedFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class RecentlyWatchedFragment extends ListFragment {
-	public static final String[] Data = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+/**
+ * A fragment representing a list of Items.
+ * <p/>
+ * Activities containing this fragment MUST implement the {@link OnRecentlyWatchedFragmentInteractionListener}
+ * interface.
+ */
+public class RecentlyWatchedFragment extends Fragment {
+	private static final String TAG = RecentlyWatchedFragment.class.getSimpleName();
 	private OnRecentlyWatchedFragmentInteractionListener listener;
 
 	public RecentlyWatchedFragment() {
-		// Required empty public constructor
 	}
 
 	public static RecentlyWatchedFragment newInstance() {
-		RecentlyWatchedFragment fragment = new RecentlyWatchedFragment();
-		return fragment;
+		return new RecentlyWatchedFragment();
 	}
 
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
 
-/*
+	List<Item> items = new ArrayList<>();
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_recently_watched, container, false);
-	}
-*/
-
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				listener.onRecentlyWatchedFragmentInteraction("some videoid");
-			}
-		});
-	}
-
-	@Override
-	public void onAttach(Context context) {
-		if (!(context instanceof OnRecentlyWatchedFragmentInteractionListener)) {
-			throw new UnsupportedOperationException(context.toString()
-					+ " must implement OnTopFragmentInteractionListener to attached activity");
-		}
-
-		super.onAttach(context);
-		// DBへデータ取りに行く
+		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recentlywatched_list, container, false);
+		Context context = recyclerView.getContext();
+		recyclerView.setLayoutManager(new LinearLayoutManager(context));
+		final RecentlyWatchedRecyclerViewAdapter adapter = new RecentlyWatchedRecyclerViewAdapter(items, listener, context);
+		recyclerView.setAdapter(adapter);
 
 		SharedPreferences recentlyWatchedSP = context.getSharedPreferences(AppConst.Pref.NAME_RECENTLY_WATCHED, 0);
 		HashSet<String> set = new HashSet<String>();
 		set.add("Im_u7DwWo0w");
-		Set<String> videoIds = recentlyWatchedSP.getStringSet(AppConst.Pref.KEY_RECENTLY_WATCHED, set);
+		set.add("hogehoge");
 
-		ArrayList<String> list = new ArrayList<>();
-		list.addAll(videoIds);
-		ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, list);
-		setListAdapter(adapter);
-		listener = (OnRecentlyWatchedFragmentInteractionListener) context;
+		final ArrayList<String> videoIdList = new ArrayList<>();
+		videoIdList.addAll(set);
+		new YoutubeRequest().fetch(videoIdList, new Callback<Popular>() {
+			@Override
+			public void onResponse(Call<Popular> call, Response<Popular> response) {
+				Log.d(TAG, "onresponse");
+				items.addAll(response.body().items);
+				adapter.notifyDataSetChanged();
+			}
+
+			@Override
+			public void onFailure(Call<Popular> call, Throwable t) {
+				Log.d(TAG, "onfailure");
+			}
+		});
+
+		return recyclerView;
+	}
+
+
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		if (context instanceof OnRecentlyWatchedFragmentInteractionListener) {
+			listener = (OnRecentlyWatchedFragmentInteractionListener) context;
+		} else {
+			throw new UnsupportedOperationException(context.toString()
+					+ " must implement OnRecentlyWatchedFragmentInteractionListener");
+		}
 	}
 
 	@Override
@@ -92,6 +108,10 @@ public class RecentlyWatchedFragment extends ListFragment {
 	 * fragment to allow an interaction in this fragment to be communicated
 	 * to the activity and potentially other fragments contained in that
 	 * activity.
+	 * <p/>
+	 * See the Android Training lesson <a href=
+	 * "http://developer.android.com/training/basics/fragments/communicating.html"
+	 * >Communicating with Other Fragments</a> for more information.
 	 */
 	public interface OnRecentlyWatchedFragmentInteractionListener {
 		void onRecentlyWatchedFragmentInteraction(String videoId);

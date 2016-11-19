@@ -3,10 +3,12 @@ package com.example.tomohiko_sato.mytube.api.youtube;
 import android.util.Log;
 
 import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Popular;
+import com.example.tomohiko_sato.mytube.api.youtube.data.search.Item;
 import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
 import com.example.tomohiko_sato.mytube.api.youtube.data.statistics.VideoList;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,6 +52,32 @@ public class YoutubeRequest {
 
 	public void fetchStatistics(String videoIds, Callback<VideoList> callback) {
 		Call<VideoList> repo = request.videoListStatistics(videoIds);
+		repo.enqueue(callback);
+	}
+
+	public void fetchStatistics(List<String> videoIds, Callback<VideoList> callback) {
+		final StringBuilder sb = new StringBuilder();
+		final String separator = ",";
+		for (String videoId : videoIds) {
+			sb.append(videoId).append(separator);
+		}
+
+		sb.deleteCharAt(sb.length() - 1);
+
+		Call<VideoList> repo = request.videoListStatistics(sb.toString());
+		repo.enqueue(callback);
+	}
+
+	public void fetch(List<String> videoIds, Callback<Popular> callback) {
+		final StringBuilder sb = new StringBuilder();
+		final String separator = ",";
+		for (String videoId : videoIds) {
+			sb.append(videoId).append(separator);
+		}
+
+		sb.deleteCharAt(sb.length() - 1);
+
+		Call<Popular> repo = request.videoListByIds(sb.toString());
 		repo.enqueue(callback);
 	}
 

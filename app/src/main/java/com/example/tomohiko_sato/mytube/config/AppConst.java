@@ -6,7 +6,7 @@ package com.example.tomohiko_sato.mytube.config;
 public class AppConst {
 
 	public class Pref {
-		public static final String NAME_RECENTLY_WATCHED = "NameRecentlyWatchedVideoId";
+		public static final String NAME = "Name";
 		public static final String KEY_RECENTLY_WATCHED = "KeyRecentlyWatchedVideoId";
 	}
 }

@@ -2,6 +2,7 @@ package com.example.tomohiko_sato.mytube.presentation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,14 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.example.tomohiko_sato.mytube.R;
+import com.example.tomohiko_sato.mytube.config.AppConst;
 import com.example.tomohiko_sato.mytube.config.Key;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 	private static final String KEY_INTENT_EXTRA_VIDEO_ID = "VIDEO_ID";
@@ -31,6 +38,13 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	public static void startPlayerActivity(Context context, String videoId) {
 		Intent intent = new Intent(context, PlayerActivity.class);
 		intent.putExtra(KEY_INTENT_EXTRA_VIDEO_ID, videoId);
+		SharedPreferences sp = context.getSharedPreferences(AppConst.Pref.NAME, MODE_PRIVATE);
+		Set<String> set = sp.getStringSet(AppConst.Pref.KEY_RECENTLY_WATCHED, new HashSet<String>());
+		List<String> list = new ArrayList<>();
+		list.addAll(set);
+		list.add(videoId);
+		sp.edit().putStringSet(AppConst.Pref.KEY_RECENTLY_WATCHED, new HashSet(list)).apply();
+
 		context.startActivity(intent);
 	}
 

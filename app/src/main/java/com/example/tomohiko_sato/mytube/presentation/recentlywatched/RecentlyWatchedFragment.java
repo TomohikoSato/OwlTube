@@ -20,6 +20,7 @@ import com.example.tomohiko_sato.mytube.config.AppConst;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,8 +59,9 @@ public class RecentlyWatchedFragment extends Fragment {
 		final RecentlyWatchedRecyclerViewAdapter adapter = new RecentlyWatchedRecyclerViewAdapter(items, listener, context);
 		recyclerView.setAdapter(adapter);
 
-		SharedPreferences recentlyWatchedSP = context.getSharedPreferences(AppConst.Pref.NAME_RECENTLY_WATCHED, 0);
-		HashSet<String> set = new HashSet<>();
+		SharedPreferences recentlyWatchedSP = context.getSharedPreferences(AppConst.Pref.NAME, 0);
+		Set<String> set = recentlyWatchedSP.getStringSet(AppConst.Pref.KEY_RECENTLY_WATCHED, new HashSet<String>());
+
 		set.add("Im_u7DwWo0w");
 		set.add("a9n_4d64dUw");
 

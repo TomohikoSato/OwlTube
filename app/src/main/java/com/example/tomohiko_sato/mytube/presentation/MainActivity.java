@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 
 	@Override
 	public void onRecentlyWatchedFragmentInteraction(String videoId) {
-
+		PlayerActivity.startPlayerActivity(this, videoId);
 	}
 
 	static class SectionPagerAdapter extends FragmentPagerAdapter {

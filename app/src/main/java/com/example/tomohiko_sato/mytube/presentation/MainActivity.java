@@ -10,12 +10,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.api.youtube.data.popular.Item;
 import com.example.tomohiko_sato.mytube.presentation.recentlywatched.RecentlyWatchedFragment;
+import com.example.tomohiko_sato.mytube.presentation.recentlywatched.RecentlyWatchedRecyclerViewAdapter;
 import com.example.tomohiko_sato.mytube.presentation.top.TopFragment;
 
 /**
@@ -23,6 +27,7 @@ import com.example.tomohiko_sato.mytube.presentation.top.TopFragment;
  */
 public class MainActivity extends AppCompatActivity implements TopFragment.OnTopFragmentInteractionListener, RecentlyWatchedFragment.OnRecentlyWatchedFragmentInteractionListener {
 	private final static String TAG = MainActivity.class.getSimpleName();
+	SectionPagerAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +37,25 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 		setSupportActionBar(toolbar);
 
 		ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-		viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
+		adapter = new SectionPagerAdapter(getSupportFragmentManager());
+		viewPager.setAdapter(adapter);
+		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+			}
+
+			@Override
+			public void onPageSelected(int position) {
+				if (position == 1) {
+					RecentlyWatchedFragment fragment = ((RecentlyWatchedFragment) adapter.getRegisteredFragment(position));
+					fragment.refreshItem(MainActivity.this);
+				}
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+			}
+		});
 
 		final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		tabLayout.setupWithViewPager(viewPager);
@@ -68,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 	}
 
 	static class SectionPagerAdapter extends FragmentPagerAdapter {
+		SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
 
 		public SectionPagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -90,6 +114,23 @@ public class MainActivity extends AppCompatActivity implements TopFragment.OnTop
 		@Override
 		public int getCount() {
 			return 2;
+		}
+
+		@Override
+		public Object instantiateItem(ViewGroup container, int position) {
+			Fragment fragment = (Fragment) super.instantiateItem(container, position);
+			registeredFragments.put(position, fragment);
+			return fragment;
+		}
+
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			registeredFragments.remove(position);
+			super.destroyItem(container, position, object);
+		}
+
+		public Fragment getRegisteredFragment(int position) {
+			return registeredFragments.get(position);
 		}
 	}
 

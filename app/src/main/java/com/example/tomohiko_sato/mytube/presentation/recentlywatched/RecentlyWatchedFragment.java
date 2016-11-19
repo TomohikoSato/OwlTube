@@ -69,15 +69,13 @@ public class RecentlyWatchedFragment extends Fragment {
 		SharedPreferences recentlyWatchedSP = context.getSharedPreferences(AppConst.Pref.NAME, 0);
 		Set<String> set = recentlyWatchedSP.getStringSet(AppConst.Pref.KEY_RECENTLY_WATCHED, new HashSet<String>());
 
-		set.add("Im_u7DwWo0w");
-		set.add("a9n_4d64dUw");
-
 		final ArrayList<String> videoIdList = new ArrayList<>();
 		videoIdList.addAll(set);
 		new YoutubeRequest().fetch(videoIdList, new Callback<Popular>() {
 			@Override
 			public void onResponse(Call<Popular> call, Response<Popular> response) {
 				Log.d(TAG, "onresponse");
+				items.clear();
 				items.addAll(response.body().items);
 				adapter.notifyDataSetChanged();
 			}

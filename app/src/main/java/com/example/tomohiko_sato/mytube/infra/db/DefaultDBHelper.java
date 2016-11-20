@@ -35,7 +35,7 @@ public class DefaultDBHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
 
-	private String readSql(@RawRes int rawResource) {
+	public String readSql(@RawRes int rawResource) {
 		BufferedReader br = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(rawResource)));
 		StringBuilder sb = new StringBuilder();
 

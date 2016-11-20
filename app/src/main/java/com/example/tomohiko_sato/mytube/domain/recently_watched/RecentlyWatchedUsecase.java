@@ -23,7 +23,7 @@ public class RecentlyWatchedUseCase {
 	}
 
 	public void fetchRecentlyWatched(RecentlyWatchedDao.Callback<List<VideoItem>> callback) {
-		this.recentlyWatchedDao.selectOrderByRecentlyCreated(20, callback);
+		this.recentlyWatchedDao.selectAllOrderByRecentlyCreated(20, callback);
 
 /*		SharedPreferences recentlyWatchedSP = context.getSharedPreferences(AppConst.Pref.NAME, 0);
 		Set<String> set = recentlyWatchedSP.getStringSet(AppConst.Pref.KEY_RECENTLY_WATCHED, new HashSet<String>());

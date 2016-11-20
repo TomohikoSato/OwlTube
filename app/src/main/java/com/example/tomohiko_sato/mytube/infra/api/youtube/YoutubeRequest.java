@@ -3,7 +3,6 @@ package com.example.tomohiko_sato.mytube.infra.api.youtube;
 import android.util.Log;
 
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Popular;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Item;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Search;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.statistics.VideoList;
 
@@ -15,29 +14,27 @@ import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class YoutubeRequest {
 	private final static String TAG = YoutubeRequest.class.getSimpleName();
 
-	private final YoutubeAPI request;
+	private final YoutubeAPI api;
 
 	@Inject
-	public YoutubeRequest(Retrofit retrofit) {
-		request = retrofit.create(YoutubeAPI.class);
+	public YoutubeRequest(YoutubeAPI api) {
+		this.api = api;
 	}
 
 	public void searchAsync(String keyword, Callback<Search> callback) {
-		Call<Search> repo = request.search(keyword);
+		Call<Search> repo = api.search(keyword);
 		repo.enqueue(callback);
 	}
 
 	public Response<Search> searchSync(String keyword) {
 		Log.d(TAG, "keyword: " + keyword);
 
-		Call<Search> searchRequest = request.search(keyword);
+		Call<Search> searchRequest = api.search(keyword);
 		Response<Search> response = null;
 		try {
 			response = searchRequest.execute();
@@ -49,7 +46,7 @@ public class YoutubeRequest {
 	}
 
 	public void fetchStatistics(String videoIds, Callback<VideoList> callback) {
-		Call<VideoList> repo = request.videoListStatistics(videoIds);
+		Call<VideoList> repo = api.videoListStatistics(videoIds);
 		repo.enqueue(callback);
 	}
 
@@ -62,7 +59,7 @@ public class YoutubeRequest {
 
 		sb.deleteCharAt(sb.length() - 1);
 
-		Call<VideoList> repo = request.videoListStatistics(sb.toString());
+		Call<VideoList> repo = api.videoListStatistics(sb.toString());
 		repo.enqueue(callback);
 	}
 
@@ -75,12 +72,12 @@ public class YoutubeRequest {
 
 		sb.deleteCharAt(sb.length() - 1);
 
-		Call<Popular> repo = request.videoListByIds(sb.toString());
+		Call<Popular> repo = api.videoListByIds(sb.toString());
 		repo.enqueue(callback);
 	}
 
 	public void fetchPopular(Callback<Popular> callback) {
-		Call<Popular> repo = request.videoListPopular();
+		Call<Popular> repo = api.videoListPopular();
 		repo.enqueue(callback);
 	}
 }

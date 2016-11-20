@@ -14,7 +14,6 @@ import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.di.DaggerSampleComponent;
 import com.example.tomohiko_sato.mytube.di.SampleModule;
 import com.example.tomohiko_sato.mytube.domain.popular.PopularUseCase;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Item;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Popular;
 

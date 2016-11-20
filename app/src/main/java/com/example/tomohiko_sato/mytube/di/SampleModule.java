@@ -3,6 +3,7 @@ package com.example.tomohiko_sato.mytube.di;
 import android.content.Context;
 
 import com.example.tomohiko_sato.mytube.domain.popular.PopularUseCase;
+import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeAPI;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 
 import dagger.Module;
@@ -29,8 +30,8 @@ public class SampleModule {
 	}
 
 	@Provides
-	YoutubeRequest provideYoutubeRequest (Retrofit retrofit) {
-		return new YoutubeRequest(retrofit);
+	YoutubeRequest provideYoutubeRequest (YoutubeAPI api) {
+		return new YoutubeRequest(api);
 	}
 
 	@Provides
@@ -39,5 +40,10 @@ public class SampleModule {
 				.baseUrl("https://www.googleapis.com/youtube/v3/")
 				.addConverterFactory(GsonConverterFactory.create())
 				.build();
+	}
+
+	@Provides
+	YoutubeAPI provideYoutubeAPI(Retrofit retrofit) {
+		return retrofit.create(YoutubeAPI.class);
 	}
 }

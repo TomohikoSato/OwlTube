@@ -1,6 +1,5 @@
 package com.example.tomohiko_sato.mytube.domain.search;
 
-import com.example.tomohiko_sato.mytube.config.Key;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Search;
 

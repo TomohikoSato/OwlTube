@@ -16,8 +16,8 @@ import javax.inject.Inject;
 import retrofit2.Callback;
 
 public class RecentlyWatchedUseCase {
-	YoutubeRequest youtubeRequest;
-	Context context;
+	private final YoutubeRequest youtubeRequest;
+	private final Context context;
 
 	@Inject
 	RecentlyWatchedUseCase(YoutubeRequest youtubeRequest, Context context) {

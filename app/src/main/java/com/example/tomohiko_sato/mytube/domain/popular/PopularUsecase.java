@@ -1,13 +1,12 @@
 package com.example.tomohiko_sato.mytube.domain.popular;
 
-import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Item;
+import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
+import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Popular;
 
-import java.util.ArrayList;
-import java.util.List;
+import retrofit2.Callback;
 
 public class PopularUseCase {
-
-	public List<Item> fetchPopular() {
-		return new ArrayList<Item>();
+	public void fetchPopular(Callback<Popular> callback) {
+		new YoutubeRequest().fetchPopular(callback);
 	}
 }

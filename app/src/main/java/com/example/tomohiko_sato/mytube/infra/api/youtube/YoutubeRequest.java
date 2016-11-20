@@ -10,6 +10,8 @@ import com.example.tomohiko_sato.mytube.infra.api.youtube.data.statistics.VideoL
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,12 +24,8 @@ public class YoutubeRequest {
 
 	private final YoutubeAPI request;
 
-	public YoutubeRequest() {
-		Retrofit retrofit = new Retrofit.Builder()
-				.baseUrl("https://www.googleapis.com/youtube/v3/")
-				.addConverterFactory(GsonConverterFactory.create())
-				.build();
-
+	@Inject
+	public YoutubeRequest(Retrofit retrofit) {
 		request = retrofit.create(YoutubeAPI.class);
 	}
 

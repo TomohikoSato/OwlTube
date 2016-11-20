@@ -23,6 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tomohiko_sato.mytube.R;
+import com.example.tomohiko_sato.mytube.di.DaggerSampleComponent;
+import com.example.tomohiko_sato.mytube.di.SampleModule;
+import com.example.tomohiko_sato.mytube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.mytube.infra.api.google.GoogleRequest;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Item;
@@ -35,6 +38,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,6 +49,12 @@ public class SearchActivity extends AppCompatActivity {
 
 	private SearchResultListAdapter adapter;
 
+	@Inject
+	SearchUseCase searchUC;
+
+	@Inject
+	YoutubeRequest youtubeRequest;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,6 +62,9 @@ public class SearchActivity extends AppCompatActivity {
 		Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+		DaggerSampleComponent.builder().sampleModule(new SampleModule(this)).build().inject(this);
+
 
 		ListView listView = (ListView) findViewById(R.id.list_view);
 		adapter = new SearchResultListAdapter(this);
@@ -87,8 +101,8 @@ public class SearchActivity extends AppCompatActivity {
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(final String query) {
-				final YoutubeRequest youtubeRequest = new YoutubeRequest();
-				youtubeRequest.searchAsync(query, new Callback<Search>() {
+
+				searchUC.search(query, new Callback<Search>() {
 					@Override
 					public void onResponse(Call<Search> call, Response<Search> response) {
 						Log.d(TAG, "Search onResponse");
@@ -129,7 +143,6 @@ public class SearchActivity extends AppCompatActivity {
 								Toast.makeText(SearchActivity.this, "再生回数の取得に失敗しました", Toast.LENGTH_LONG).show();
 							}
 						});
-
 					}
 
 					@Override

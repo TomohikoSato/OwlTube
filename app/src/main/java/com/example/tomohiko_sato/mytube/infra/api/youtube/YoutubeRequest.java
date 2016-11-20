@@ -18,7 +18,6 @@ import retrofit2.Response;
 
 public class YoutubeRequest {
 	private final static String TAG = YoutubeRequest.class.getSimpleName();
-
 	private final YoutubeAPI api;
 
 	@Inject

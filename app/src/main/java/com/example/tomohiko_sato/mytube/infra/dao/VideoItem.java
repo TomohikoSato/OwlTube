@@ -1,5 +1,8 @@
 package com.example.tomohiko_sato.mytube.infra.dao;
 
+/**
+ * {@link RecentlyWatchedDao で永続化するときに使うデータクラス}
+ */
 public class VideoItem {
 	String videoId;
 	String title;

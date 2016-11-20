@@ -5,6 +5,9 @@ import android.content.Context;
 import com.example.tomohiko_sato.mytube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeAPI;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
+import com.example.tomohiko_sato.mytube.infra.dao.RecentlyWatchedDao;
+import com.example.tomohiko_sato.mytube.infra.dao.RecentlyWatchedDaoImpl;
+import com.example.tomohiko_sato.mytube.infra.db.DefaultDBHelper;
 
 import dagger.Module;
 import dagger.Provides;
@@ -45,5 +48,15 @@ public class SampleModule {
 	@Provides
 	YoutubeAPI provideYoutubeAPI(Retrofit retrofit) {
 		return retrofit.create(YoutubeAPI.class);
+	}
+
+	@Provides
+	RecentlyWatchedDao provideRecentlyWatchedDao(DefaultDBHelper helper) {
+		return new RecentlyWatchedDaoImpl(helper);
+	}
+
+	@Provides
+	DefaultDBHelper provideDefaultDBHelper () {
+		return new DefaultDBHelper();
 	}
 }

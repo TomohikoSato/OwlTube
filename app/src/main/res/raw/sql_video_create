@@ -1,0 +1,1 @@
+CREATE TABLE video (videoId PRIMARY KEY NOT NULL TEXT, title NOT NULL TEXT, channelTitle NOT NULL TEXT, viewCount TEXT, thumbnailUrl NOT NULL TEXT, createdAt NOT NULL INTEGER, updatedAt NOT NULL INTEGER)

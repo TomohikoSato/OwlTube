@@ -56,7 +56,7 @@ public class SampleModule {
 	}
 
 	@Provides
-	DefaultDBHelper provideDefaultDBHelper () {
-		return new DefaultDBHelper();
+	DefaultDBHelper provideDefaultDBHelper (Context contxt) {
+		return new DefaultDBHelper(context);
 	}
 }

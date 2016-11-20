@@ -1,0 +1,1 @@
+SELECT * FROM Video ORDER BY updatedAt DESC LIMIT ?;

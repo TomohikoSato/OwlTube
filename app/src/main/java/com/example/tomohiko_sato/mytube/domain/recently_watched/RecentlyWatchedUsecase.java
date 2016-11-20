@@ -3,7 +3,6 @@ package com.example.tomohiko_sato.mytube.domain.recently_watched;
 import android.content.Context;
 
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Popular;
 import com.example.tomohiko_sato.mytube.infra.dao.RecentlyWatchedDao;
 import com.example.tomohiko_sato.mytube.infra.dao.VideoItem;
 

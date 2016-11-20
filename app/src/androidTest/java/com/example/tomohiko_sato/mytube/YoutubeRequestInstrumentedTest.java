@@ -3,8 +3,8 @@ package com.example.tomohiko_sato.mytube;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
-import com.example.tomohiko_sato.mytube.api.youtube.YoutubeRequest;
-import com.example.tomohiko_sato.mytube.api.youtube.data.search.Search;
+import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
+import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Search;
 
 import junit.framework.Assert;
 

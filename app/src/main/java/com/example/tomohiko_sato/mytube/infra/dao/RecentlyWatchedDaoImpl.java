@@ -33,9 +33,9 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	public List<VideoItem> selectAllOrderByRecentlyCreated(int limit) {
 		List<VideoItem> list = new ArrayList<>();
 		try (SQLiteDatabase db = helper.getReadableDatabase();
-			 Cursor c = db.rawQuery(helper.readSql(R.raw.sql_video_select_all), new String[]{Integer.toString(limit)})) {
-			c.moveToFirst();
-			while (c.moveToNext()) {
+			 Cursor c = db.rawQuery(helper.readSql(R.raw.sql_video_select_all), new String[]{String.valueOf(limit)})) {
+
+			for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 				list.add(new VideoItem(c.getString(COLUMN_VIDEO_ID),
 						c.getString(COLUMN_TITLE),
 						c.getString(COLUMN_CHANNEL_TITLE),
@@ -64,7 +64,7 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 		VideoItem item = null;
 		try (SQLiteDatabase db = helper.getReadableDatabase();
 			 Cursor c = db.rawQuery(helper.readSql(R.raw.sql_video_select_by_video_id), new String[]{videoId})) {
-			if (c.getCount() == 1) {
+			if (c.moveToFirst()) {
 				item = new VideoItem(c.getString(COLUMN_VIDEO_ID),
 						c.getString(COLUMN_TITLE),
 						c.getString(COLUMN_CHANNEL_TITLE),
@@ -80,8 +80,8 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	 * @throws android.database.SQLException
 	 */
 	private void update(VideoItem item) {
-		try (SQLiteDatabase db = helper.getWritableDatabase()) {
-			SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_video_update));
+		try (SQLiteDatabase db = helper.getWritableDatabase();
+			 SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_video_update))) {
 			stmt.bindString(1, item.title);
 			stmt.bindString(2, item.channelTitle);
 			stmt.bindString(3, item.viewCount);
@@ -96,8 +96,8 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	 * @throws android.database.SQLException
 	 */
 	private void insert(VideoItem item) {
-		try (SQLiteDatabase db = helper.getWritableDatabase()) {
-			SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_video_insert));
+		try (SQLiteDatabase db = helper.getWritableDatabase();
+			 SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_video_insert))) {
 			stmt.bindString(1, item.videoId);
 			stmt.bindString(2, item.title);
 			stmt.bindString(3, item.channelTitle);
@@ -105,7 +105,6 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 			stmt.bindString(5, item.thumbnailUrl);
 			stmt.bindLong(6, System.currentTimeMillis() / 1000L);
 			stmt.bindLong(7, System.currentTimeMillis() / 1000L);
-
 			stmt.execute();
 		}
 	}

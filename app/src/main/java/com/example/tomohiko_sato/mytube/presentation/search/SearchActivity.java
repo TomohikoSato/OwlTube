@@ -27,6 +27,7 @@ import com.example.tomohiko_sato.mytube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.mytube.domain.util.Callback;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.presentation.player.PlayerActivity;
+import com.example.tomohiko_sato.mytube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -221,7 +222,7 @@ public class SearchActivity extends AppCompatActivity {
 
 			VideoItem viewModel = viewModels.get(position);
 			holder.title.setText(viewModel.title);
-			holder.viewCount.setText(viewModel.viewCount);
+			holder.viewCount.setText(StringUtil.convertDisplayViewCount(viewModel.viewCount));
 			holder.channelTitle.setText(viewModel.channelTitle);
 			Picasso.with(context).load(viewModel.thumbnailUrl).into(holder.thumbnail);
 

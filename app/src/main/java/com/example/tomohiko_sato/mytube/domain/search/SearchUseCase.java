@@ -8,6 +8,7 @@ import com.example.tomohiko_sato.mytube.domain.util.Callback;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Search;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class SearchUseCase {
 					}
 				});
 
-				List<String> videoIds = null;
+				List<String> videoIds = new ArrayList<>();
 				for (VideoItem item : items) {
 					videoIds.add(item.videoId);
 				}

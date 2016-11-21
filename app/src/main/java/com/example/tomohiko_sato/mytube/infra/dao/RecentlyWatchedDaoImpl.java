@@ -82,12 +82,12 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	private void update(VideoItem item) {
 		try (SQLiteDatabase db = helper.getWritableDatabase()) {
 			SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_video_update));
-			stmt.bindString(0, item.title);
-			stmt.bindString(1, item.channelTitle);
-			stmt.bindString(2, item.viewCount);
-			stmt.bindString(3, item.thumbnailUrl);
-			stmt.bindLong(4, System.currentTimeMillis() / 1000L);
-			stmt.bindString(5, item.videoId);
+			stmt.bindString(1, item.title);
+			stmt.bindString(2, item.channelTitle);
+			stmt.bindString(3, item.viewCount);
+			stmt.bindString(4, item.thumbnailUrl);
+			stmt.bindLong(5, System.currentTimeMillis() / 1000L);
+			stmt.bindString(6, item.videoId);
 			stmt.execute();
 		}
 	}
@@ -98,13 +98,13 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	private void insert(VideoItem item) {
 		try (SQLiteDatabase db = helper.getWritableDatabase()) {
 			SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_video_insert));
-			stmt.bindString(0, item.videoId);
-			stmt.bindString(1, item.title);
-			stmt.bindString(2, item.channelTitle);
-			stmt.bindString(3, item.viewCount);
-			stmt.bindString(4, item.thumbnailUrl);
-			stmt.bindLong(5, System.currentTimeMillis() / 1000L);
+			stmt.bindString(1, item.videoId);
+			stmt.bindString(2, item.title);
+			stmt.bindString(3, item.channelTitle);
+			stmt.bindString(4, item.viewCount);
+			stmt.bindString(5, item.thumbnailUrl);
 			stmt.bindLong(6, System.currentTimeMillis() / 1000L);
+			stmt.bindLong(7, System.currentTimeMillis() / 1000L);
 
 			stmt.execute();
 		}

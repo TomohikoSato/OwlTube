@@ -49,7 +49,7 @@ public class RecentlyWatchedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 				if (listener == null || holder.item == null) {
 					return;
 				}
-				listener.onRecentlyWatchedFragmentInteraction(holder.item.videoId);
+				listener.onRecentlyWatchedFragmentInteraction(holder.item);
 			}
 		});
 	}

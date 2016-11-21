@@ -109,6 +109,6 @@ public class RecentlyWatchedFragment extends Fragment {
 	 * >Communicating with Other Fragments</a> for more information.
 	 */
 	public interface OnRecentlyWatchedFragmentInteractionListener {
-		void onRecentlyWatchedFragmentInteraction(String videoId);
+		void onRecentlyWatchedFragmentInteraction(VideoItem item);
 	}
 }

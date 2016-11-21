@@ -83,13 +83,13 @@ public class MainActivity extends AppCompatActivity implements PopularFragment.O
 	}
 
 	@Override
-	public void onRecentlyWatchedFragmentInteraction(String videoId) {
-		PlayerActivity.startPlayerActivity(this, videoId);
+	public void onRecentlyWatchedFragmentInteraction(VideoItem item) {
+		PlayerActivity.startPlayerActivity(this, item);
 	}
 
 	@Override
 	public void onTopFragmentInteraction(VideoItem item) {
-		PlayerActivity.startPlayerActivity(this, item.videoId);
+		PlayerActivity.startPlayerActivity(this, item);
 	}
 
 	static class SectionPagerAdapter extends FragmentPagerAdapter {

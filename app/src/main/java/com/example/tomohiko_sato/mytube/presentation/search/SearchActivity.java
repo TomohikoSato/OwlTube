@@ -2,7 +2,6 @@ package com.example.tomohiko_sato.mytube.presentation.search;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -27,10 +26,7 @@ import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.mytube.domain.util.Callback;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Search;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.data.statistics.VideoList;
 import com.example.tomohiko_sato.mytube.presentation.player.PlayerActivity;
-import com.example.tomohiko_sato.mytube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -66,11 +62,10 @@ public class SearchActivity extends AppCompatActivity {
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				PlayerActivity.startPlayerActivity(SearchActivity.this, adapter.getItem(position).id);
+				PlayerActivity.startPlayerActivity(SearchActivity.this, adapter.getItem(position));
 			}
 		});
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,13 +95,7 @@ public class SearchActivity extends AppCompatActivity {
 					@Override
 					public void onSuccess(List<VideoItem> items) {
 						Log.d(TAG, "Search onSuccess");
-
-						final List<SearchResultViewModel> searchResultViewModels = new ArrayList<>();
-						for (VideoItem item : items) {
-							searchResultViewModels.add(new SearchResultViewModel(item.videoId, item.title, item.channelTitle, item.thumbnailUrl));
-						}
-
-						adapter.setViewModels(searchResultViewModels);
+						adapter.setViewModels(items);
 					}
 
 					@Override
@@ -187,28 +176,8 @@ public class SearchActivity extends AppCompatActivity {
 	}
 */
 
-	@VisibleForTesting
-	public static class SearchResultViewModel {
-		final String id;
-		final String title;
-		final String channelTitle;
-		String viewCount;
-		final String thumbnailUrl;
-
-		public SearchResultViewModel(String id, String title, String channelTitle, String thumbnailUrl) {
-			this.id = id;
-			this.title = title;
-			this.channelTitle = channelTitle;
-			this.thumbnailUrl = thumbnailUrl;
-		}
-
-		void setViewCount(String viewCount) {
-			this.viewCount = StringUtil.convertDisplayViewCount(viewCount);
-		}
-	}
-
-	static class SearchResultListAdapter extends ArrayAdapter<SearchResultViewModel> {
-		private List<SearchResultViewModel> viewModels = new ArrayList<>();
+	static class SearchResultListAdapter extends ArrayAdapter<VideoItem> {
+		private List<VideoItem> viewModels = new ArrayList<>();
 		private final Context context;
 		private final LayoutInflater inflater;
 
@@ -218,7 +187,7 @@ public class SearchActivity extends AppCompatActivity {
 			this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
 		}
 
-		public void setViewModels(List<SearchResultViewModel> viewModels) {
+		public void setViewModels(List<VideoItem> viewModels) {
 			this.viewModels = viewModels;
 			notifyDataSetChanged();
 		}
@@ -229,7 +198,7 @@ public class SearchActivity extends AppCompatActivity {
 		}
 
 		@Override
-		public SearchResultViewModel getItem(int position) {
+		public VideoItem getItem(int position) {
 			return viewModels.get(position);
 		}
 
@@ -250,7 +219,7 @@ public class SearchActivity extends AppCompatActivity {
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			SearchResultViewModel viewModel = viewModels.get(position);
+			VideoItem viewModel = viewModels.get(position);
 			holder.title.setText(viewModel.title);
 			holder.viewCount.setText(viewModel.viewCount);
 			holder.channelTitle.setText(viewModel.channelTitle);

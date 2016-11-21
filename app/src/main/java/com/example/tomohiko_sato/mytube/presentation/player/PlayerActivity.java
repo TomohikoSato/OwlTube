@@ -2,7 +2,6 @@ package com.example.tomohiko_sato.mytube.presentation.player;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,25 +12,20 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.tomohiko_sato.mytube.R;
-import com.example.tomohiko_sato.mytube.config.AppConst;
 import com.example.tomohiko_sato.mytube.config.Key;
 import com.example.tomohiko_sato.mytube.di.DaggerSampleComponent;
 import com.example.tomohiko_sato.mytube.di.SampleModule;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.domain.player.PlayerUseCase;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import javax.inject.Inject;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
-	private static final String KEY_INTENT_EXTRA_VIDEO_ID = "VIDEO_ID";
+	private static final String KEY_INTENT_EXTRA_VIDEO_ITEM = "VIDEO_ITEM";
 	private static final int REQUEST_CODE_PLAYER_RECOVERY_DIALOG = 22;
 	private static final int REQUEST_CODE_EXTERNAL_PLAYER_RECOVERY_DIALOG = 23;
 	private static final String TAG = PlayerActivity.class.getSimpleName();
@@ -42,9 +36,9 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	@Inject
 	PlayerUseCase playerUseCase;
 
-	public static void startPlayerActivity(Context context, String videoId) {
+	public static void startPlayerActivity(Context context, VideoItem item) {
 		Intent intent = new Intent(context, PlayerActivity.class);
-		intent.putExtra(KEY_INTENT_EXTRA_VIDEO_ID, videoId);
+		intent.putExtra(KEY_INTENT_EXTRA_VIDEO_ITEM, item);
 		context.startActivity(intent);
 	}
 
@@ -52,14 +46,15 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		DaggerSampleComponent.builder().sampleModule(new SampleModule(this)).build().inject(this);
-		playerUseCase.addRecentlyWatched(null); //TODO: fix
+
 
 		setContentView(R.layout.activity_player);
-		videoId = getIntent().getStringExtra(KEY_INTENT_EXTRA_VIDEO_ID);
-		if (videoId == null) {
-			throw new IllegalArgumentException("KEY_INTENT_EXTRA_VIDEO_ID must set");
+		VideoItem videoItem = getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO_ITEM);
+		if (videoItem == null) {
+			throw new IllegalArgumentException("KEY_INTENT_EXTRA_VIDEO_ITEM must set");
 		}
-
+		videoId = videoItem.videoId;
+		playerUseCase.addRecentlyWatched(videoItem); //TODO: fix
 
 		playerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 		playerView.initialize(Key.Youtube.API_KEY, this);

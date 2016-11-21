@@ -3,7 +3,6 @@ package com.example.tomohiko_sato.mytube.presentation.search;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.mytube.R;
-import com.example.tomohiko_sato.mytube.presentation.search.dummy.DummyContent;
-import com.example.tomohiko_sato.mytube.presentation.search.dummy.DummyContent.DummyItem;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -21,12 +22,10 @@ import com.example.tomohiko_sato.mytube.presentation.search.dummy.DummyContent.D
  * interface.
  */
 public class SearchResultFragment extends Fragment {
+	private OnSearchResultFragmentInteractionListener listener;
 
-	// TODO: Customize parameter argument names
-	private static final String ARG_COLUMN_COUNT = "column-count";
-	// TODO: Customize parameters
-	private int mColumnCount = 1;
-	private OnSearchResultFragmentInteractionListener mListener;
+	private final static String KEY_VIDEO_ITEMS = "VIDEO_ITEMS";
+	private SearchResultRecyclerViewAdapter adapter;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -35,42 +34,25 @@ public class SearchResultFragment extends Fragment {
 	public SearchResultFragment() {
 	}
 
-	// TODO: Customize parameter initialization
-	@SuppressWarnings("unused")
-	public static SearchResultFragment newInstance(int columnCount) {
+	public static SearchResultFragment newInstance(List<VideoItem> items) {
 		SearchResultFragment fragment = new SearchResultFragment();
-		Bundle args = new Bundle();
-		args.putInt(ARG_COLUMN_COUNT, columnCount);
-		fragment.setArguments(args);
+		Bundle bundle = new Bundle();
+		bundle.putParcelableArrayList(KEY_VIDEO_ITEMS, new ArrayList(items));
+		fragment.setArguments(bundle);
 		return fragment;
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		if (getArguments() != null) {
-			mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_searchresult_list, container, false);
+		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_searchresult_list, container, false);
+		Context context = recyclerView.getContext();
+		recyclerView.setLayoutManager(new LinearLayoutManager(context));
+		List<VideoItem> items = getArguments().getParcelableArrayList(KEY_VIDEO_ITEMS);
+		adapter = new SearchResultRecyclerViewAdapter(items, listener, context);
+		recyclerView.setAdapter(adapter);
 
-		// Set the adapter
-		if (view instanceof RecyclerView) {
-			Context context = view.getContext();
-			RecyclerView recyclerView = (RecyclerView) view;
-			if (mColumnCount <= 1) {
-				recyclerView.setLayoutManager(new LinearLayoutManager(context));
-			} else {
-				recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-			}
-			recyclerView.setAdapter(new SearchResultRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-		}
-		return view;
+		return recyclerView;
 	}
 
 
@@ -78,9 +60,9 @@ public class SearchResultFragment extends Fragment {
 	public void onAttach(Context context) {
 		super.onAttach(context);
 		if (context instanceof OnSearchResultFragmentInteractionListener) {
-			mListener = (OnSearchResultFragmentInteractionListener) context;
+			listener = (OnSearchResultFragmentInteractionListener) context;
 		} else {
-			throw new RuntimeException(context.toString()
+			throw new UnsupportedOperationException(context.toString()
 					+ " must implement OnListFragmentInteractionListener");
 		}
 	}
@@ -88,7 +70,11 @@ public class SearchResultFragment extends Fragment {
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		mListener = null;
+		listener = null;
+	}
+
+	public void setVideoItems(List<VideoItem> videoItems) {
+		adapter.setItems(videoItems);
 	}
 
 	/**
@@ -103,6 +89,6 @@ public class SearchResultFragment extends Fragment {
 	 */
 	public interface OnSearchResultFragmentInteractionListener {
 		// TODO: Update argument type and name
-		void onSearchResultFragmentInteraction(DummyItem item);
+		void onSearchResultFragmentInteraction(VideoItem item);
 	}
 }

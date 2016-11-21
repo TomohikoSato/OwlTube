@@ -3,7 +3,7 @@ package com.example.tomohiko_sato.mytube.domain.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class VideoItem implements Parcelable{
+public class VideoItem implements Parcelable {
 	public String videoId;
 	public String title;
 	public String channelTitle;

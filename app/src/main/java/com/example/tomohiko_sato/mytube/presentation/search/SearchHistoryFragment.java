@@ -3,7 +3,6 @@ package com.example.tomohiko_sato.mytube.presentation.search;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.mytube.R;
-import com.example.tomohiko_sato.mytube.presentation.search.dummy.DummyContent;
-import com.example.tomohiko_sato.mytube.presentation.search.dummy.DummyContent.DummyItem;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -22,21 +21,10 @@ import com.example.tomohiko_sato.mytube.presentation.search.dummy.DummyContent.D
  */
 public class SearchHistoryFragment extends Fragment {
 
-	// TODO: Customize parameters
-	private int mColumnCount = 1;
+	private OnSearchHistoryFragmentInteractionListener listener;
 
-	// TODO: Customize parameter argument names
-	private static final String ARG_COLUMN_COUNT = "column-count";
-
-	private OnSearchHistoryFragmentInteractionListener mListener;
-
-	// TODO: Customize parameter initialization
-	@SuppressWarnings("unused")
-	public static SearchHistoryFragment newInstance(int columnCount) {
+	public static SearchHistoryFragment newInstance() {
 		SearchHistoryFragment fragment = new SearchHistoryFragment();
-		Bundle args = new Bundle();
-		args.putInt(ARG_COLUMN_COUNT, columnCount);
-		fragment.setArguments(args);
 		return fragment;
 	}
 
@@ -48,31 +36,20 @@ public class SearchHistoryFragment extends Fragment {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		if (getArguments() != null) {
-			mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-		}
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_searchhistory_list, container, false);
+		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_searchhistory_list, container, false);
 
-		// Set the adapter
-		if (view instanceof RecyclerView) {
-			Context context = view.getContext();
-			RecyclerView recyclerView = (RecyclerView) view;
-			if (mColumnCount <= 1) {
-				recyclerView.setLayoutManager(new LinearLayoutManager(context));
-			} else {
-				recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-			}
-			recyclerView.setAdapter(new SearchHistoryRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-		}
-		return view;
+		Context context = recyclerView.getContext();
+		recyclerView.setLayoutManager(new LinearLayoutManager(context));
+		new ArrayList<String>();
+		recyclerView.setAdapter(new SearchHistoryRecyclerViewAdapter(new ArrayList<String>() {{
+			add("A");
+			add("B");
+			add("C");
+		}}, listener));
+
+		return recyclerView;
 	}
 
 
@@ -80,7 +57,7 @@ public class SearchHistoryFragment extends Fragment {
 	public void onAttach(Context context) {
 		super.onAttach(context);
 		if (context instanceof OnSearchHistoryFragmentInteractionListener) {
-			mListener = (OnSearchHistoryFragmentInteractionListener) context;
+			listener = (OnSearchHistoryFragmentInteractionListener) context;
 		} else {
 			throw new RuntimeException(context.toString()
 					+ " must implement OnSearchHistoryFragmentInteractionListener");
@@ -90,21 +67,10 @@ public class SearchHistoryFragment extends Fragment {
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		mListener = null;
+		listener = null;
 	}
 
-	/**
-	 * This interface must be implemented by activities that contain this
-	 * fragment to allow an interaction in this fragment to be communicated
-	 * to the activity and potentially other fragments contained in that
-	 * activity.
-	 * <p/>
-	 * See the Android Training lesson <a href=
-	 * "http://developer.android.com/training/basics/fragments/communicating.html"
-	 * >Communicating with Other Fragments</a> for more information.
-	 */
 	public interface OnSearchHistoryFragmentInteractionListener {
-		// TODO: Update argument type and name
-		void OnSearchHistoryFragmentInteraction(DummyItem item);
+		void OnSearchHistoryFragmentInteraction(String searchHistory);
 	}
 }

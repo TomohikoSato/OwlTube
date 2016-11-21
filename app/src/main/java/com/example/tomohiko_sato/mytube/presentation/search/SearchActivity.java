@@ -1,26 +1,19 @@
 package com.example.tomohiko_sato.mytube.presentation.search;
 
-import android.app.FragmentManager;
-import android.content.Context;
+
 import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tomohiko_sato.mytube.R;
@@ -31,24 +24,23 @@ import com.example.tomohiko_sato.mytube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.mytube.domain.util.Callback;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.presentation.player.PlayerActivity;
-import com.example.tomohiko_sato.mytube.presentation.util.StringUtil;
-import com.squareup.picasso.Picasso;
+import com.example.tomohiko_sato.mytube.presentation.search.SearchHistoryFragment.OnSearchHistoryFragmentInteractionListener;
+import com.example.tomohiko_sato.mytube.presentation.search.SearchResultFragment.OnSearchResultFragmentInteractionListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements OnSearchResultFragmentInteractionListener, OnSearchHistoryFragmentInteractionListener {
 	private static final String TAG = SearchActivity.class.getSimpleName();
-
-	private SearchResultListAdapter adapter;
 
 	@Inject
 	SearchUseCase searchUC;
 
 	@Inject
 	YoutubeRequest youtubeRequest;
+
+	private SearchResultFragment searchResultFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,19 +52,11 @@ public class SearchActivity extends AppCompatActivity {
 
 		DaggerSampleComponent.builder().sampleModule(new SampleModule(this)).build().inject(this);
 
-
-		FragmentManager manager = getFragmentManager();
-		manager.beginTransaction();
-
-		ListView listView = (ListView) findViewById(R.id.list_view);
-		adapter = new SearchResultListAdapter(this);
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				PlayerActivity.startPlayerActivity(SearchActivity.this, adapter.getItem(position));
-			}
-		});
+		FragmentManager manager = getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		searchResultFragment = new SearchResultFragment();
+		transaction.add(R.id.fragment_container, searchResultFragment);
+		transaction.commit();
 	}
 
 	@Override
@@ -120,7 +104,8 @@ public class SearchActivity extends AppCompatActivity {
 					@Override
 					public void onSuccess(List<VideoItem> items) {
 						Log.d(TAG, "Search onSuccess");
-						adapter.setViewModels(items);
+						searchResultFragment.setVideoItems(items);
+
 					}
 
 					@Override
@@ -156,7 +141,6 @@ public class SearchActivity extends AppCompatActivity {
 	}
 
 	private void populateAdapter(String query, List<String> suggests, CursorAdapter adapter) {
-
 		final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "suggest"});
 		for (int i = 0; i < suggests.size(); i++) {
 			if (suggests.get(i).toLowerCase().startsWith(query.toLowerCase()))
@@ -165,70 +149,25 @@ public class SearchActivity extends AppCompatActivity {
 		adapter.changeCursor(c);
 	}
 
-	static class SearchResultListAdapter extends ArrayAdapter<VideoItem> {
-		private List<VideoItem> viewModels = new ArrayList<>();
-		private final Context context;
-		private final LayoutInflater inflater;
-
-		public SearchResultListAdapter(Context context) {
-			super(context, R.layout.video_list_item);
-			this.context = context;
-			this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-		}
-
-		public void setViewModels(List<VideoItem> viewModels) {
-			this.viewModels = viewModels;
-			notifyDataSetChanged();
-		}
-
-		@Override
-		public int getCount() {
-			return viewModels.size();
-		}
-
-		@Override
-		public VideoItem getItem(int position) {
-			return viewModels.get(position);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.video_list_item, parent, false);
+	@Override
+	public void OnSearchHistoryFragmentInteraction(String searchHistory) {
+		searchUC.search(searchHistory, new Callback<List<VideoItem>>() {
+			@Override
+			public void onSuccess(List<VideoItem> items) {
+				Log.d(TAG, "Search onSuccess");
+				searchResultFragment.setVideoItems(items);
 			}
 
-			ViewHolder holder;
-			if (convertView.getTag() == null) {
-				TextView title = (TextView) convertView.findViewById(R.id.title);
-				TextView channelTitle = (TextView) convertView.findViewById(R.id.channel_title);
-				TextView createdAt = (TextView) convertView.findViewById(R.id.view_count);
-				ImageView thumbnail = (ImageView) convertView.findViewById(R.id.thumbnail);
-				holder = new ViewHolder(title, channelTitle, createdAt, thumbnail);
-			} else {
-				holder = (ViewHolder) convertView.getTag();
+			@Override
+			public void onFailure(Throwable t) {
+				Log.e(TAG, "Search onFailure " + t);
+				Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
 			}
+		});
+	}
 
-			VideoItem viewModel = viewModels.get(position);
-			holder.title.setText(viewModel.title);
-			holder.viewCount.setText(StringUtil.convertDisplayViewCount(viewModel.viewCount));
-			holder.channelTitle.setText(viewModel.channelTitle);
-			Picasso.with(context).load(viewModel.thumbnailUrl).into(holder.thumbnail);
-
-			return convertView;
-		}
-
-		static class ViewHolder {
-			final TextView title;
-			final TextView channelTitle;
-			final TextView viewCount;
-			final ImageView thumbnail;
-
-			ViewHolder(TextView title, TextView channelTitle, TextView viewCount, ImageView thumbnail) {
-				this.title = title;
-				this.channelTitle = channelTitle;
-				this.viewCount = viewCount;
-				this.thumbnail = thumbnail;
-			}
-		}
+	@Override
+	public void onSearchResultFragmentInteraction(VideoItem item) {
+		PlayerActivity.startPlayerActivity(this, item);
 	}
 }

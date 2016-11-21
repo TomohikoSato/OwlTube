@@ -32,6 +32,8 @@ public class SearchUseCase {
 	}
 
 	public void search(final String query, final Callback<List<VideoItem>> callback) {
+		addSearchHistory(query);
+
 		final Handler handler = new Handler();
 		new Thread(new Runnable() {
 			@Override
@@ -82,7 +84,7 @@ public class SearchUseCase {
 		}).start();
 	}
 
-	public void addSearchHistory(final String searchHistory) {
+	private void addSearchHistory(final String searchHistory) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

@@ -1,9 +1,11 @@
 package com.example.tomohiko_sato.mytube.presentation.search;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -57,6 +59,10 @@ public class SearchActivity extends AppCompatActivity {
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 		DaggerSampleComponent.builder().sampleModule(new SampleModule(this)).build().inject(this);
+
+
+		FragmentManager manager = getFragmentManager();
+		manager.beginTransaction();
 
 		ListView listView = (ListView) findViewById(R.id.list_view);
 		adapter = new SearchResultListAdapter(this);

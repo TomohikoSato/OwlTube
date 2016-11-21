@@ -15,6 +15,9 @@ import android.widget.Button;
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.config.AppConst;
 import com.example.tomohiko_sato.mytube.config.Key;
+import com.example.tomohiko_sato.mytube.di.DaggerSampleComponent;
+import com.example.tomohiko_sato.mytube.di.SampleModule;
+import com.example.tomohiko_sato.mytube.domain.player.PlayerUseCase;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -25,6 +28,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 	private static final String KEY_INTENT_EXTRA_VIDEO_ID = "VIDEO_ID";
 	private static final int REQUEST_CODE_PLAYER_RECOVERY_DIALOG = 22;
@@ -34,27 +39,27 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	private YouTubePlayerView playerView;
 	private YouTubePlayerView externalPlayerView;
 
+	@Inject
+	PlayerUseCase playerUseCase;
+
 	public static void startPlayerActivity(Context context, String videoId) {
 		Intent intent = new Intent(context, PlayerActivity.class);
 		intent.putExtra(KEY_INTENT_EXTRA_VIDEO_ID, videoId);
-		SharedPreferences sp = context.getSharedPreferences(AppConst.Pref.NAME, MODE_PRIVATE);
-		Set<String> set = sp.getStringSet(AppConst.Pref.KEY_RECENTLY_WATCHED, new HashSet<String>());
-		List<String> list = new ArrayList<>();
-		list.addAll(set);
-		list.add(videoId);
-		sp.edit().putStringSet(AppConst.Pref.KEY_RECENTLY_WATCHED, new HashSet(list)).apply();
-
 		context.startActivity(intent);
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		DaggerSampleComponent.builder().sampleModule(new SampleModule(this)).build().inject(this);
+		playerUseCase.addRecentlyWatched(null); //TODO: fix
+
 		setContentView(R.layout.activity_player);
 		videoId = getIntent().getStringExtra(KEY_INTENT_EXTRA_VIDEO_ID);
 		if (videoId == null) {
 			throw new IllegalArgumentException("KEY_INTENT_EXTRA_VIDEO_ID must set");
 		}
+
 
 		playerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 		playerView.initialize(Key.Youtube.API_KEY, this);

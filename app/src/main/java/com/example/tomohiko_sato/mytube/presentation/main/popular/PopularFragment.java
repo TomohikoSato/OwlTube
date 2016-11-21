@@ -41,9 +41,15 @@ public class PopularFragment extends Fragment {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		DaggerSampleComponent.builder().sampleModule(new SampleModule(context)).build().inject(this);
+		if (context instanceof OnTopFragmentInteractionListener) {
+			mListener = (OnTopFragmentInteractionListener) context;
+		} else {
+			throw new UnsupportedOperationException(context.toString()
+					+ " must implement OnTopFragmentInteractionListener to attached activity");
+		}
 	}
 
 	@Override
@@ -69,18 +75,6 @@ public class PopularFragment extends Fragment {
 		});
 
 		return recyclerView;
-	}
-
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-		DaggerSampleComponent.builder().sampleModule(new SampleModule(context)).build().inject(this);
-		if (context instanceof OnTopFragmentInteractionListener) {
-			mListener = (OnTopFragmentInteractionListener) context;
-		} else {
-			throw new UnsupportedOperationException(context.toString()
-					+ " must implement OnTopFragmentInteractionListener to attached activity");
-		}
 	}
 
 	@Override

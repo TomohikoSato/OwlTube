@@ -2,6 +2,7 @@ package com.example.tomohiko_sato.mytube.presentation.search;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,11 +36,13 @@ public class SearchResultFragment extends Fragment {
 	public SearchResultFragment() {
 	}
 
-	public static SearchResultFragment newInstance(List<VideoItem> items) {
+	public static SearchResultFragment newInstance(@Nullable List<VideoItem> items) {
 		SearchResultFragment fragment = new SearchResultFragment();
-		Bundle bundle = new Bundle();
-		bundle.putParcelableArrayList(KEY_VIDEO_ITEMS, new ArrayList(items));
-		fragment.setArguments(bundle);
+		if (items != null) {
+			Bundle bundle = new Bundle();
+			bundle.putParcelableArrayList(KEY_VIDEO_ITEMS, new ArrayList(items));
+			fragment.setArguments(bundle);
+		}
 		return fragment;
 	}
 

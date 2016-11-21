@@ -55,11 +55,23 @@ public class SearchActivity extends AppCompatActivity implements OnSearchResultF
 
 		DaggerSampleComponent.builder().sampleModule(new SampleModule(this)).build().inject(this);
 
+		searchHistoryFragment = SearchHistoryFragment.newInstance();
+		searchResultFragment = SearchResultFragment.newInstance(null);
+
+		showSearchHistoryFragment();
+	}
+
+	private void showSearchHistoryFragment() {
 		FragmentManager manager = getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
-		//searchResultFragment = new SearchResultFragment.newInstance(null);
-		searchHistoryFragment = SearchHistoryFragment.newInstance();
-		transaction.add(R.id.fragment_container, searchHistoryFragment);
+		transaction.replace(R.id.fragment_container, searchHistoryFragment);
+		transaction.commit();
+	}
+
+	private void showSearchResultFragment() {
+		FragmentManager manager = getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.replace(R.id.fragment_container, searchResultFragment);
 		transaction.commit();
 	}
 
@@ -103,13 +115,14 @@ public class SearchActivity extends AppCompatActivity implements OnSearchResultF
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(final String query) {
+				showSearchResultFragment();
 
 				searchUC.search(query, new Callback<List<VideoItem>>() {
 					@Override
 					public void onSuccess(List<VideoItem> items) {
 						Log.d(TAG, "Search onSuccess");
-						searchResultFragment.setVideoItems(items);
 
+						searchResultFragment.setVideoItems(items);
 					}
 
 					@Override
@@ -159,6 +172,7 @@ public class SearchActivity extends AppCompatActivity implements OnSearchResultF
 			@Override
 			public void onSuccess(List<VideoItem> items) {
 				Log.d(TAG, "Search onSuccess");
+				showSearchResultFragment();
 				searchResultFragment.setVideoItems(items);
 			}
 

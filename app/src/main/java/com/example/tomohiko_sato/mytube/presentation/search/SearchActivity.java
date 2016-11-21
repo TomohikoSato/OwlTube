@@ -1,7 +1,9 @@
 package com.example.tomohiko_sato.mytube.presentation.search;
 
 import android.content.Context;
+import android.database.MatrixCursor;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -76,7 +78,7 @@ public class SearchActivity extends AppCompatActivity {
 		searchView.setQueryHint("Search Music");
 		searchView.requestFocusFromTouch();
 
-		final String[] from = new String[]{"cityName"};
+		final String[] from = new String[]{"suggest"};
 		final int[] to = new int[]{android.R.id.text1};
 
 		final SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(this,
@@ -110,12 +112,13 @@ public class SearchActivity extends AppCompatActivity {
 			}
 
 			@Override
-			public boolean onQueryTextChange(String newText) {
+			public boolean onQueryTextChange(final String newText) {
 				Log.d(TAG, "query text change" + newText);
 				searchUC.fetchSuggest(newText, new Callback<List<String>>() {
 					@Override
 					public void onSuccess(List<String> suggests) {
 						Log.d(TAG, "Search onSuccess");
+						populateAdapter(newText, suggests, simpleCursorAdapter);
 					}
 
 					@Override
@@ -131,63 +134,15 @@ public class SearchActivity extends AppCompatActivity {
 		return true;
 	}
 
+	private void populateAdapter(String query, List<String> suggests, CursorAdapter adapter) {
 
-	private static final String[] SUGGESTIONS = {
-			"Bauru", "Sao Paulo", "Rio de Janeiro",
-			"Bahia", "Mato Grosso", "Minas Gerais",
-			"Tocantins", "Rio Grande do Sul"
-	};
-
-/*
-	private final GoogleRequest googleRequest = new GoogleRequest();
-	private final Callback<List<List<String>>> suggestKeywordCallback = new Callback<List<List<String>>>() {
-		@Override
-		public void onResponse(Call<List<List<String>>> call, Response<List<List<String>>> response) {
-			Log.d(TAG, response.raw().toString());
+		final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "suggest"});
+		for (int i = 0; i < suggests.size(); i++) {
+			if (suggests.get(i).toLowerCase().startsWith(query.toLowerCase()))
+				c.addRow(new Object[]{i, suggests.get(i)});
 		}
-
-		@Override
-		public void onFailure(Call<List<List<String>>> call, Throwable t) {
-			t.printStackTrace();
-		}
-	};
-*/
-
-	// You must implements your logic to get data using OrmLite
-/*
-	private void populateAdapter(String query, CursorAdapter hogeadapter) {
-		*/
-/*try {*//*
-
-		//GoogleRequest.SuggestResponse response= new GoogleRequest.SuggestResponse();
-		googleRequest.fetchSuggestKeywordForYoutube(query, new Callback<List<GoogleRequest.RetrofitSuggestKeywordResponse>>() {
-			@Override
-			public void onResponse(Call<List<GoogleRequest.RetrofitSuggestKeywordResponse>> call, Response<List<GoogleRequest.RetrofitSuggestKeywordResponse>> response) {
-				Log.d(TAG, response.raw().toString());
-			}
-
-			@Override
-			public void onFailure(Call<List<GoogleRequest.RetrofitSuggestKeywordResponse>> call, Throwable t) {
-				t.printStackTrace();
-			}
-		});
-*/
-/*
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-*/
-
-
-/*
-		final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "cityName"});
-		for (int i = 0; i < SUGGESTIONS.length; i++) {
-			if (SUGGESTIONS[i].toLowerCase().startsWith(query.toLowerCase()))
-				c.addRow(new Object[]{i, SUGGESTIONS[i]});
-		}
-		hogeadapter.changeCursor(c);
+		adapter.changeCursor(c);
 	}
-*/
 
 	static class SearchResultListAdapter extends ArrayAdapter<VideoItem> {
 		private List<VideoItem> viewModels = new ArrayList<>();

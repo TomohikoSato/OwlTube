@@ -28,17 +28,17 @@ public class SampleModule {
 	}
 
 	@Provides
-	Context provideContext () {
+	Context provideContext() {
 		return context;
 	}
 
 	@Provides
-	PopularUseCase providePopularUseCase (YoutubeRequest youtubeRequest) {
+	PopularUseCase providePopularUseCase(YoutubeRequest youtubeRequest) {
 		return new PopularUseCase(youtubeRequest);
 	}
 
 	@Provides
-	RecentlyWatchedUseCase provideRecentlyWatchedUseCase (YoutubeRequest youtubeRequest, Context context, RecentlyWatchedDao recentlyWatchedDao) {
+	RecentlyWatchedUseCase provideRecentlyWatchedUseCase(YoutubeRequest youtubeRequest, Context context, RecentlyWatchedDao recentlyWatchedDao) {
 		return new RecentlyWatchedUseCase(youtubeRequest, context, recentlyWatchedDao);
 	}
 
@@ -48,12 +48,12 @@ public class SampleModule {
 	}
 
 	@Provides
-	SearchUseCase provideSearchUseCase (YoutubeRequest youtubeRequest, GoogleRequest googleRequest) {
-		new SearchUseCase(youtubeRequest, googleRequest);
+	SearchUseCase provideSearchUseCase(YoutubeRequest youtubeRequest, GoogleRequest googleRequest) {
+		return new SearchUseCase(youtubeRequest, googleRequest);
 	}
 
 	@Provides
-	YoutubeRequest provideYoutubeRequest (YoutubeAPI api) {
+	YoutubeRequest provideYoutubeRequest(YoutubeAPI api) {
 		return new YoutubeRequest(api);
 	}
 
@@ -71,7 +71,7 @@ public class SampleModule {
 	}
 
 	@Provides
-	GoogleAPI provideGoogleAPI (Retrofit retrofit) {
+	GoogleAPI provideGoogleAPI(Retrofit retrofit) {
 		return new Retrofit.Builder()
 				.baseUrl("http://suggestqueries.google.com/complete/")
 				.addConverterFactory(GsonConverterFactory.create())
@@ -84,7 +84,7 @@ public class SampleModule {
 	}
 
 	@Provides
-	DefaultDBHelper provideDefaultDBHelper (Context contxt) {
+	DefaultDBHelper provideDefaultDBHelper(Context contxt) {
 		return new DefaultDBHelper(context);
 	}
 }

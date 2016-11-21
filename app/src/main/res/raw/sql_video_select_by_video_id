@@ -1,1 +1,1 @@
-SELECT * FROM Video WHERE videoId = ?;
+SELECT * FROM video WHERE videoId = ?;

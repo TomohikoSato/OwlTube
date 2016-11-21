@@ -1,1 +1,1 @@
-UPDATE video SET title = ?, channelTitle = ?, viewCount = ?, thumbnailUrl = ?, updatedAt = ? where videoId = ?
+UPDATE video SET title = ?, channelTitle = ?, viewCount = ?, thumbnailUrl = ?, updatedAt = ? where videoId = ?;

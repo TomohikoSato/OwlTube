@@ -1,0 +1,1 @@
+SELECT * FROM searchHistory ORDER BY searchAt DESC LIMIT 20;

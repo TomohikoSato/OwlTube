@@ -14,6 +14,7 @@ import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeAPI;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.infra.dao.RecentlyWatchedDao;
 import com.example.tomohiko_sato.mytube.infra.dao.RecentlyWatchedDaoImpl;
+import com.example.tomohiko_sato.mytube.infra.dao.SearchHistoryDaoImpl;
 import com.example.tomohiko_sato.mytube.infra.db.DefaultDBHelper;
 
 import dagger.Module;
@@ -90,5 +91,10 @@ public class SampleModule {
 	@Provides
 	DefaultDBHelper provideDefaultDBHelper(Context contxt) {
 		return new DefaultDBHelper(context);
+	}
+
+	@Provides
+	SearchHistoryDaoImpl provideSearcHistoryDao (DefaultDBHelper helper) {
+		new SearchHistoryDaoImpl(helper);
 	}
 }

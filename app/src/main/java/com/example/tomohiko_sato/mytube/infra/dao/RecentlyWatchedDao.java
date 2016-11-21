@@ -1,5 +1,7 @@
 package com.example.tomohiko_sato.mytube.infra.dao;
 
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
+
 import java.util.List;
 
 public interface RecentlyWatchedDao {

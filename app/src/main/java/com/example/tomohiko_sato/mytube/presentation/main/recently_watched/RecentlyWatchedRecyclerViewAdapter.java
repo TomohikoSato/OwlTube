@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tomohiko_sato.mytube.R;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Item;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
 
@@ -17,11 +17,11 @@ import java.util.List;
 
 public class RecentlyWatchedRecyclerViewAdapter extends RecyclerView.Adapter<RecentlyWatchedRecyclerViewAdapter.ViewHolder> {
 
-	private final List<com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Item> items;
+	private final List<VideoItem> items;
 	private final RecentlyWatchedFragment.OnRecentlyWatchedFragmentInteractionListener listener;
 	private final Context context;
 
-	public RecentlyWatchedRecyclerViewAdapter(List<com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Item> items, RecentlyWatchedFragment.OnRecentlyWatchedFragmentInteractionListener listener, Context context) {
+	public RecentlyWatchedRecyclerViewAdapter(List<VideoItem> items, RecentlyWatchedFragment.OnRecentlyWatchedFragmentInteractionListener listener, Context context) {
 		this.items = items;
 		this.listener = listener;
 		this.context = context;
@@ -36,11 +36,12 @@ public class RecentlyWatchedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, int position) {
-		holder.item = items.get(position);
-		holder.title.setText(items.get(position).snippet.title);
-		holder.channelTitle.setText(items.get(position).snippet.channelTitle);
-		holder.viewCount.setText(StringUtil.convertDisplayViewCount(items.get(position).statistics.viewCount));
-		Picasso.with(context).load(items.get(position).snippet.thumbnails.medium.url).into(holder.thumbnail);
+		VideoItem item = items.get(position);
+		holder.item = item;
+		holder.title.setText(item.title);
+		holder.channelTitle.setText(item.channelTitle);
+		holder.viewCount.setText(StringUtil.convertDisplayViewCount(item.viewCount));
+		Picasso.with(context).load(item.thumbnailUrl).into(holder.thumbnail);
 
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -48,7 +49,7 @@ public class RecentlyWatchedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 				if (listener == null || holder.item == null) {
 					return;
 				}
-				listener.onRecentlyWatchedFragmentInteraction(holder.item.id);
+				listener.onRecentlyWatchedFragmentInteraction(holder.item.videoId);
 			}
 		});
 	}
@@ -59,7 +60,7 @@ public class RecentlyWatchedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 	}
 
 	static class ViewHolder extends RecyclerView.ViewHolder {
-		Item item;
+		VideoItem item;
 		View itemView;
 		TextView title;
 		TextView channelTitle;

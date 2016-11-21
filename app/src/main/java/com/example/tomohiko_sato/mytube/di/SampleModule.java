@@ -40,8 +40,8 @@ public class SampleModule {
 	}
 
 	@Provides
-	PlayerUseCase providePlayerUseCase() {
-		return new PlayerUseCase();
+	PlayerUseCase providePlayerUseCase(RecentlyWatchedDao dao) {
+		return new PlayerUseCase(dao);
 	}
 
 	@Provides

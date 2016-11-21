@@ -9,29 +9,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tomohiko_sato.mytube.R;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Item;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link Item} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link VideoItem} and makes a call to the
  * specified {@link PopularFragment.OnTopFragmentInteractionListener}.
  */
 public class PopularItemAdapter extends RecyclerView.Adapter<PopularItemAdapter.ViewHolder> {
 
-	private List<Item> items;
+	private List<VideoItem> items;
 	private final PopularFragment.OnTopFragmentInteractionListener listener;
 	private Context context;
 
-	public PopularItemAdapter(List<Item> items, PopularFragment.OnTopFragmentInteractionListener listener, Context context) {
+	public PopularItemAdapter(List<VideoItem> items, PopularFragment.OnTopFragmentInteractionListener listener, Context context) {
 		this.items = items;
 		this.listener = listener;
 		this.context = context;
 	}
 
-	public void setItems(List<Item> items) {
+	public void setItems(List<VideoItem> items) {
 		this.items = items;
 	}
 
@@ -44,11 +44,12 @@ public class PopularItemAdapter extends RecyclerView.Adapter<PopularItemAdapter.
 
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, int position) {
-		holder.item = items.get(position);
-		holder.title.setText(items.get(position).snippet.title);
-		holder.channelTitle.setText(items.get(position).snippet.channelTitle);
-		holder.viewCount.setText(StringUtil.convertDisplayViewCount(items.get(position).statistics.viewCount));
-		Picasso.with(context).load(items.get(position).snippet.thumbnails.medium.url).into(holder.thumbnail);
+		VideoItem item = items.get(position);
+		holder.item = item;
+		holder.title.setText(item.title);
+		holder.channelTitle.setText(item.channelTitle);
+		holder.viewCount.setText(StringUtil.convertDisplayViewCount(item.viewCount));
+		Picasso.with(context).load(item.thumbnailUrl).into(holder.thumbnail);
 
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -67,7 +68,7 @@ public class PopularItemAdapter extends RecyclerView.Adapter<PopularItemAdapter.
 	}
 
 	static class ViewHolder extends RecyclerView.ViewHolder {
-		Item item;
+		VideoItem item;
 		View itemView;
 		TextView title;
 		TextView channelTitle;

@@ -1,9 +1,7 @@
 package com.example.tomohiko_sato.mytube.presentation.search;
 
 import android.content.Context;
-import android.database.MatrixCursor;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -25,10 +23,10 @@ import android.widget.Toast;
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.di.DaggerSampleComponent;
 import com.example.tomohiko_sato.mytube.di.SampleModule;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.domain.search.SearchUseCase;
-import com.example.tomohiko_sato.mytube.infra.api.google.GoogleRequest;
+import com.example.tomohiko_sato.mytube.domain.util.Callback;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Item;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Search;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.statistics.VideoList;
 import com.example.tomohiko_sato.mytube.presentation.player.PlayerActivity;
@@ -39,10 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SearchActivity extends AppCompatActivity {
 	private static final String TAG = SearchActivity.class.getSimpleName();
@@ -102,51 +96,21 @@ public class SearchActivity extends AppCompatActivity {
 			@Override
 			public boolean onQueryTextSubmit(final String query) {
 
-				searchUC.search(query, new Callback<Search>() {
+				searchUC.search(query, new Callback<List<VideoItem>>() {
 					@Override
-					public void onResponse(Call<Search> call, Response<Search> response) {
-						Log.d(TAG, "Search onResponse");
-						final List<Item> items = response.body().items;
+					public void onSuccess(List<VideoItem> items) {
+						Log.d(TAG, "Search onSuccess");
 
 						final List<SearchResultViewModel> searchResultViewModels = new ArrayList<>();
-						for (Item item : items) {
-							searchResultViewModels.add(new SearchResultViewModel(item.id.videoId, item.snippet.title, item.snippet.channelTitle, item.snippet.thumbnails.medium.url));
+						for (VideoItem item : items) {
+							searchResultViewModels.add(new SearchResultViewModel(item.videoId, item.title, item.channelTitle, item.thumbnailUrl));
 						}
 
 						adapter.setViewModels(searchResultViewModels);
-
-						final StringBuilder stringBuilder = new StringBuilder();
-						final String separator = ",";
-						for (Item item : items) {
-							stringBuilder.append(item.id.videoId);
-							if (!items.equals(items.get(items.size() - 1))) {
-								stringBuilder.append(separator);
-							}
-						}
-
-						final String ids = stringBuilder.toString();
-						youtubeRequest.fetchStatistics(ids, new Callback<VideoList>() {
-							@Override
-							public void onResponse(Call<VideoList> call, Response<VideoList> response) {
-								Log.d(TAG, "VideoList onResponse");
-								for (int i = 0; i < response.body().items.size(); i++) {
-									String viewCount = response.body().items.get(i).statistics.viewCount;
-									searchResultViewModels.get(i).setViewCount(viewCount);
-								}
-
-								adapter.setViewModels(searchResultViewModels);
-							}
-
-							@Override
-							public void onFailure(Call<VideoList> call, Throwable t) {
-								Log.e(TAG, "VideoList onFailure " + t);
-								Toast.makeText(SearchActivity.this, "再生回数の取得に失敗しました", Toast.LENGTH_LONG).show();
-							}
-						});
 					}
 
 					@Override
-					public void onFailure(Call<Search> call, Throwable t) {
+					public void onFailure(Throwable t) {
 						Log.e(TAG, "Search onFailure " + t);
 						Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
 					}
@@ -158,7 +122,7 @@ public class SearchActivity extends AppCompatActivity {
 			@Override
 			public boolean onQueryTextChange(String newText) {
 				Log.d(TAG, "query text change" + newText);
-				populateAdapter(newText, simpleCursorAdapter);
+				//populateAdapter(newText, simpleCursorAdapter);
 				return false;
 			}
 		});
@@ -172,6 +136,7 @@ public class SearchActivity extends AppCompatActivity {
 			"Tocantins", "Rio Grande do Sul"
 	};
 
+/*
 	private final GoogleRequest googleRequest = new GoogleRequest();
 	private final Callback<List<List<String>>> suggestKeywordCallback = new Callback<List<List<String>>>() {
 		@Override
@@ -184,22 +149,27 @@ public class SearchActivity extends AppCompatActivity {
 			t.printStackTrace();
 		}
 	};
+*/
 
 	// You must implements your logic to get data using OrmLite
+/*
 	private void populateAdapter(String query, CursorAdapter hogeadapter) {
-		/*try {*/
-			//GoogleRequest.SuggestResponse response= new GoogleRequest.SuggestResponse();
-			googleRequest.fetchSuggestKeywordForYoutube(query, new Callback<List<GoogleRequest.RetrofitSuggestKeywordResponse>>() {
-				@Override
-				public void onResponse(Call<List<GoogleRequest.RetrofitSuggestKeywordResponse>> call, Response<List<GoogleRequest.RetrofitSuggestKeywordResponse>> response) {
-					Log.d(TAG, response.raw().toString());
-				}
+		*/
+/*try {*//*
 
-				@Override
-				public void onFailure(Call<List<GoogleRequest.RetrofitSuggestKeywordResponse>> call, Throwable t) {
-					t.printStackTrace();
-				}
-			});
+		//GoogleRequest.SuggestResponse response= new GoogleRequest.SuggestResponse();
+		googleRequest.fetchSuggestKeywordForYoutube(query, new Callback<List<GoogleRequest.RetrofitSuggestKeywordResponse>>() {
+			@Override
+			public void onResponse(Call<List<GoogleRequest.RetrofitSuggestKeywordResponse>> call, Response<List<GoogleRequest.RetrofitSuggestKeywordResponse>> response) {
+				Log.d(TAG, response.raw().toString());
+			}
+
+			@Override
+			public void onFailure(Call<List<GoogleRequest.RetrofitSuggestKeywordResponse>> call, Throwable t) {
+				t.printStackTrace();
+			}
+		});
+*/
 /*
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -207,6 +177,7 @@ public class SearchActivity extends AppCompatActivity {
 */
 
 
+/*
 		final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "cityName"});
 		for (int i = 0; i < SUGGESTIONS.length; i++) {
 			if (SUGGESTIONS[i].toLowerCase().startsWith(query.toLowerCase()))
@@ -214,6 +185,7 @@ public class SearchActivity extends AppCompatActivity {
 		}
 		hogeadapter.changeCursor(c);
 	}
+*/
 
 	@VisibleForTesting
 	public static class SearchResultViewModel {

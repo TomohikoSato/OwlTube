@@ -13,17 +13,16 @@ import android.view.ViewGroup;
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.di.DaggerSampleComponent;
 import com.example.tomohiko_sato.mytube.di.SampleModule;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.domain.popular.PopularUseCase;
+import com.example.tomohiko_sato.mytube.domain.util.Callback;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Item;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Popular;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PopularFragment extends Fragment {
 	private final static String TAG = PopularFragment.class.getSimpleName();
@@ -54,19 +53,18 @@ public class PopularFragment extends Fragment {
 
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
-		adapter = new PopularItemAdapter(new ArrayList<Item>(), mListener, context);
+		adapter = new PopularItemAdapter(new ArrayList<VideoItem>(), mListener, context);
 		recyclerView.setAdapter(adapter);
 
-		popularUC.fetchPopular(new Callback<Popular>() {
+		popularUC.fetchPopular(new Callback<List<VideoItem>>() {
 			@Override
-			public void onResponse(Call<Popular> call, Response<Popular> response) {
-				Log.d(TAG, "size " + response.body().items.size());
-				adapter.setItems(response.body().items);
+			public void onSuccess(List<VideoItem> items) {
+				adapter.setItems(items);
 				adapter.notifyDataSetChanged();
 			}
 
 			@Override
-			public void onFailure(Call<Popular> call, Throwable t) {
+			public void onFailure(Throwable t) {
 			}
 		});
 
@@ -98,6 +96,6 @@ public class PopularFragment extends Fragment {
 	 * activity.
 	 */
 	public interface OnTopFragmentInteractionListener {
-		void onTopFragmentInteraction(Item item);
+		void onTopFragmentInteraction(VideoItem item);
 	}
 }

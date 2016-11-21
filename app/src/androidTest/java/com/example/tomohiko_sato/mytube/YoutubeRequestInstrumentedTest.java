@@ -36,7 +36,7 @@ public class YoutubeRequestInstrumentedTest {
 
 	@Test
 	public void syncRequest() {
-		Response<Search> repo = request.searchSync("dir en grey");
+		Response<Search> repo = request.search("dir en grey");
 		assertEquals("JP", repo.body().regionCode);
 		assertEquals("youtube#searchResult", repo.body().items.iterator().next().kind);
 	}

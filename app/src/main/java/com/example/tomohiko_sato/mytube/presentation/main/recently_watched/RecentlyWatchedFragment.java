@@ -1,7 +1,6 @@
 package com.example.tomohiko_sato.mytube.presentation.main.recently_watched;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,22 +13,14 @@ import android.view.ViewGroup;
 import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.di.DaggerSampleComponent;
 import com.example.tomohiko_sato.mytube.di.SampleModule;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.domain.recently_watched.RecentlyWatchedUseCase;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Item;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Popular;
-import com.example.tomohiko_sato.mytube.config.AppConst;
+import com.example.tomohiko_sato.mytube.domain.util.Callback;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A fragment representing a list of Items.
@@ -55,7 +46,7 @@ public class RecentlyWatchedFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	List<Item> items = new ArrayList<>();
+	List<VideoItem> items = new ArrayList<>();
 	RecentlyWatchedRecyclerViewAdapter adapter;
 
 	@Override
@@ -73,17 +64,17 @@ public class RecentlyWatchedFragment extends Fragment {
 	}
 
 	public void refreshItem(Context context) {
-		recentlyWatchedUC.fetchRecentlyWatched(new Callback<Popular>() {
+		recentlyWatchedUC.fetchRecentlyWatched(new Callback<List<VideoItem>>() {
 			@Override
-			public void onResponse(Call<Popular> call, Response<Popular> response) {
-				Log.d(TAG, "onresponse");
+			public void onSuccess(List<VideoItem> response) {
 				items.clear();
-				items.addAll(response.body().items);
+				items.addAll(response);
 				adapter.notifyDataSetChanged();
 			}
 
 			@Override
-			public void onFailure(Call<Popular> call, Throwable t) {
+			public void onFailure(Throwable t) {
+				t.printStackTrace();
 				Log.d(TAG, "onfailure");
 			}
 		});

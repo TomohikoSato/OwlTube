@@ -1,13 +1,19 @@
 package com.example.tomohiko_sato.mytube.infra.api.youtube;
 
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Popular;
+import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Statistics;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Search;
+import com.example.tomohiko_sato.mytube.infra.api.youtube.data.statistics.Item;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.statistics.VideoList;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
+import com.example.tomohiko_sato.mytube.infra.api.mapper.VideoItemMapper;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -25,12 +31,14 @@ public class YoutubeRequest {
 		this.api = api;
 	}
 
+/*
 	public void searchAsync(String keyword, Callback<Search> callback) {
 		Call<Search> repo = api.search(keyword);
 		repo.enqueue(callback);
 	}
+*/
 
-	public Response<Search> searchSync(String keyword) {
+	public List<VideoItem> search(String keyword) {
 		Log.d(TAG, "keyword: " + keyword);
 
 		Call<Search> searchRequest = api.search(keyword);
@@ -41,25 +49,39 @@ public class YoutubeRequest {
 			e.printStackTrace();
 		}
 
-		return response;
+		if (response.body() == null) {
+			return null;
+		}
+
+		List<VideoItem> items = VideoItemMapper.map(response.body());
+
+		return items;
 	}
 
-	public void fetchStatistics(String videoIds, Callback<VideoList> callback) {
-		Call<VideoList> repo = api.videoListStatistics(videoIds);
-		repo.enqueue(callback);
-	}
-
-	public void fetchStatistics(List<String> videoIds, Callback<VideoList> callback) {
+	public Map<String, String> fetchStatistics(List<String> videoIds) {
 		final StringBuilder sb = new StringBuilder();
 		final String separator = ",";
 		for (String videoId : videoIds) {
 			sb.append(videoId).append(separator);
 		}
-
 		sb.deleteCharAt(sb.length() - 1);
 
-		Call<VideoList> repo = api.videoListStatistics(sb.toString());
-		repo.enqueue(callback);
+		return fetchStatistics(sb.toString());
+	}
+
+	private Map<String, String> fetchStatistics(String videoIds) {
+		Call<VideoList> call = api.videoListStatistics(videoIds);
+
+		Map<String, String> map = new ArrayMap<>();
+		try {
+			Response<VideoList> response = call.execute();
+			for (Item item : response.body().items) {
+				map.put(item.id, item.statistics.viewCount);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return map;
 	}
 
 	public void fetch(List<String> videoIds, Callback<Popular> callback) {
@@ -75,8 +97,19 @@ public class YoutubeRequest {
 		repo.enqueue(callback);
 	}
 
-	public void fetchPopular(Callback<Popular> callback) {
-		Call<Popular> repo = api.videoListPopular();
-		repo.enqueue(callback);
+	public List<VideoItem> fetchPopular() {
+		Call<Popular> call = api.videoListPopular();
+		Popular response = null;
+		try {
+			response = call.execute().body();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (response == null) {
+			return null;
+		}
+
+		return VideoItemMapper.map(response);
 	}
 }

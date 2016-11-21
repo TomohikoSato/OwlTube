@@ -3,9 +3,10 @@ package com.example.tomohiko_sato.mytube.domain.recently_watched;
 import android.content.Context;
 import android.os.Handler;
 
+import com.example.tomohiko_sato.mytube.domain.util.Callback;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.infra.dao.RecentlyWatchedDao;
-import com.example.tomohiko_sato.mytube.infra.dao.VideoItem;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 
 import java.util.List;
 
@@ -45,15 +46,5 @@ public class RecentlyWatchedUseCase {
 		final ArrayList<String> videoIdList = new ArrayList<>();
 		videoIdList.addAll(set);
 		youtubeRequest.fetch(videoIdList, callback);*/
-	}
-
-		class Callback<T> {
-		public void onSuccess(T items) {
-
-		}
-
-		public void onFailure() {
-
-		}
 	}
 }

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.mytube.R;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.popular.Item;
 import com.example.tomohiko_sato.mytube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.mytube.presentation.search.SearchActivity;
@@ -82,13 +83,13 @@ public class MainActivity extends AppCompatActivity implements PopularFragment.O
 	}
 
 	@Override
-	public void onTopFragmentInteraction(Item item) {
-		PlayerActivity.startPlayerActivity(this, item.id);
+	public void onRecentlyWatchedFragmentInteraction(String videoId) {
+		PlayerActivity.startPlayerActivity(this, videoId);
 	}
 
 	@Override
-	public void onRecentlyWatchedFragmentInteraction(String videoId) {
-		PlayerActivity.startPlayerActivity(this, videoId);
+	public void onTopFragmentInteraction(VideoItem item) {
+		PlayerActivity.startPlayerActivity(this, item.videoId);
 	}
 
 	static class SectionPagerAdapter extends FragmentPagerAdapter {

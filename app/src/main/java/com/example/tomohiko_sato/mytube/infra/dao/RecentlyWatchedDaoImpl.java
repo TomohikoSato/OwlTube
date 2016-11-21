@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import com.example.tomohiko_sato.mytube.R;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.infra.db.DefaultDBHelper;
 
 import java.util.ArrayList;
@@ -39,9 +40,8 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 						c.getString(COLUMN_TITLE),
 						c.getString(COLUMN_CHANNEL_TITLE),
 						c.getString(COLUMN_VIEW_COUNT),
-						c.getString(COLUMN_THUMNBNAIL_URL),
-						c.getString(COLUMN_CREATED_AT),
-						c.getString(COLUMN_UPDATED_AT)));
+						c.getString(COLUMN_THUMNBNAIL_URL)
+				));
 			}
 		}
 
@@ -69,9 +69,7 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 						c.getString(COLUMN_TITLE),
 						c.getString(COLUMN_CHANNEL_TITLE),
 						c.getString(COLUMN_VIEW_COUNT),
-						c.getString(COLUMN_THUMNBNAIL_URL),
-						c.getString(COLUMN_CREATED_AT),
-						c.getString(COLUMN_UPDATED_AT));
+						c.getString(COLUMN_THUMNBNAIL_URL));
 			}
 		}
 
@@ -84,7 +82,12 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	private void update(VideoItem item) {
 		try (SQLiteDatabase db = helper.getWritableDatabase()) {
 			SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_video_update));
-			stmt.bindAllArgsAsStrings(new String[]{item.title, item.channelTitle, item.viewCount, item.thumbnailUrl, item.updatedAt, item.videoId});
+			stmt.bindString(0, item.title);
+			stmt.bindString(1, item.channelTitle);
+			stmt.bindString(2, item.viewCount);
+			stmt.bindString(3, item.thumbnailUrl);
+			stmt.bindLong(4, System.currentTimeMillis() / 1000L);
+			stmt.bindString(5, item.videoId);
 			stmt.execute();
 		}
 	}
@@ -94,8 +97,15 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	 */
 	private void insert(VideoItem item) {
 		try (SQLiteDatabase db = helper.getWritableDatabase()) {
-			SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_video_update));
-			stmt.bindAllArgsAsStrings(new String[]{item.title, item.channelTitle, item.viewCount, item.thumbnailUrl, item.updatedAt, item.videoId});
+			SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_video_insert));
+			stmt.bindString(0, item.videoId);
+			stmt.bindString(1, item.title);
+			stmt.bindString(2, item.channelTitle);
+			stmt.bindString(3, item.viewCount);
+			stmt.bindString(4, item.thumbnailUrl);
+			stmt.bindLong(5, System.currentTimeMillis() / 1000L);
+			stmt.bindLong(6, System.currentTimeMillis() / 1000L);
+
 			stmt.execute();
 		}
 	}

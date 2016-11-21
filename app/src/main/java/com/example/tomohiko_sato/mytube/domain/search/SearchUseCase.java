@@ -5,6 +5,7 @@ import android.os.Handler;
 
 import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.domain.util.Callback;
+import com.example.tomohiko_sato.mytube.infra.api.google.GoogleRequest;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Search;
 
@@ -16,11 +17,13 @@ import javax.inject.Inject;
 
 
 public class SearchUseCase {
-	final YoutubeRequest youtubeRequest;
+	private final YoutubeRequest youtubeRequest;
+	private final GoogleRequest googleRequest;
 
 	@Inject
-	public SearchUseCase(YoutubeRequest youtubeRequest) {
+	public SearchUseCase(YoutubeRequest youtubeRequest, GoogleRequest googleRequest) {
 		this.youtubeRequest = youtubeRequest;
+		this.googleRequest = googleRequest;
 	}
 
 	public void search(final String query, final Callback<List<VideoItem>> callback) {
@@ -51,6 +54,23 @@ public class SearchUseCase {
 					@Override
 					public void run() {
 						callback.onSuccess(items);
+					}
+				});
+			}
+		}).start();
+	}
+
+	public void fetchSuggest(final String query, final Callback<List<String>> callback) {
+		final Handler handler = new Handler();
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				final List<String> suggests = googleRequest.fetchSuggestKeywordForYoutube(query);
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						callback.onSuccess(suggests);
 					}
 				});
 			}

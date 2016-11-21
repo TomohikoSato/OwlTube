@@ -112,6 +112,18 @@ public class SearchActivity extends AppCompatActivity {
 			@Override
 			public boolean onQueryTextChange(String newText) {
 				Log.d(TAG, "query text change" + newText);
+				searchUC.fetchSuggest(newText, new Callback<List<String>>() {
+					@Override
+					public void onSuccess(List<String> suggests) {
+						Log.d(TAG, "Search onSuccess");
+					}
+
+					@Override
+					public void onFailure(Throwable t) {
+						Log.e(TAG, "onFailure " + t);
+					}
+
+				});
 				//populateAdapter(newText, simpleCursorAdapter);
 				return false;
 			}

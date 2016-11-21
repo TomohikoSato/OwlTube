@@ -8,7 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-interface GoogleAPI {
+public interface GoogleAPI {
 
 	/**
 	 * fetch suggest keyword for youtube
@@ -17,6 +17,6 @@ interface GoogleAPI {
 	 * clientがfirefoxな理由：firefox向けのレスポンスが簡潔で扱いやすかったから
 	 * ds=yt でyoutube向けのsuggestにしている
 	 */
-	@GET("search?client=firefox&ds=yt")
-	Call<List<GoogleRequest.RetrofitSuggestKeywordResponse>> suggestKeywordForYoutube(@Query("q") String q);
+/*	@GET("search?client=firefox&ds=yt")
+	Call<List<GoogleRequest.RetrofitSuggestKeywordResponse>> suggestKeywordForYoutube(@Query("q") String q);*/
 }

@@ -14,8 +14,6 @@ import java.util.List;
  * {@link com.example.tomohiko_sato.mytube.infra.api.youtube.data} を {@link com.example.tomohiko_sato.mytube.domain.data.VideoItem} へ変換するクラス
  */
 public class VideoItemMapper {
-
-
 	public static List<VideoItem> map(@NonNull Search search) {
 		List<VideoItem> result = new ArrayList<>();
 		for (Item item : search.items) {

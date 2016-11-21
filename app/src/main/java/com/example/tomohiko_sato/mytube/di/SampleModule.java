@@ -5,6 +5,9 @@ import android.content.Context;
 import com.example.tomohiko_sato.mytube.domain.player.PlayerUseCase;
 import com.example.tomohiko_sato.mytube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.mytube.domain.recently_watched.RecentlyWatchedUseCase;
+import com.example.tomohiko_sato.mytube.domain.search.SearchUseCase;
+import com.example.tomohiko_sato.mytube.infra.api.google.GoogleAPI;
+import com.example.tomohiko_sato.mytube.infra.api.google.GoogleRequest;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeAPI;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.infra.dao.RecentlyWatchedDao;
@@ -45,21 +48,34 @@ public class SampleModule {
 	}
 
 	@Provides
+	SearchUseCase provideSearchUseCase (YoutubeRequest youtubeRequest, GoogleRequest googleRequest) {
+		new SearchUseCase(youtubeRequest, googleRequest);
+	}
+
+	@Provides
 	YoutubeRequest provideYoutubeRequest (YoutubeAPI api) {
 		return new YoutubeRequest(api);
 	}
 
 	@Provides
-	Retrofit provideYoutubeRetrofit () {
+	YoutubeAPI provideYoutubeAPI() {
 		return new Retrofit.Builder()
 				.baseUrl("https://www.googleapis.com/youtube/v3/")
 				.addConverterFactory(GsonConverterFactory.create())
-				.build();
+				.build().create(YoutubeAPI.class);
 	}
 
 	@Provides
-	YoutubeAPI provideYoutubeAPI(Retrofit retrofit) {
-		return retrofit.create(YoutubeAPI.class);
+	GoogleRequest provideGoogleRequest() {
+		return new GoogleRequest();
+	}
+
+	@Provides
+	GoogleAPI provideGoogleAPI (Retrofit retrofit) {
+		return new Retrofit.Builder()
+				.baseUrl("http://suggestqueries.google.com/complete/")
+				.addConverterFactory(GsonConverterFactory.create())
+				.build().create(GoogleAPI.class);
 	}
 
 	@Provides

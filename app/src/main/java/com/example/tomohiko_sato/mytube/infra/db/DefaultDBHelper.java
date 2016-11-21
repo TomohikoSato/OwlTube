@@ -29,6 +29,7 @@ public class DefaultDBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(readSql(R.raw.sql_video_create));
+		db.execSQL(readSql(R.raw.sql_search_history_create));
 	}
 
 	@Override

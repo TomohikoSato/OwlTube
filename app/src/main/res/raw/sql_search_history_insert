@@ -1,1 +1,1 @@
-INSERT INTO searchHistory (query, searchAt) values (?, ?);
+INSERT INTO searchHistory (query, searchedAt) values (?, ?);

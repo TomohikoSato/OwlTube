@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM searchHistory WHERE query = ?;

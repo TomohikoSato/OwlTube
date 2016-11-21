@@ -1,1 +1,1 @@
-UPDATE searchHistory SET query = ?, searchAt = ?;
+UPDATE searchHistory SET query = ?, searchedAt = ?;

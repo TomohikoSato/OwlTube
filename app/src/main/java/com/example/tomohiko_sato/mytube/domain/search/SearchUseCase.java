@@ -10,6 +10,7 @@ import com.example.tomohiko_sato.mytube.domain.util.Callback;
 import com.example.tomohiko_sato.mytube.infra.api.google.GoogleRequest;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Search;
+import com.example.tomohiko_sato.mytube.infra.dao.SearchHistoryDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +22,13 @@ import javax.inject.Inject;
 public class SearchUseCase {
 	private final YoutubeRequest youtubeRequest;
 	private final GoogleRequest googleRequest;
-	private final SharedPreferences sp;
+	private final SearchHistoryDao dao;
 
 	@Inject
-	public SearchUseCase(YoutubeRequest youtubeRequest, GoogleRequest googleRequest, SharedPreferences sp) {
+	public SearchUseCase(YoutubeRequest youtubeRequest, GoogleRequest googleRequest, SearchHistoryDao dao) {
 		this.youtubeRequest = youtubeRequest;
 		this.googleRequest = googleRequest;
-		this.sp = sp;
+		this.dao = dao;
 	}
 
 	public void search(final String query, final Callback<List<VideoItem>> callback) {
@@ -82,16 +83,10 @@ public class SearchUseCase {
 	}
 
 	public void addSearchHistory(String searchHistory) {
-
-		sp.edit().putString(AppConst.Pref.KEY_SEARCH_HISTORY, "hoge");
-	}
-
-	private String getSearchHistory() {
-
+		dao.insertOrUpdateSearchHistory(searchHistory);
 	}
 
 	public List<String> fetchSearchHistories() {
-		String searchHistroriesString = sp.getString(AppConst.Pref.KEY_SEARCH_HISTORY, "");
-		searchHistroriesString.split(",");
+		return dao.selectAllSearchHistories();
 	}
 }

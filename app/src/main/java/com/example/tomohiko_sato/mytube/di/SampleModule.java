@@ -1,7 +1,9 @@
 package com.example.tomohiko_sato.mytube.di;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.example.tomohiko_sato.mytube.config.AppConst;
 import com.example.tomohiko_sato.mytube.domain.player.PlayerUseCase;
 import com.example.tomohiko_sato.mytube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.mytube.domain.recently_watched.RecentlyWatchedUseCase;
@@ -47,9 +49,11 @@ public class SampleModule {
 		return new PlayerUseCase(dao);
 	}
 
+
 	@Provides
 	SearchUseCase provideSearchUseCase(YoutubeRequest youtubeRequest, GoogleRequest googleRequest) {
-		return new SearchUseCase(youtubeRequest, googleRequest);
+		SharedPreferences sp = context.getSharedPreferences(AppConst.Pref.NAME, Context.MODE_PRIVATE);
+		return new SearchUseCase(youtubeRequest, googleRequest, sp);
 	}
 
 	@Provides

@@ -1,8 +1,10 @@
 package com.example.tomohiko_sato.mytube.domain.search;
 
+import android.content.SharedPreferences;
 import android.os.Handler;
 
 
+import com.example.tomohiko_sato.mytube.config.AppConst;
 import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.domain.util.Callback;
 import com.example.tomohiko_sato.mytube.infra.api.google.GoogleRequest;
@@ -19,11 +21,13 @@ import javax.inject.Inject;
 public class SearchUseCase {
 	private final YoutubeRequest youtubeRequest;
 	private final GoogleRequest googleRequest;
+	private final SharedPreferences sp;
 
 	@Inject
-	public SearchUseCase(YoutubeRequest youtubeRequest, GoogleRequest googleRequest) {
+	public SearchUseCase(YoutubeRequest youtubeRequest, GoogleRequest googleRequest, SharedPreferences sp) {
 		this.youtubeRequest = youtubeRequest;
 		this.googleRequest = googleRequest;
+		this.sp = sp;
 	}
 
 	public void search(final String query, final Callback<List<VideoItem>> callback) {
@@ -75,5 +79,19 @@ public class SearchUseCase {
 				});
 			}
 		}).start();
+	}
+
+	public void addSearchHistory(String searchHistory) {
+
+		sp.edit().putString(AppConst.Pref.KEY_SEARCH_HISTORY, "hoge");
+	}
+
+	private String getSearchHistory() {
+
+	}
+
+	public List<String> fetchSearchHistories() {
+		String searchHistroriesString = sp.getString(AppConst.Pref.KEY_SEARCH_HISTORY, "");
+		searchHistroriesString.split(",");
 	}
 }

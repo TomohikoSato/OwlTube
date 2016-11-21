@@ -58,7 +58,6 @@ public class SearchActivity extends AppCompatActivity {
 
 		DaggerSampleComponent.builder().sampleModule(new SampleModule(this)).build().inject(this);
 
-
 		ListView listView = (ListView) findViewById(R.id.list_view);
 		adapter = new SearchResultListAdapter(this);
 		listView.setAdapter(adapter);
@@ -72,7 +71,7 @@ public class SearchActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		SearchView searchView = (SearchView) findViewById(R.id.search_search_view);
+		final SearchView searchView = (SearchView) findViewById(R.id.search_search_view);
 		searchView.setIconifiedByDefault(false);
 		searchView.setFocusable(true);
 		searchView.setQueryHint("Search Music");
@@ -89,6 +88,23 @@ public class SearchActivity extends AppCompatActivity {
 				CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
 		searchView.setSuggestionsAdapter(simpleCursorAdapter);
+		searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+			@Override
+			public boolean onSuggestionSelect(int position) {
+				Log.d(TAG, "onSuggestionSelect");
+				return false;
+			}
+
+			@Override
+			public boolean onSuggestionClick(int position) {
+				Log.d(TAG, "onSuggestionClick");
+				MatrixCursor cursor = (MatrixCursor) simpleCursorAdapter.getItem(position);
+				String query = cursor.getString(1);
+				searchView.setQuery(query, true);
+
+				return false;
+			}
+		});
 
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
@@ -127,7 +143,6 @@ public class SearchActivity extends AppCompatActivity {
 					}
 
 				});
-				//populateAdapter(newText, simpleCursorAdapter);
 				return false;
 			}
 		});

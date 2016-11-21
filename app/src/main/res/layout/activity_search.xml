@@ -22,7 +22,9 @@
         <android.support.v7.widget.SearchView
             android:id="@+id/search_search_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:actionViewClass="android.support.v7.widget.SearchView"
+            app:actionViewClass="android.support.v7.widget.SearchView"/>
 
     </android.support.v7.widget.Toolbar>
 

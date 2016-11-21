@@ -14,6 +14,7 @@ import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeAPI;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.mytube.infra.dao.RecentlyWatchedDao;
 import com.example.tomohiko_sato.mytube.infra.dao.RecentlyWatchedDaoImpl;
+import com.example.tomohiko_sato.mytube.infra.dao.SearchHistoryDao;
 import com.example.tomohiko_sato.mytube.infra.dao.SearchHistoryDaoImpl;
 import com.example.tomohiko_sato.mytube.infra.db.DefaultDBHelper;
 
@@ -52,9 +53,8 @@ public class SampleModule {
 
 
 	@Provides
-	SearchUseCase provideSearchUseCase(YoutubeRequest youtubeRequest, GoogleRequest googleRequest) {
-		SharedPreferences sp = context.getSharedPreferences(AppConst.Pref.NAME, Context.MODE_PRIVATE);
-		return new SearchUseCase(youtubeRequest, googleRequest, sp);
+	SearchUseCase provideSearchUseCase(YoutubeRequest youtubeRequest, GoogleRequest googleRequest, SearchHistoryDao dao) {
+		return new SearchUseCase(youtubeRequest, googleRequest, dao);
 	}
 
 	@Provides
@@ -76,7 +76,7 @@ public class SampleModule {
 	}
 
 	@Provides
-	GoogleAPI provideGoogleAPI(Retrofit retrofit) {
+	GoogleAPI provideGoogleAPI() {
 		return new Retrofit.Builder()
 				.baseUrl("http://suggestqueries.google.com/complete/")
 				.addConverterFactory(GsonConverterFactory.create())
@@ -94,7 +94,7 @@ public class SampleModule {
 	}
 
 	@Provides
-	SearchHistoryDaoImpl provideSearcHistoryDao (DefaultDBHelper helper) {
-		new SearchHistoryDaoImpl(helper);
+	SearchHistoryDao provideSearcHistoryDao (DefaultDBHelper helper) {
+		return new SearchHistoryDaoImpl(helper);
 	}
 }

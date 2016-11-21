@@ -11,7 +11,10 @@ import dagger.Component;
 @Component(modules = SampleModule.class)
 public interface SampleComponent {
 	void inject(PopularFragment fragment);
+
 	void inject(RecentlyWatchedFragment fragment);
+
 	void inject(SearchActivity activity);
+
 	void inject(PlayerActivity activity);
 }

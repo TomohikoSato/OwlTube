@@ -23,6 +23,7 @@ import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.mytube.domain.util.Callback;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
+import com.example.tomohiko_sato.mytube.infra.dao.SearchHistoryDao;
 import com.example.tomohiko_sato.mytube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.mytube.presentation.search.SearchHistoryFragment.OnSearchHistoryFragmentInteractionListener;
 import com.example.tomohiko_sato.mytube.presentation.search.SearchResultFragment.OnSearchResultFragmentInteractionListener;
@@ -41,6 +42,8 @@ public class SearchActivity extends AppCompatActivity implements OnSearchResultF
 	YoutubeRequest youtubeRequest;
 
 	private SearchResultFragment searchResultFragment;
+	private SearchHistoryFragment searchHistoryFragment;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +57,9 @@ public class SearchActivity extends AppCompatActivity implements OnSearchResultF
 
 		FragmentManager manager = getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
-		searchResultFragment = new SearchResultFragment();
-		transaction.add(R.id.fragment_container, searchResultFragment);
+		//searchResultFragment = new SearchResultFragment.newInstance(null);
+		searchHistoryFragment = SearchHistoryFragment.newInstance();
+		transaction.add(R.id.fragment_container, searchHistoryFragment);
 		transaction.commit();
 	}
 

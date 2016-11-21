@@ -82,11 +82,28 @@ public class SearchUseCase {
 		}).start();
 	}
 
-	public void addSearchHistory(String searchHistory) {
-		dao.insertOrUpdateSearchHistory(searchHistory);
+	public void addSearchHistory(final String searchHistory) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				dao.insertOrUpdateSearchHistory(searchHistory);
+			}
+		}).start();
 	}
 
-	public List<String> fetchSearchHistories() {
-		return dao.selectAllSearchHistories();
+	public void fetchSearchHistories(final Callback<List<String>> callback) {
+		final Handler handler = new Handler();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				final List<String> searchHistories= dao.selectAllSearchHistories();
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						callback.onSuccess(searchHistories);
+					}
+				});
+			}
+		}).start();
 	}
 }

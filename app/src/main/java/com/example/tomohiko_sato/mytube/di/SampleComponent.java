@@ -5,6 +5,7 @@ import com.example.tomohiko_sato.mytube.presentation.main.popular.PopularFragmen
 import com.example.tomohiko_sato.mytube.presentation.main.recently_watched.RecentlyWatchedFragment;
 import com.example.tomohiko_sato.mytube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.mytube.presentation.search.SearchActivity;
+import com.example.tomohiko_sato.mytube.presentation.search.SearchHistoryFragment;
 
 import dagger.Component;
 
@@ -17,4 +18,6 @@ public interface SampleComponent {
 	void inject(SearchActivity activity);
 
 	void inject(PlayerActivity activity);
+
+	void inject(SearchHistoryFragment fragment);
 }

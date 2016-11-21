@@ -5,13 +5,23 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.tomohiko_sato.mytube.R;
+import com.example.tomohiko_sato.mytube.di.DaggerSampleComponent;
+import com.example.tomohiko_sato.mytube.di.SampleModule;
+import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
+import com.example.tomohiko_sato.mytube.domain.search.SearchUseCase;
+import com.example.tomohiko_sato.mytube.domain.util.Callback;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * A fragment representing a list of Items.
@@ -22,6 +32,10 @@ import java.util.ArrayList;
 public class SearchHistoryFragment extends Fragment {
 
 	private OnSearchHistoryFragmentInteractionListener listener;
+	private SearchHistoryRecyclerViewAdapter adapter;
+
+	@Inject
+	SearchUseCase searchUC;
 
 	public static SearchHistoryFragment newInstance() {
 		SearchHistoryFragment fragment = new SearchHistoryFragment();
@@ -43,11 +57,14 @@ public class SearchHistoryFragment extends Fragment {
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
 		new ArrayList<String>();
-		recyclerView.setAdapter(new SearchHistoryRecyclerViewAdapter(new ArrayList<String>() {{
+
+		adapter = new SearchHistoryRecyclerViewAdapter(new ArrayList<String>() {{
 			add("A");
 			add("B");
 			add("C");
-		}}, listener));
+		}}, listener);
+
+		recyclerView.setAdapter(adapter);
 
 		return recyclerView;
 	}
@@ -56,6 +73,18 @@ public class SearchHistoryFragment extends Fragment {
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
+		DaggerSampleComponent.builder().sampleModule(new SampleModule(context)).build().inject(this);
+
+		searchUC.fetchSearchHistories(new Callback<List<String>>() {
+			@Override
+			public void onSuccess(List<String> searchHistories) {
+
+			}
+
+			@Override
+			public void onFailure(Throwable t) {
+			}
+		});
 		if (context instanceof OnSearchHistoryFragmentInteractionListener) {
 			listener = (OnSearchHistoryFragmentInteractionListener) context;
 		} else {

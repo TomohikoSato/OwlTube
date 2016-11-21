@@ -17,12 +17,17 @@ import java.util.List;
   */
 public class SearchHistoryRecyclerViewAdapter extends RecyclerView.Adapter<SearchHistoryRecyclerViewAdapter.ViewHolder> {
 
-	private final List<String> searchHistories;
+	private List<String> searchHistories;
 	private final OnSearchHistoryFragmentInteractionListener listener;
 
 	public SearchHistoryRecyclerViewAdapter(List<String> searchHistories, OnSearchHistoryFragmentInteractionListener listener) {
 		this.searchHistories = searchHistories;
 		this.listener = listener;
+	}
+
+	public void refreshSearchHistories (List<String> searchHistories) {
+		this.searchHistories.addAll(searchHistories);
+		notifyItemInserted(0);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import com.example.tomohiko_sato.mytube.R;
 import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -48,7 +49,12 @@ public class SearchResultFragment extends Fragment {
 		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_searchresult_list, container, false);
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
-		List<VideoItem> items = getArguments().getParcelableArrayList(KEY_VIDEO_ITEMS);
+		Bundle bundle = getArguments();
+		List<VideoItem> items = new ArrayList<>();
+		if (bundle != null) {
+			items = bundle.getParcelableArrayList(KEY_VIDEO_ITEMS);
+		}
+
 		adapter = new SearchResultRecyclerViewAdapter(items, listener, context);
 		recyclerView.setAdapter(adapter);
 

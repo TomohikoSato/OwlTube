@@ -33,7 +33,7 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	public List<VideoItem> selectAllOrderByRecentlyCreated(int limit) {
 		List<VideoItem> list = new ArrayList<>();
 		try (SQLiteDatabase db = helper.getReadableDatabase();
-			 Cursor c = db.rawQuery(helper.readSql(R.raw.sql_video_select_all), new String[]{String.valueOf(limit)})) {
+			 Cursor c = db.rawQuery(helper.readSql(R.raw.sql_recently_watched_select_all), new String[]{String.valueOf(limit)})) {
 
 			for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 				list.add(new VideoItem(c.getString(COLUMN_VIDEO_ID),
@@ -63,7 +63,7 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	private VideoItem selectByVideoId(String videoId) {
 		VideoItem item = null;
 		try (SQLiteDatabase db = helper.getReadableDatabase();
-			 Cursor c = db.rawQuery(helper.readSql(R.raw.sql_video_select_by_video_id), new String[]{videoId})) {
+			 Cursor c = db.rawQuery(helper.readSql(R.raw.sql_recently_watched_select_by_video_id), new String[]{videoId})) {
 			if (c.moveToFirst()) {
 				item = new VideoItem(c.getString(COLUMN_VIDEO_ID),
 						c.getString(COLUMN_TITLE),
@@ -81,7 +81,7 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	 */
 	private void update(VideoItem item) {
 		try (SQLiteDatabase db = helper.getWritableDatabase();
-			 SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_video_update))) {
+			 SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_recently_watched_update))) {
 			stmt.bindString(1, item.title);
 			stmt.bindString(2, item.channelTitle);
 			stmt.bindString(3, item.viewCount);
@@ -97,7 +97,7 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	 */
 	private void insert(VideoItem item) {
 		try (SQLiteDatabase db = helper.getWritableDatabase();
-			 SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_video_insert))) {
+			 SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_recently_watched_insert))) {
 			stmt.bindString(1, item.videoId);
 			stmt.bindString(2, item.title);
 			stmt.bindString(3, item.channelTitle);

@@ -1,0 +1,1 @@
+SELECT * FROM recentlyWatched ORDER BY updatedAt DESC LIMIT ?;

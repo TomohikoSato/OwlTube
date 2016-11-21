@@ -1,0 +1,1 @@
+CREATE TABLE recentlyWatched (videoId TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, channelTitle TEXT NOT NULL, viewCount TEXT, thumbnailUrl TEXT NOT NULL, createdAt INTEGER NOT NULL, updatedAt INTEGER NOT NULL);

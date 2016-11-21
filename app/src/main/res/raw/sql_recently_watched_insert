@@ -1,0 +1,1 @@
+INSERT INTO recentlyWatched (videoId, title, channelTitle, viewCount, ThumbnailUrl, createdAt, updatedAt) values (?, ?, ?, ?, ?, ?, ?);

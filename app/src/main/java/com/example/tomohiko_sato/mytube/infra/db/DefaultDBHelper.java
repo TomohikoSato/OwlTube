@@ -9,7 +9,6 @@ import com.example.tomohiko_sato.mytube.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import javax.inject.Inject;
@@ -28,7 +27,7 @@ public class DefaultDBHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(readSql(R.raw.sql_video_create));
+		db.execSQL(readSql(R.raw.sql_recently_watched_create));
 		db.execSQL(readSql(R.raw.sql_search_history_create));
 	}
 

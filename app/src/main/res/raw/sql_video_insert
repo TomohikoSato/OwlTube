@@ -1,1 +1,0 @@
-INSERT INTO video (videoId, title, channelTitle, viewCount, ThumbnailUrl, createdAt, updatedAt) values (?, ?, ?, ?, ?, ?, ?);

@@ -5,7 +5,7 @@ OwlTube is an android app for watching youtube
 
 1) Download the repository
 
-```git@github.com:TomohikoSato/OwlTube.git```
+``` git clone git@github.com:TomohikoSato/OwlTube.git ```
 
 2) Open the project in Android Studio
 

@@ -3,7 +3,7 @@ package com.example.tomohiko_sato.owltube.domain.recently_watched;
 import android.content.Context;
 import android.os.Handler;
 
-import com.example.tomohiko_sato.owltube.domain.util.Callback;
+import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.owltube.infra.dao.RecentlyWatchedDao;
 import com.example.tomohiko_sato.owltube.domain.data.VideoItem;

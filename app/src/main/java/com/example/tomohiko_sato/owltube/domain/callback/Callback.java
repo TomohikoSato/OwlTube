@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.owltube.domain.util;
+package com.example.tomohiko_sato.owltube.domain.callback;
 
 /**
  * 非同期処理の結果を渡すために使うコールバッククラス

@@ -15,12 +15,15 @@ import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.config.Key;
 import com.example.tomohiko_sato.owltube.di.DaggerSampleComponent;
 import com.example.tomohiko_sato.owltube.di.SampleModule;
+import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -55,7 +58,14 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		}
 		videoId = videoItem.videoId;
 		playerUseCase.addRecentlyWatched(videoItem);
-		playerUseCase.fetchRelatedVideo(videoId);
+		playerUseCase.fetchRelatedVideo(videoId, new Callback<List<VideoItem>>() {
+			public void onSuccess(List<VideoItem> response) {
+
+			}
+
+			public void onFailure(Throwable t) {
+			}
+		});
 
 		playerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 		playerView.initialize(Key.Youtube.API_KEY, this);

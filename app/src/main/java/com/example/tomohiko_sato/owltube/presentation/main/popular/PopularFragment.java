@@ -23,7 +23,7 @@ import javax.inject.Inject;
 
 public class PopularFragment extends Fragment {
 	private final static String TAG = PopularFragment.class.getSimpleName();
-	private OnTopFragmentInteractionListener mListener;
+	private OnTopFragmentInteractionListener listener;
 	PopularItemAdapter adapter;
 
 	@Inject
@@ -42,11 +42,12 @@ public class PopularFragment extends Fragment {
 		super.onAttach(context);
 		DaggerSampleComponent.builder().sampleModule(new SampleModule(context)).build().inject(this);
 		if (context instanceof OnTopFragmentInteractionListener) {
-			mListener = (OnTopFragmentInteractionListener) context;
+			listener = (OnTopFragmentInteractionListener) context;
 		} else {
 			throw new UnsupportedOperationException(context.toString()
 					+ " must implement OnTopFragmentInteractionListener to attached activity");
 		}
+
 	}
 
 	@Override
@@ -56,8 +57,9 @@ public class PopularFragment extends Fragment {
 
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
-		adapter = new PopularItemAdapter(new ArrayList<VideoItem>(), mListener, context);
+		adapter = new PopularItemAdapter(new ArrayList<VideoItem>(), listener, context);
 		recyclerView.setAdapter(adapter);
+
 
 		popularUC.fetchPopular(new Callback<List<VideoItem>>() {
 			@Override
@@ -77,7 +79,7 @@ public class PopularFragment extends Fragment {
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		mListener = null;
+		listener = null;
 	}
 
 	/**

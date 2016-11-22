@@ -64,7 +64,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			@Override
 			public void onClick(View v) {
 				LayoutInflater layoutInflater = LayoutInflater.from(PlayerActivity.this);
-//				LinearLayout externalPlayerContainer = (LinearLayout) layoutInflater.inflate(R.layout.external_player, null);
+//				LinearLayout externalPlayerContainer = (LinearLayout) layoutInflater.inflate(R.layout.view_external_player, null);
 
 				// 重ね合わせするViewの設定を行う
 				WindowManager.LayoutParams params = new WindowManager.LayoutParams(

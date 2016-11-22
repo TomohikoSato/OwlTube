@@ -11,4 +11,4 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.example.tomohiko_sato.owltube.presentation.main.popular.PopularFragment"
-    tools:listitem="@layout/video_list_item"/>
+    tools:listitem="@layout/list_item_video"/>

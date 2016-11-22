@@ -30,7 +30,7 @@ public class RecentlyWatchedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.video_list_item, parent, false);
+				.inflate(R.layout.list_item_video, parent, false);
 		return new ViewHolder(view);
 	}
 

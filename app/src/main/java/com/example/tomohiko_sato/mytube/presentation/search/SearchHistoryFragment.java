@@ -58,11 +58,7 @@ public class SearchHistoryFragment extends Fragment {
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
 		new ArrayList<String>();
 
-		adapter = new SearchHistoryRecyclerViewAdapter(new ArrayList<String>() {{
-			add("A");
-			add("B");
-			add("C");
-		}}, listener);
+		adapter = new SearchHistoryRecyclerViewAdapter(new ArrayList<String>(), listener);
 
 		recyclerView.setAdapter(adapter);
 
@@ -78,7 +74,7 @@ public class SearchHistoryFragment extends Fragment {
 		searchUC.fetchSearchHistories(new Callback<List<String>>() {
 			@Override
 			public void onSuccess(List<String> searchHistories) {
-
+				adapter.refreshSearchHistories(searchHistories);
 			}
 
 			@Override

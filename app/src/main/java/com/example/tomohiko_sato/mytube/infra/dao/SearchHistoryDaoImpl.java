@@ -48,14 +48,17 @@ public class SearchHistoryDaoImpl implements SearchHistoryDao {
 
 	private int countByQuery(String query, SQLiteDatabase db) {
 		try (Cursor c = db.rawQuery(helper.readSql(R.raw.sql_search_history_count_by_query), new String[]{query})) {
-			return c.getCount();
+			if (c.moveToFirst()) {
+				return c.getInt(0);
+			}
+			return 0;
 		}
 	}
 
 	private void update(String query, SQLiteDatabase db) {
 		try (SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_search_history_update))) {
-			stmt.bindString(1, query);
-			stmt.bindLong(2, System.currentTimeMillis() / 1000L);
+			stmt.bindLong(1, System.currentTimeMillis() / 1000L);
+			stmt.bindString(2, query);
 			stmt.executeUpdateDelete();
 		}
 	}

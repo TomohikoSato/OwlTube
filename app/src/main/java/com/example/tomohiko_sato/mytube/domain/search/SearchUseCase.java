@@ -1,15 +1,11 @@
 package com.example.tomohiko_sato.mytube.domain.search;
 
-import android.content.SharedPreferences;
 import android.os.Handler;
 
-
-import com.example.tomohiko_sato.mytube.config.AppConst;
 import com.example.tomohiko_sato.mytube.domain.data.VideoItem;
 import com.example.tomohiko_sato.mytube.domain.util.Callback;
 import com.example.tomohiko_sato.mytube.infra.api.google.GoogleRequest;
 import com.example.tomohiko_sato.mytube.infra.api.youtube.YoutubeRequest;
-import com.example.tomohiko_sato.mytube.infra.api.youtube.data.search.Search;
 import com.example.tomohiko_sato.mytube.infra.dao.SearchHistoryDao;
 
 import java.util.ArrayList;
@@ -17,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-
 
 public class SearchUseCase {
 	private final YoutubeRequest youtubeRequest;

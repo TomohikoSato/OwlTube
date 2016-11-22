@@ -115,8 +115,6 @@ public class SearchActivity extends AppCompatActivity implements OnSearchResultF
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(final String query) {
-				showSearchResultFragment();
-
 				searchUC.search(query, new Callback<List<VideoItem>>() {
 					@Override
 					public void onSuccess(List<VideoItem> items) {
@@ -138,6 +136,8 @@ public class SearchActivity extends AppCompatActivity implements OnSearchResultF
 			@Override
 			public boolean onQueryTextChange(final String newText) {
 				Log.d(TAG, "query text change" + newText);
+				showSearchResultFragment();
+
 				searchUC.fetchSuggest(newText, new Callback<List<String>>() {
 					@Override
 					public void onSuccess(List<String> suggests) {
@@ -168,11 +168,12 @@ public class SearchActivity extends AppCompatActivity implements OnSearchResultF
 
 	@Override
 	public void OnSearchHistoryFragmentInteraction(String searchHistory) {
+		showSearchResultFragment();
+
 		searchUC.search(searchHistory, new Callback<List<VideoItem>>() {
 			@Override
 			public void onSuccess(List<VideoItem> items) {
 				Log.d(TAG, "Search onSuccess");
-				showSearchResultFragment();
 				searchResultFragment.setVideoItems(items);
 			}
 

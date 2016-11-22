@@ -38,13 +38,5 @@ public class RecentlyWatchedUseCase {
 				});
 			}
 		}).start();
-
-
-/*		SharedPreferences recentlyWatchedSP = context.getSharedPreferences(AppConst.Pref.NAME, 0);
-		Set<String> set = recentlyWatchedSP.getStringSet(AppConst.Pref.KEY_RECENTLY_WATCHED, new HashSet<String>());
-
-		final ArrayList<String> videoIdList = new ArrayList<>();
-		videoIdList.addAll(set);
-		youtubeRequest.fetch(videoIdList, callback);*/
 	}
 }

@@ -54,7 +54,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			throw new IllegalArgumentException("KEY_INTENT_EXTRA_VIDEO_ITEM must set");
 		}
 		videoId = videoItem.videoId;
-		playerUseCase.addRecentlyWatched(videoItem); //TODO: fix
+		playerUseCase.addRecentlyWatched(videoItem);
+		playerUseCase.fetchRelatedVideo(videoId);
 
 		playerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 		playerView.initialize(Key.Youtube.API_KEY, this);

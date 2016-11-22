@@ -45,8 +45,8 @@ public class SampleModule {
 	}
 
 	@Provides
-	PlayerUseCase providePlayerUseCase(RecentlyWatchedDao dao) {
-		return new PlayerUseCase(dao);
+	PlayerUseCase providePlayerUseCase(RecentlyWatchedDao dao, YoutubeRequest request) {
+		return new PlayerUseCase(dao, request);
 	}
 
 
@@ -87,7 +87,7 @@ public class SampleModule {
 	}
 
 	@Provides
-	DefaultDBHelper provideDefaultDBHelper(Context contxt) {
+	DefaultDBHelper provideDefaultDBHelper() {
 		return new DefaultDBHelper(context);
 	}
 

@@ -15,16 +15,24 @@ import com.example.tomohiko_sato.owltube.di.SampleModule;
 import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
 import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.owltube.domain.util.Callback;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class PopularFragment extends Fragment {
+/**
+ * 人気な動画の一覧が観れるFragment.
+ * <p>
+ * Activities containing this fragment MUST implement the {@link OnPopularFragmentInteractionListener}
+ * interface.
+ * </p>
+ */
+public class PopularFragment extends Fragment implements VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private final static String TAG = PopularFragment.class.getSimpleName();
-	private OnTopFragmentInteractionListener listener;
-	PopularRecyclerViewAdapter adapter;
+	private OnPopularFragmentInteractionListener listener;
+	VideoItemRecyclerViewAdapter adapter;
 
 	@Inject
 	PopularUseCase popularUC;
@@ -41,13 +49,12 @@ public class PopularFragment extends Fragment {
 	public void onAttach(Context context) {
 		super.onAttach(context);
 		DaggerSampleComponent.builder().sampleModule(new SampleModule(context)).build().inject(this);
-		if (context instanceof OnTopFragmentInteractionListener) {
-			listener = (OnTopFragmentInteractionListener) context;
+		if (context instanceof OnPopularFragmentInteractionListener) {
+			listener = (OnPopularFragmentInteractionListener) context;
 		} else {
 			throw new UnsupportedOperationException(context.toString()
-					+ " must implement OnTopFragmentInteractionListener to attached activity");
+					+ " must implement OnPopularFragmentInteractionListener to attached activity");
 		}
-
 	}
 
 	@Override
@@ -57,7 +64,7 @@ public class PopularFragment extends Fragment {
 
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
-		adapter = new PopularRecyclerViewAdapter(new ArrayList<VideoItem>(), listener, context);
+		adapter = new VideoItemRecyclerViewAdapter(new ArrayList<VideoItem>(), this, context);
 		recyclerView.setAdapter(adapter);
 
 
@@ -82,13 +89,18 @@ public class PopularFragment extends Fragment {
 		listener = null;
 	}
 
+	@Override
+	public void onVideoItemSelected(VideoItem item) {
+		listener.onPopularFragmentInteraction(item);
+	}
+
 	/**
 	 * This interface must be implemented by activities that contain this
 	 * fragment to allow an interaction in this fragment to be communicated
 	 * to the activity and potentially other fragments contained in that
 	 * activity.
 	 */
-	public interface OnTopFragmentInteractionListener {
-		void onTopFragmentInteraction(VideoItem item);
+	public interface OnPopularFragmentInteractionListener {
+		void onPopularFragmentInteraction(VideoItem item);
 	}
 }

@@ -16,6 +16,7 @@ import com.example.tomohiko_sato.owltube.di.SampleModule;
 import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
 import com.example.tomohiko_sato.owltube.domain.recently_watched.RecentlyWatchedUseCase;
 import com.example.tomohiko_sato.owltube.domain.util.Callback;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ import javax.inject.Inject;
  * Activities containing this fragment MUST implement the {@link OnRecentlyWatchedFragmentInteractionListener}
  * interface.
  */
-public class RecentlyWatchedFragment extends Fragment {
+public class RecentlyWatchedFragment extends Fragment implements VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private static final String TAG = RecentlyWatchedFragment.class.getSimpleName();
 	private OnRecentlyWatchedFragmentInteractionListener listener;
 	@Inject
@@ -47,7 +48,7 @@ public class RecentlyWatchedFragment extends Fragment {
 	}
 
 	List<VideoItem> items = new ArrayList<>();
-	RecentlyWatchedRecyclerViewAdapter adapter;
+	VideoItemRecyclerViewAdapter adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,7 +57,7 @@ public class RecentlyWatchedFragment extends Fragment {
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-		adapter = new RecentlyWatchedRecyclerViewAdapter(items, listener, context);
+		adapter = new VideoItemRecyclerViewAdapter(items, this, context);
 		recyclerView.setAdapter(adapter);
 		refreshItem(context);
 
@@ -96,6 +97,11 @@ public class RecentlyWatchedFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		listener = null;
+	}
+
+	@Override
+	public void onVideoItemSelected(VideoItem item) {
+		listener.onRecentlyWatchedFragmentInteraction(item);
 	}
 
 	/**

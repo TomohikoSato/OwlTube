@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.owltube.presentation.search;
+package com.example.tomohiko_sato.owltube.presentation.common_component;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,23 +10,26 @@ import android.widget.TextView;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
-import com.example.tomohiko_sato.owltube.presentation.search.SearchResultFragment.OnSearchResultFragmentInteractionListener;
 import com.example.tomohiko_sato.owltube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link VideoItem} and makes a call to the
- * specified {@link OnSearchResultFragmentInteractionListener}.
+ * {@link RecyclerView.Adapter} that can display a {@link VideoItem}.
+ * {@link VideoItem} tap event call {@link OnVideoItemSelectedListener}.
  */
-public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<SearchResultRecyclerViewAdapter.ViewHolder> {
+public class VideoItemRecyclerViewAdapter extends RecyclerView.Adapter<VideoItemRecyclerViewAdapter.ViewHolder> {
+
+	public interface OnVideoItemSelectedListener {
+		void onVideoItemSelected(VideoItem item);
+	}
 
 	private List<VideoItem> items;
-	private final OnSearchResultFragmentInteractionListener listener;
-	private final Context context;
+	private final OnVideoItemSelectedListener listener;
+	private Context context;
 
-	public SearchResultRecyclerViewAdapter(List<VideoItem> items, OnSearchResultFragmentInteractionListener listener, Context context) {
+	public VideoItemRecyclerViewAdapter(List<VideoItem> items, OnVideoItemSelectedListener listener, Context context) {
 		this.items = items;
 		this.listener = listener;
 		this.context = context;
@@ -34,7 +37,6 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Search
 
 	public void setItems(List<VideoItem> items) {
 		this.items = items;
-		notifyDataSetChanged();
 	}
 
 	@Override
@@ -45,7 +47,8 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Search
 	}
 
 	@Override
-	public void onBindViewHolder(final ViewHolder holder, int position) {		VideoItem item = items.get(position);
+	public void onBindViewHolder(final ViewHolder holder, int position) {
+		VideoItem item = items.get(position);
 		holder.item = item;
 		holder.title.setText(item.title);
 		holder.channelTitle.setText(item.channelTitle);
@@ -55,11 +58,10 @@ public class SearchResultRecyclerViewAdapter extends RecyclerView.Adapter<Search
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (null != listener) {
-					// Notify the active callbacks interface (the activity, if the
-					// fragment is attached to one) that an item has been selected.
-					listener.onSearchResultFragmentInteraction(holder.item);
+				if (listener == null || holder.item == null) {
+					return;
 				}
+				listener.onVideoItemSelected(holder.item);
 			}
 		});
 	}

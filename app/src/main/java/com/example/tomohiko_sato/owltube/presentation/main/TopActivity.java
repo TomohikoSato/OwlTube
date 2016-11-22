@@ -24,10 +24,10 @@ import com.example.tomohiko_sato.owltube.presentation.main.recently_watched.Rece
 import com.example.tomohiko_sato.owltube.presentation.main.popular.PopularFragment;
 
 /**
- * 起動後最初に表示されるメインの画面
+ * 起動後最初に表示される、トップ画面を担うAcitivity.
  */
-public class MainActivity extends AppCompatActivity implements PopularFragment.OnTopFragmentInteractionListener, RecentlyWatchedFragment.OnRecentlyWatchedFragmentInteractionListener {
-	private final static String TAG = MainActivity.class.getSimpleName();
+public class TopActivity extends AppCompatActivity implements PopularFragment.OnPopularFragmentInteractionListener, RecentlyWatchedFragment.OnRecentlyWatchedFragmentInteractionListener {
+	private final static String TAG = TopActivity.class.getSimpleName();
 	SectionPagerAdapter adapter;
 
 	@Override
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements PopularFragment.O
 			public void onPageSelected(int position) {
 				if (position == 1) {
 					RecentlyWatchedFragment fragment = ((RecentlyWatchedFragment) adapter.getRegisteredFragment(position));
-					fragment.refreshItem(MainActivity.this);
+					fragment.refreshItem(TopActivity.this);
 				}
 			}
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements PopularFragment.O
 	}
 
 	@Override
-	public void onTopFragmentInteraction(VideoItem item) {
+	public void onPopularFragmentInteraction(VideoItem item) {
 		PlayerActivity.startPlayerActivity(this, item);
 	}
 

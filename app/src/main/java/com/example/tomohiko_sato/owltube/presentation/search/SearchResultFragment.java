@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +23,11 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnSearchResultFragmentInteractionListener}
  * interface.
  */
-public class SearchResultFragment extends Fragment {
+public class SearchResultFragment extends Fragment implements VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private OnSearchResultFragmentInteractionListener listener;
 
 	private final static String KEY_VIDEO_ITEMS = "VIDEO_ITEMS";
-	private SearchResultRecyclerViewAdapter adapter;
+	private VideoItemRecyclerViewAdapter adapter;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -57,7 +58,7 @@ public class SearchResultFragment extends Fragment {
 			items = bundle.getParcelableArrayList(KEY_VIDEO_ITEMS);
 		}
 
-		adapter = new SearchResultRecyclerViewAdapter(items, listener, context);
+		adapter = new VideoItemRecyclerViewAdapter(items, this, context);
 		recyclerView.setAdapter(adapter);
 
 		return recyclerView;
@@ -85,6 +86,11 @@ public class SearchResultFragment extends Fragment {
 		adapter.setItems(videoItems);
 	}
 
+	@Override
+	public void onVideoItemSelected(VideoItem item) {
+		listener.onSearchResultFragmentInteraction(item);
+	}
+
 	/**
 	 * This interface must be implemented by activities that contain this
 	 * fragment to allow an interaction in this fragment to be communicated
@@ -96,7 +102,6 @@ public class SearchResultFragment extends Fragment {
 	 * >Communicating with Other Fragments</a> for more information.
 	 */
 	public interface OnSearchResultFragmentInteractionListener {
-		// TODO: Update argument type and name
 		void onSearchResultFragmentInteraction(VideoItem item);
 	}
 }

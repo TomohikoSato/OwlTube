@@ -16,7 +16,7 @@
         </activity>
         <activity android:name="com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity">
         </activity>
-        <activity android:name="com.example.tomohiko_sato.owltube.presentation.main.MainActivity">
+        <activity android:name="com.example.tomohiko_sato.owltube.presentation.main.TopActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

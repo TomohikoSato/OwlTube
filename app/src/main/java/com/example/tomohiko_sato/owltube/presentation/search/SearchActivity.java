@@ -1,6 +1,7 @@
 package com.example.tomohiko_sato.owltube.presentation.search;
 
 
+import android.content.Context;
 import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.provider.BaseColumns;
@@ -13,6 +14,8 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.R;
@@ -112,29 +115,13 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(final String query) {
-				searchUC.search(query, new Callback<List<VideoItem>>() {
-					@Override
-					public void onSuccess(List<VideoItem> items) {
-						Log.d(TAG, "Search onSuccess");
-
-						searchResultFragment.setVideoItems(items);
-					}
-
-					@Override
-					public void onFailure(Throwable t) {
-						Log.e(TAG, "Search onFailure " + t);
-						Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
-					}
-				});
-
+				search(query);
 				return false;
 			}
 
 			@Override
 			public boolean onQueryTextChange(final String newText) {
 				Log.d(TAG, "query text change" + newText);
-				showSearchResultFragment();
-
 				searchUC.fetchSuggest(newText, new Callback<List<String>>() {
 					@Override
 					public void onSuccess(List<String> suggests) {
@@ -153,20 +140,10 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		return true;
 	}
 
-	private void populateAdapter(String query, List<String> suggests, CursorAdapter adapter) {
-		final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "suggest"});
-		for (int i = 0; i < suggests.size(); i++) {
-			if (suggests.get(i).toLowerCase().startsWith(query.toLowerCase()))
-				c.addRow(new Object[]{i, suggests.get(i)});
-		}
-		adapter.changeCursor(c);
-	}
-
-	@Override
-	public void OnSearchHistoryFragmentInteraction(String searchHistory) {
+	private void search(String query) {
+		hideKeyboard();
 		showSearchResultFragment();
-
-		searchUC.search(searchHistory, new Callback<List<VideoItem>>() {
+		searchUC.search(query, new Callback<List<VideoItem>>() {
 			@Override
 			public void onSuccess(List<VideoItem> items) {
 				Log.d(TAG, "Search onSuccess");
@@ -179,6 +156,28 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 				Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
 			}
 		});
+	}
+
+	private void hideKeyboard() {
+		View view = this.getCurrentFocus();
+		if (view != null) {
+			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+		}
+	}
+
+	private void populateAdapter(String query, List<String> suggests, CursorAdapter adapter) {
+		final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "suggest"});
+		for (int i = 0; i < suggests.size(); i++) {
+			if (suggests.get(i).toLowerCase().startsWith(query.toLowerCase()))
+				c.addRow(new Object[]{i, suggests.get(i)});
+		}
+		adapter.changeCursor(c);
+	}
+
+	@Override
+	public void OnSearchHistoryFragmentInteraction(String searchHistory) {
+		search(searchHistory);
 	}
 
 	@Override

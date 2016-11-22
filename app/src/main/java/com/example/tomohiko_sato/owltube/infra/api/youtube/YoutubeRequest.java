@@ -91,4 +91,17 @@ public class YoutubeRequest {
 
 		return VideoItemMapper.map(response);
 	}
+
+	public List<VideoItem> fetchRealtedToVideoId(String videoId) {
+		Call<Search> call = api.relatedToVideoId(videoId);
+
+		Search response = null;
+		try {
+			response = call.execute().body();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return VideoItemMapper.map(response);
+	}
 }

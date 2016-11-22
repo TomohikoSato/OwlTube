@@ -138,15 +138,14 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 				searchUC.fetchSuggest(newText, new Callback<List<String>>() {
 					@Override
 					public void onSuccess(List<String> suggests) {
-						Log.d(TAG, "Search onSuccess");
+						Log.d(TAG, "Suggest onSuccess");
 						populateAdapter(newText, suggests, simpleCursorAdapter);
 					}
 
 					@Override
 					public void onFailure(Throwable t) {
-						Log.e(TAG, "onFailure " + t);
+						Log.e(TAG, "Suggest onFailure " + t);
 					}
-
 				});
 				return false;
 			}

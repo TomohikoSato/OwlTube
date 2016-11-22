@@ -77,7 +77,7 @@ public class RecentlyWatchedFragment extends Fragment {
 			@Override
 			public void onFailure(Throwable t) {
 				t.printStackTrace();
-				Log.d(TAG, "onfailure");
+				Log.d(TAG, "fetch RecentlyWatched onFailure");
 			}
 		});
 	}

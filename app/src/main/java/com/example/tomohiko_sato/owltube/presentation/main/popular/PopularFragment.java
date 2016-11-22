@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.di.DaggerSampleComponent;
@@ -63,7 +64,7 @@ public class PopularFragment extends Fragment {
 							 Bundle savedInstanceState) {
 		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_popular, container, false);
 
-		Context context = recyclerView.getContext();
+		final Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
 		adapter = new VideoItemRecyclerViewAdapter(new ArrayList<VideoItem>(), listener, context);
 		recyclerView.setAdapter(adapter);
@@ -75,9 +76,9 @@ public class PopularFragment extends Fragment {
 				adapter.setItems(items);
 				adapter.notifyDataSetChanged();
 			}
-
 			@Override
 			public void onFailure(Throwable t) {
+				Toast.makeText(context, "データの読み込みに失敗しました", Toast.LENGTH_LONG).show();
 			}
 		});
 

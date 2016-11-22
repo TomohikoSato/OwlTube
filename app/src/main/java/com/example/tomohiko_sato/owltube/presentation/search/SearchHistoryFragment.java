@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.di.DaggerSampleComponent;
@@ -27,6 +29,7 @@ import javax.inject.Inject;
  * interface.
  */
 public class SearchHistoryFragment extends Fragment {
+	private final static String TAG = SearchHistoryFragment.class.getSimpleName();
 
 	private OnSearchHistoryFragmentInteractionListener listener;
 	private SearchHistoryRecyclerViewAdapter adapter;
@@ -64,7 +67,7 @@ public class SearchHistoryFragment extends Fragment {
 
 
 	@Override
-	public void onAttach(Context context) {
+	public void onAttach(final Context context) {
 		super.onAttach(context);
 		DaggerSampleComponent.builder().sampleModule(new SampleModule(context)).build().inject(this);
 
@@ -76,6 +79,8 @@ public class SearchHistoryFragment extends Fragment {
 
 			@Override
 			public void onFailure(Throwable t) {
+				t.printStackTrace();
+				Log.e(TAG, "search histories onFailure");
 			}
 		});
 		if (context instanceof OnSearchHistoryFragmentInteractionListener) {

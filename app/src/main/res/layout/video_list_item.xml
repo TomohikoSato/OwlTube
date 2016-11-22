@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-
         android:layout_weight="2"
         app:srcCompat="@mipmap/ic_launcher"/>
 
@@ -37,6 +36,7 @@
             android:id="@+id/channel_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:ellipsize="end"
             android:text="チャンネルタイトル"/>
 

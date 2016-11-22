@@ -19,13 +19,13 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link VideoItem} and makes a call to the
  * specified {@link PopularFragment.OnTopFragmentInteractionListener}.
  */
-public class PopularItemAdapter extends RecyclerView.Adapter<PopularItemAdapter.ViewHolder> {
+public class PopularRecyclerViewAdapter extends RecyclerView.Adapter<PopularRecyclerViewAdapter.ViewHolder> {
 
 	private List<VideoItem> items;
 	private final PopularFragment.OnTopFragmentInteractionListener listener;
 	private Context context;
 
-	public PopularItemAdapter(List<VideoItem> items, PopularFragment.OnTopFragmentInteractionListener listener, Context context) {
+	public PopularRecyclerViewAdapter(List<VideoItem> items, PopularFragment.OnTopFragmentInteractionListener listener, Context context) {
 		this.items = items;
 		this.listener = listener;
 		this.context = context;

@@ -24,7 +24,7 @@ import javax.inject.Inject;
 public class PopularFragment extends Fragment {
 	private final static String TAG = PopularFragment.class.getSimpleName();
 	private OnTopFragmentInteractionListener listener;
-	PopularItemAdapter adapter;
+	PopularRecyclerViewAdapter adapter;
 
 	@Inject
 	PopularUseCase popularUC;
@@ -57,7 +57,7 @@ public class PopularFragment extends Fragment {
 
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
-		adapter = new PopularItemAdapter(new ArrayList<VideoItem>(), listener, context);
+		adapter = new PopularRecyclerViewAdapter(new ArrayList<VideoItem>(), listener, context);
 		recyclerView.setAdapter(adapter);
 
 

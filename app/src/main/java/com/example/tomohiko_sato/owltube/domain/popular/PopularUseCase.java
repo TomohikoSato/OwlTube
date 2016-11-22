@@ -11,7 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class PopularUseCase {
-	YoutubeRequest youtubeRequest;
+	private final YoutubeRequest youtubeRequest;
 
 	@Inject
 	public PopularUseCase(YoutubeRequest youtubeRequest) {

@@ -30,13 +30,6 @@ public class YoutubeRequest {
 		this.api = api;
 	}
 
-/*
-	public void searchAsync(String keyword, Callback<Search> callback) {
-		Call<Search> repo = api.search(keyword);
-		repo.enqueue(callback);
-	}
-*/
-
 	public List<VideoItem> search(String keyword) {
 		Log.d(TAG, "keyword: " + keyword);
 
@@ -81,19 +74,6 @@ public class YoutubeRequest {
 			e.printStackTrace();
 		}
 		return map;
-	}
-
-	public void fetch(List<String> videoIds, Callback<Popular> callback) {
-		final StringBuilder sb = new StringBuilder();
-		final String separator = ",";
-		for (String videoId : videoIds) {
-			sb.append(videoId).append(separator);
-		}
-
-		sb.deleteCharAt(sb.length() - 1);
-
-		Call<Popular> repo = api.videoListByIds(sb.toString());
-		repo.enqueue(callback);
 	}
 
 	public List<VideoItem> fetchPopular() {

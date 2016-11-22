@@ -9,6 +9,6 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.tomohiko_sato.mytube.presentation.setting.SettingActivity">
+    tools:context="com.example.tomohiko_sato.owltube.presentation.setting.SettingActivity">
 
 </RelativeLayout>

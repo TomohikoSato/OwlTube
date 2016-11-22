@@ -10,5 +10,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.example.tomohiko_sato.mytube.presentation.main.recently_watched.RecentlyWatchedFragment"
+    tools:context="com.example.tomohiko_sato.owltube.presentation.main.recently_watched.RecentlyWatchedFragment"
     tools:listitem="@layout/fragment_recentlywatcheditem"/>

@@ -10,5 +10,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.example.tomohiko_sato.mytube.presentation.search.SearchHistoryFragment"
+    tools:context="com.example.tomohiko_sato.owltube.presentation.search.SearchHistoryFragment"
     tools:listitem="@layout/fragment_searchhistory"/>

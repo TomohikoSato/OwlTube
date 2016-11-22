@@ -6,7 +6,7 @@
     android:id="@+id/activity_top"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.tomohiko_sato.mytube.presentation.main.MainActivity">
+    tools:context="com.example.tomohiko_sato.owltube.presentation.main.MainActivity">
 
 
     <android.support.design.widget.CoordinatorLayout

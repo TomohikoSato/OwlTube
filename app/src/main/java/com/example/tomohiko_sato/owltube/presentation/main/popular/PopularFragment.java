@@ -3,11 +3,13 @@ package com.example.tomohiko_sato.owltube.presentation.main.popular;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.R;
@@ -62,27 +64,32 @@ public class PopularFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_popular, container, false);
+		final Context context = getContext();
 
-		final Context context = recyclerView.getContext();
+		View rootView = inflater.inflate(R.layout.fragment_popular, container, false);
+		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+		final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
 		adapter = new VideoItemRecyclerViewAdapter(new ArrayList<VideoItem>(), listener, context);
 		recyclerView.setAdapter(adapter);
-
 
 		popularUC.fetchPopular(new Callback<List<VideoItem>>() {
 			@Override
 			public void onSuccess(List<VideoItem> items) {
 				adapter.setItems(items);
 				adapter.notifyDataSetChanged();
+				progressBar.setVisibility(View.GONE);
 			}
+
 			@Override
 			public void onFailure(Throwable t) {
 				Toast.makeText(context, "データの読み込みに失敗しました", Toast.LENGTH_LONG).show();
+				progressBar.setVisibility(View.GONE);
 			}
 		});
 
-		return recyclerView;
+		return rootView;
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
 import com.example.tomohiko_sato.owltube.domain.recently_watched.RecentlyWatchedUseCase;
 import com.example.tomohiko_sato.owltube.domain.util.Callback;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +27,12 @@ import javax.inject.Inject;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnRecentlyWatchedFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnVideoItemSelectedListener}
  * interface.
  */
-public class RecentlyWatchedFragment extends Fragment implements VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener {
+public class RecentlyWatchedFragment extends Fragment {
 	private static final String TAG = RecentlyWatchedFragment.class.getSimpleName();
-	private OnRecentlyWatchedFragmentInteractionListener listener;
+	private OnVideoItemSelectedListener listener;
 	@Inject
 	RecentlyWatchedUseCase recentlyWatchedUC;
 
@@ -57,14 +58,14 @@ public class RecentlyWatchedFragment extends Fragment implements VideoItemRecycl
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-		adapter = new VideoItemRecyclerViewAdapter(items, this, context);
+		adapter = new VideoItemRecyclerViewAdapter(items, listener, context);
 		recyclerView.setAdapter(adapter);
-		refreshItem(context);
+		refreshItem();
 
 		return recyclerView;
 	}
 
-	public void refreshItem(Context context) {
+	public void refreshItem() {
 		recentlyWatchedUC.fetchRecentlyWatched(new Callback<List<VideoItem>>() {
 			@Override
 			public void onSuccess(List<VideoItem> response) {
@@ -85,8 +86,8 @@ public class RecentlyWatchedFragment extends Fragment implements VideoItemRecycl
 	public void onAttach(Context context) {
 		super.onAttach(context);
 		DaggerSampleComponent.builder().sampleModule(new SampleModule(context)).build().inject(this);
-		if (context instanceof OnRecentlyWatchedFragmentInteractionListener) {
-			listener = (OnRecentlyWatchedFragmentInteractionListener) context;
+		if (context instanceof OnVideoItemSelectedListener) {
+			listener = (OnVideoItemSelectedListener) context;
 		} else {
 			throw new UnsupportedOperationException(context.toString()
 					+ " must implement OnRecentlyWatchedFragmentInteractionListener");
@@ -97,24 +98,5 @@ public class RecentlyWatchedFragment extends Fragment implements VideoItemRecycl
 	public void onDetach() {
 		super.onDetach();
 		listener = null;
-	}
-
-	@Override
-	public void onVideoItemSelected(VideoItem item) {
-		listener.onRecentlyWatchedFragmentInteraction(item);
-	}
-
-	/**
-	 * This interface must be implemented by activities that contain this
-	 * fragment to allow an interaction in this fragment to be communicated
-	 * to the activity and potentially other fragments contained in that
-	 * activity.
-	 * <p/>
-	 * See the Android Training lesson <a href=
-	 * "http://developer.android.com/training/basics/fragments/communicating.html"
-	 * >Communicating with Other Fragments</a> for more information.
-	 */
-	public interface OnRecentlyWatchedFragmentInteractionListener {
-		void onRecentlyWatchedFragmentInteraction(VideoItem item);
 	}
 }

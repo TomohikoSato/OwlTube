@@ -22,15 +22,14 @@ import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.owltube.domain.util.Callback;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
-import com.example.tomohiko_sato.owltube.presentation.search.SearchHistoryFragment.OnSearchHistoryFragmentInteractionListener;
-import com.example.tomohiko_sato.owltube.presentation.search.SearchResultFragment.OnSearchResultFragmentInteractionListener;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class SearchActivity extends AppCompatActivity implements OnSearchResultFragmentInteractionListener, OnSearchHistoryFragmentInteractionListener {
+public class SearchActivity extends AppCompatActivity implements OnVideoItemSelectedListener, SearchHistoryFragment.OnSearchHistoryFragmentInteractionListener {
 	private static final String TAG = SearchActivity.class.getSimpleName();
 
 	@Inject
@@ -184,7 +183,7 @@ public class SearchActivity extends AppCompatActivity implements OnSearchResultF
 	}
 
 	@Override
-	public void onSearchResultFragmentInteraction(VideoItem item) {
+	public void onVideoItemSelected(VideoItem item) {
 		PlayerActivity.startPlayerActivity(this, item);
 	}
 }

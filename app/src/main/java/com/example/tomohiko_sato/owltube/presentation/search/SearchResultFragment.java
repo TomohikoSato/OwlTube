@@ -17,14 +17,16 @@ import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItem
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnSearchResultFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnVideoItemSelectedListener}
  * interface.
  */
-public class SearchResultFragment extends Fragment implements VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener {
-	private OnSearchResultFragmentInteractionListener listener;
+public class SearchResultFragment extends Fragment {
+	private OnVideoItemSelectedListener listener;
 
 	private final static String KEY_VIDEO_ITEMS = "VIDEO_ITEMS";
 	private VideoItemRecyclerViewAdapter adapter;
@@ -58,7 +60,7 @@ public class SearchResultFragment extends Fragment implements VideoItemRecyclerV
 			items = bundle.getParcelableArrayList(KEY_VIDEO_ITEMS);
 		}
 
-		adapter = new VideoItemRecyclerViewAdapter(items, this, context);
+		adapter = new VideoItemRecyclerViewAdapter(items, listener, context);
 		recyclerView.setAdapter(adapter);
 
 		return recyclerView;
@@ -68,8 +70,8 @@ public class SearchResultFragment extends Fragment implements VideoItemRecyclerV
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		if (context instanceof OnSearchResultFragmentInteractionListener) {
-			listener = (OnSearchResultFragmentInteractionListener) context;
+		if (context instanceof OnVideoItemSelectedListener) {
+			listener = (OnVideoItemSelectedListener) context;
 		} else {
 			throw new UnsupportedOperationException(context.toString()
 					+ " must implement OnListFragmentInteractionListener");
@@ -84,24 +86,5 @@ public class SearchResultFragment extends Fragment implements VideoItemRecyclerV
 
 	public void setVideoItems(List<VideoItem> videoItems) {
 		adapter.setItems(videoItems);
-	}
-
-	@Override
-	public void onVideoItemSelected(VideoItem item) {
-		listener.onSearchResultFragmentInteraction(item);
-	}
-
-	/**
-	 * This interface must be implemented by activities that contain this
-	 * fragment to allow an interaction in this fragment to be communicated
-	 * to the activity and potentially other fragments contained in that
-	 * activity.
-	 * <p/>
-	 * See the Android Training lesson <a href=
-	 * "http://developer.android.com/training/basics/fragments/communicating.html"
-	 * >Communicating with Other Fragments</a> for more information.
-	 */
-	public interface OnSearchResultFragmentInteractionListener {
-		void onSearchResultFragmentInteraction(VideoItem item);
 	}
 }

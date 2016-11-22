@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchActivity;
 import com.example.tomohiko_sato.owltube.presentation.setting.SettingActivity;
@@ -26,7 +27,7 @@ import com.example.tomohiko_sato.owltube.presentation.main.popular.PopularFragme
 /**
  * 起動後最初に表示される、トップ画面を担うAcitivity.
  */
-public class TopActivity extends AppCompatActivity implements PopularFragment.OnPopularFragmentInteractionListener, RecentlyWatchedFragment.OnRecentlyWatchedFragmentInteractionListener {
+public class TopActivity extends AppCompatActivity implements VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private final static String TAG = TopActivity.class.getSimpleName();
 	SectionPagerAdapter adapter;
 
@@ -49,7 +50,7 @@ public class TopActivity extends AppCompatActivity implements PopularFragment.On
 			public void onPageSelected(int position) {
 				if (position == 1) {
 					RecentlyWatchedFragment fragment = ((RecentlyWatchedFragment) adapter.getRegisteredFragment(position));
-					fragment.refreshItem(TopActivity.this);
+					fragment.refreshItem();
 				}
 			}
 
@@ -82,12 +83,7 @@ public class TopActivity extends AppCompatActivity implements PopularFragment.On
 	}
 
 	@Override
-	public void onRecentlyWatchedFragmentInteraction(VideoItem item) {
-		PlayerActivity.startPlayerActivity(this, item);
-	}
-
-	@Override
-	public void onPopularFragmentInteraction(VideoItem item) {
+	public void onVideoItemSelected(VideoItem item) {
 		PlayerActivity.startPlayerActivity(this, item);
 	}
 

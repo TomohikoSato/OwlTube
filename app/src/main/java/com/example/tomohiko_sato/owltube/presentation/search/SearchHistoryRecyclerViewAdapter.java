@@ -33,7 +33,7 @@ public class SearchHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Searc
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.fragment_item, parent, false);
+				.inflate(R.layout.fragment_search_history_item, parent, false);
 		return new ViewHolder(view);
 	}
 
@@ -67,7 +67,7 @@ public class SearchHistoryRecyclerViewAdapter extends RecyclerView.Adapter<Searc
 		public ViewHolder(View view) {
 			super(view);
 			this.view = view;
-			searchHistoryTextView = (TextView) view.findViewById(R.id.id);
+			searchHistoryTextView = (TextView) view.findViewById(R.id.search_history);
 		}
 	}
 }

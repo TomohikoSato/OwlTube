@@ -49,7 +49,7 @@ public class SearchHistoryFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_searchhistory_list, container, false);
+		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_search_history, container, false);
 
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));

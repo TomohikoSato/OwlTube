@@ -19,8 +19,7 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link VideoItem}.
  * {@link VideoItem} tap event call {@link OnVideoItemSelectedListener}.
  */
-public class VideoItemRecyclerViewAdapter extends RecyclerView.Adapter<VideoItemRecyclerViewAdapter.ViewHolder> {
-
+public class VideoItemRecyclerViewAdapter extends RecyclerView.Adapter<VideoItemRecyclerViewHolder> {
 	public interface OnVideoItemSelectedListener {
 		void onVideoItemSelected(VideoItem item);
 	}
@@ -40,14 +39,14 @@ public class VideoItemRecyclerViewAdapter extends RecyclerView.Adapter<VideoItem
 	}
 
 	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	public VideoItemRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext())
 				.inflate(R.layout.list_item_video, parent, false);
-		return new ViewHolder(view);
+		return new VideoItemRecyclerViewHolder(view);
 	}
 
 	@Override
-	public void onBindViewHolder(final ViewHolder holder, int position) {
+	public void onBindViewHolder(final VideoItemRecyclerViewHolder holder, int position) {
 		VideoItem item = items.get(position);
 		holder.item = item;
 		holder.title.setText(item.title);
@@ -69,23 +68,5 @@ public class VideoItemRecyclerViewAdapter extends RecyclerView.Adapter<VideoItem
 	@Override
 	public int getItemCount() {
 		return items.size();
-	}
-
-	static class ViewHolder extends RecyclerView.ViewHolder {
-		VideoItem item;
-		View itemView;
-		TextView title;
-		TextView channelTitle;
-		TextView viewCount;
-		ImageView thumbnail;
-
-		ViewHolder(View view) {
-			super(view);
-			itemView = view;
-			title = (TextView) view.findViewById(R.id.title);
-			channelTitle = (TextView) view.findViewById(R.id.channel_title);
-			viewCount = (TextView) view.findViewById(R.id.view_count);
-			thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-		}
 	}
 }

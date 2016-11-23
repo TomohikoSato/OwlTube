@@ -26,10 +26,20 @@ public class VideoItemMapper {
 	public static List<VideoItem> map(@NonNull Popular popular) {
 		List<VideoItem> result = new ArrayList<>();
 		for (com.example.tomohiko_sato.owltube.infra.api.youtube.data.popular.Item item : popular.items) {
+			if (isDeletedVideo(item)) {
+				// Deleted Video はスキップする
+				continue;
+			}
+
 			result.add(new VideoItem(item.id, item.snippet.title, item.snippet.channelTitle, item.statistics.viewCount, item.snippet.thumbnails.medium.url));
 		}
 		return result;
 	}
 
-
+	/**
+	 * 削除されたVideoか判定する。Youtube APIに明確なフラグがないため、それっぽいので判定している。
+	 */
+	private static boolean isDeletedVideo(com.example.tomohiko_sato.owltube.infra.api.youtube.data.popular.Item item) {
+		return item.statistics == null;
+	}
 }

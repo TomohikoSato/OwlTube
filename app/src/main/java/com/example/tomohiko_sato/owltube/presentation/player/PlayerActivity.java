@@ -1,15 +1,15 @@
 package com.example.tomohiko_sato.owltube.presentation.player;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PixelFormat;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.tomohiko_sato.owltube.R;
@@ -19,7 +19,6 @@ import com.example.tomohiko_sato.owltube.di.SampleModule;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
-import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -32,15 +31,31 @@ import javax.inject.Inject;
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener, PlayerRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private static final String KEY_INTENT_EXTRA_VIDEO_ITEM = "VIDEO_ITEM";
 	private static final int REQUEST_CODE_PLAYER_RECOVERY_DIALOG = 22;
-	private static final int REQUEST_CODE_EXTERNAL_PLAYER_RECOVERY_DIALOG = 23;
 	private static final String TAG = PlayerActivity.class.getSimpleName();
 	private String videoId;
 	private YouTubePlayerView playerView;
-	private YouTubePlayerView externalPlayerView;
+
 	private PlayerRecyclerViewAdapter adapter;
+	ExternalPlayerService externalPlayerService;
+	private boolean isBound = false;
 
 	@Inject
 	PlayerUseCase playerUseCase;
+
+	private ServiceConnection connection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder binder) {
+			Log.d(TAG, "onServiceConnected");
+			isBound = true;
+			externalPlayerService = ((ExternalPlayerService.ExternalPlayerServiceBinder) binder).getService();
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			Log.d(TAG, "onServiceDisconnected");
+			isBound = false;
+		}
+	};
 
 	public static void startPlayerActivity(Context context, VideoItem item) {
 		Intent intent = new Intent(context, PlayerActivity.class);
@@ -51,20 +66,19 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		DaggerSampleComponent.builder().sampleModule(new SampleModule(this)).build().inject(this);
-
-
-		setContentView(R.layout.activity_player);
-
-
 		VideoItem videoItem = getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO_ITEM);
 		if (videoItem == null) {
 			throw new IllegalArgumentException("KEY_INTENT_EXTRA_VIDEO_ITEM must set");
 		}
+
+		DaggerSampleComponent.builder().sampleModule(new SampleModule(this)).build().inject(this);
+		setContentView(R.layout.activity_player);
+
 		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 		adapter = new PlayerRecyclerViewAdapter(this, this, videoItem);
 		recyclerView.setAdapter(adapter);
 		videoId = videoItem.videoId;
+		ExternalPlayerService.bindService(this, connection);
 
 		playerUseCase.addRecentlyWatched(videoItem);
 		playerUseCase.fetchRelatedVideo(videoId, new Callback<List<VideoItem>>() {
@@ -72,6 +86,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 				adapter.setBodyItem(response);
 				adapter.notifyDataSetChanged();
 			}
+
 			public void onFailure(Throwable t) {
 				t.printStackTrace();
 			}
@@ -84,46 +99,40 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		external.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LayoutInflater layoutInflater = LayoutInflater.from(PlayerActivity.this);
-//				LinearLayout externalPlayerContainer = (LinearLayout) layoutInflater.inflate(R.layout.view_external_player, null);
+				ExternalPlayerService.startService(PlayerActivity.this);
 
-				// 重ね合わせするViewの設定を行う
-				WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-						toPixel(200),
-						toPixel(110),
-						WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-						WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-						PixelFormat.TRANSLUCENT);
-
-				// WindowManagerを取得する
-				WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-				ViewGroup parent = (ViewGroup) playerView.getParent();
-				parent.removeView(playerView);
-
-//				externalPlayerContainer.addView(playerView, toPixel(110), toPixel(200));
-				wm.addView(playerView, params);
-/*
-				// レイアウトファイルから重ね合わせするViewを作成する
-
-				externalPlayerView = (YouTubePlayerView) view.findViewById(R.id.external_youtube_player);
+				View layout = LayoutInflater.from(PlayerActivity.this).inflate(R.layout.view_external_player, null);
+				Button closeButton = (Button) layout.findViewById(R.id.button_close);
+				closeButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Log.d(TAG, "onclick");
+					}
+				});
+				YouTubePlayerView externalPlayerView = (YouTubePlayerView) layout.findViewById(R.id.external_youtube_player);
 				externalPlayerView.initialize(Key.Youtube.API_KEY, PlayerActivity.this);
-
-				// Viewを画面上に重ね合わせする
-				wm.addView(view, params);
-	*/
+				externalPlayerService.addView(layout);
 			}
 		});
 	}
 
+/*
 	private int toPixel(int dp) {
 		final float scale = getResources().getDisplayMetrics().density;
-		int pixel = (int) (dp * scale + 0.5f); //0.5?
+		int pixel = (int) (dp * scale + 0.5f); //TODO: 0.5?
 		return pixel;
 	}
+*/
+
+	private YouTubePlayer currentPlayingPlayer;
 
 	@Override
 	public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
 		Log.d(TAG, "onInitializationSuccess");
+		if (currentPlayingPlayer != null) {
+			currentPlayingPlayer.release();
+			currentPlayingPlayer = null;
+		}
 		player.loadVideo(videoId);
 	}
 
@@ -141,6 +150,23 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		if (REQUEST_CODE_PLAYER_RECOVERY_DIALOG == requestCode) {
 			playerView.initialize(Key.Youtube.API_KEY, this);
 		}
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.d(TAG, "onStop");
+
+		if (isBound) {
+			unbindService(connection);
+			isBound = false;
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.d(TAG, "onDestroy");
 	}
 
 	@Override

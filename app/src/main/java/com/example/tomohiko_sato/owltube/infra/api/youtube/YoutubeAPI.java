@@ -13,7 +13,7 @@ import static com.example.tomohiko_sato.owltube.config.Key.Youtube.API_KEY;
 public interface YoutubeAPI {
 	int MAX_RESULTS = 50;
 
-	@GET("search?part=snippet&regionCode=JP&maxResults=" + MAX_RESULTS + "&key=" + API_KEY)
+	@GET("search?part=snippet&regionCode=JP&type=video&maxResults=" + MAX_RESULTS + "&key=" + API_KEY)
 	Call<Search> search(@Query("q") String q);
 
 	@GET("videos?part=statistics&key=" + API_KEY)

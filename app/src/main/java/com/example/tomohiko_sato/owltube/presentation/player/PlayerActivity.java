@@ -70,6 +70,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		playerUseCase.fetchRelatedVideo(videoId, new Callback<List<VideoItem>>() {
 			public void onSuccess(List<VideoItem> response) {
 				adapter.setBodyItem(response);
+				adapter.notifyDataSetChanged();
 			}
 			public void onFailure(Throwable t) {
 				t.printStackTrace();

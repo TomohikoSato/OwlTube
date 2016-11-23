@@ -8,7 +8,9 @@ import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.owltube.infra.dao.RecentlyWatchedDao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -37,6 +39,24 @@ public class PlayerUseCase {
 			@Override
 			public void run() {
 				final List<VideoItem> items = youtubeRequest.fetchRealtedToVideoId(videoId);
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						callback.onSuccess(items);
+					}
+				});
+
+				List<String> videoIds = new ArrayList<>();
+				for (VideoItem item : items) {
+					videoIds.add(item.videoId);
+				}
+
+				Map<String, String> map = youtubeRequest.fetchStatistics(videoIds);
+
+				for (VideoItem item : items) {
+					item.viewCount = map.get(item.videoId);
+				}
+
 				handler.post(new Runnable() {
 					@Override
 					public void run() {

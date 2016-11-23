@@ -99,11 +99,14 @@ public class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> 
 			vdvh.viewCount.setText(StringUtil.convertDisplayViewCount(headerItem.viewCount));
 		} else if (viewType == ViewType.Body) {
 			final VideoItemRecyclerViewHolder vivh = (VideoItemRecyclerViewHolder) holder;
-			vivh.item = headerItem;
-			vivh.title.setText(headerItem.title);
-			vivh.channelTitle.setText(headerItem.channelTitle);
-			vivh.viewCount.setText(StringUtil.convertDisplayViewCount(headerItem.viewCount));
-			Picasso.with(context).load(headerItem.thumbnailUrl).into(vivh.thumbnail);
+
+			int bodyPosition = position - 1;
+
+			vivh.item = bodyItems.get(bodyPosition);
+			vivh.title.setText(bodyItems.get(bodyPosition).title);
+			vivh.channelTitle.setText(bodyItems.get(bodyPosition).channelTitle);
+			vivh.viewCount.setText(StringUtil.convertDisplayViewCount(bodyItems.get(bodyPosition).viewCount));
+			Picasso.with(context).load(bodyItems.get(bodyPosition).thumbnailUrl).into(vivh.thumbnail);
 
 			vivh.itemView.setOnClickListener(new View.OnClickListener() {
 				@Override

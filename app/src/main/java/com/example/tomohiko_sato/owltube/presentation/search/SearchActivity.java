@@ -44,7 +44,8 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 
 	private SearchResultFragment searchResultFragment;
 	private SearchHistoryFragment searchHistoryFragment;
-
+	private SearchView searchView;
+	private Fragment currentShowingFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		showSearchHistoryFragment();
 	}
 
-	private Fragment currentShowingFragment;
+
 
 	private void showSearchHistoryFragment() {
 		if (currentShowingFragment == searchHistoryFragment) {
@@ -88,7 +89,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		final SearchView searchView = (SearchView) findViewById(R.id.search_search_view);
+		searchView = (SearchView) findViewById(R.id.search_search_view);
 		searchView.setIconifiedByDefault(false);
 		searchView.setFocusable(true);
 		searchView.setQueryHint("Search Music");
@@ -190,7 +191,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 
 	@Override
 	public void OnSearchHistoryFragmentInteraction(String searchHistory) {
-		search(searchHistory);
+		searchView.setQuery(searchHistory, true);
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.example.tomohiko_sato.owltube.di.SampleModule;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -27,7 +29,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
+public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener, PlayerRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private static final String KEY_INTENT_EXTRA_VIDEO_ITEM = "VIDEO_ITEM";
 	private static final int REQUEST_CODE_PLAYER_RECOVERY_DIALOG = 22;
 	private static final int REQUEST_CODE_EXTERNAL_PLAYER_RECOVERY_DIALOG = 23;
@@ -35,6 +37,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	private String videoId;
 	private YouTubePlayerView playerView;
 	private YouTubePlayerView externalPlayerView;
+	private PlayerRecyclerViewAdapter adapter;
 
 	@Inject
 	PlayerUseCase playerUseCase;
@@ -52,18 +55,24 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
 
 		setContentView(R.layout.activity_player);
+
+
 		VideoItem videoItem = getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO_ITEM);
 		if (videoItem == null) {
 			throw new IllegalArgumentException("KEY_INTENT_EXTRA_VIDEO_ITEM must set");
 		}
+		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+		adapter = new PlayerRecyclerViewAdapter(this, this, videoItem);
+		recyclerView.setAdapter(adapter);
 		videoId = videoItem.videoId;
+
 		playerUseCase.addRecentlyWatched(videoItem);
 		playerUseCase.fetchRelatedVideo(videoId, new Callback<List<VideoItem>>() {
 			public void onSuccess(List<VideoItem> response) {
-
+				adapter.setBodyItem(response);
 			}
-
 			public void onFailure(Throwable t) {
+				t.printStackTrace();
 			}
 		});
 
@@ -131,5 +140,10 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		if (REQUEST_CODE_PLAYER_RECOVERY_DIALOG == requestCode) {
 			playerView.initialize(Key.Youtube.API_KEY, this);
 		}
+	}
+
+	@Override
+	public void onVideoItemSelected(VideoItem item) {
+		startPlayerActivity(this, item);
 	}
 }

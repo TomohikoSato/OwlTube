@@ -4,7 +4,8 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:name="com.example.tomohiko_sato.mytube.presentation.ItemFragment"
              android:layout_width="match_parent"
-             android:layout_height="match_parent">
+             android:layout_height="match_parent"
+             tools:context="com.example.tomohiko_sato.owltube.presentation.main.popular.PopularFragment">
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -22,6 +23,5 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.example.tomohiko_sato.owltube.presentation.main.popular.PopularFragment"
         tools:listitem="@layout/list_item_video"/>
 </FrameLayout>

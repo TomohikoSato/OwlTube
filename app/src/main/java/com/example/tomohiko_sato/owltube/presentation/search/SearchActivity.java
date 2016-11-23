@@ -63,8 +63,6 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		showSearchHistoryFragment();
 	}
 
-
-
 	private void showSearchHistoryFragment() {
 		if (currentShowingFragment == searchHistoryFragment) {
 			return;

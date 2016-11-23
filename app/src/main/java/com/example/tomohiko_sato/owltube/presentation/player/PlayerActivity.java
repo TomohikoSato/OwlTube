@@ -92,8 +92,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			}
 		});
 
-		playerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
-		playerView.initialize(Key.Youtube.API_KEY, this);
+//		playerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
+//		playerView.initialize(Key.Youtube.API_KEY, this);
 
 		Button external = (Button) findViewById(R.id.button_external);
 		external.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +133,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			currentPlayingPlayer.release();
 			currentPlayingPlayer = null;
 		}
+		currentPlayingPlayer = player;
 		player.loadVideo(videoId);
 	}
 

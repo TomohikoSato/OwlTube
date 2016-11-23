@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.CursorAdapter;
@@ -61,18 +62,28 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		showSearchHistoryFragment();
 	}
 
+	private Fragment currentShowingFragment;
+
 	private void showSearchHistoryFragment() {
+		if (currentShowingFragment == searchHistoryFragment) {
+			return;
+		}
 		FragmentManager manager = getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
 		transaction.replace(R.id.fragment_container, searchHistoryFragment);
 		transaction.commit();
+		currentShowingFragment = searchHistoryFragment;
 	}
 
 	private void showSearchResultFragment() {
+		if (currentShowingFragment == searchResultFragment) {
+			return;
+		}
 		FragmentManager manager = getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
 		transaction.replace(R.id.fragment_container, searchResultFragment);
 		transaction.commit();
+		currentShowingFragment = searchResultFragment;
 	}
 
 	@Override
@@ -81,6 +92,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		searchView.setIconifiedByDefault(false);
 		searchView.setFocusable(true);
 		searchView.setQueryHint("Search Music");
+		//TODO: 検索履歴画面の時だけ見せたい
 		searchView.requestFocusFromTouch();
 
 		final String[] from = new String[]{"suggest"};
@@ -121,6 +133,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 
 			@Override
 			public boolean onQueryTextChange(final String newText) {
+				showSearchHistoryFragment();
 				Log.d(TAG, "query text change" + newText);
 				searchUC.fetchSuggest(newText, new Callback<List<String>>() {
 					@Override

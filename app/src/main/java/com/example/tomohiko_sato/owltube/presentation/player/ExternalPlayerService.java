@@ -53,20 +53,6 @@ public class ExternalPlayerService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.i(TAG, "onStartCommand Received start id " + startId + ": " + intent);
 		Toast.makeText(this, "ExternalPlayerService#onStartCommand", Toast.LENGTH_SHORT).show();
-
-		// nothing to do??
-
-/*
-		Button closeButton = (Button) layout.findViewById(R.id.button_close);
-		closeButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "onclick");
-			}
-		});
-		overlapView.addView(layout);
-*/
-
 		return START_STICKY;
 	}
 
@@ -79,6 +65,7 @@ public class ExternalPlayerService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
+		Log.d(TAG, "onBind " + intent.toString());
 		windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 		overlapView = new FrameLayout(getApplicationContext());
 		overlapViewParams = new WindowManager.LayoutParams(
@@ -95,13 +82,19 @@ public class ExternalPlayerService extends Service {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				Log.d(TAG, "removeView");
+				Log.d(TAG, "delay time has come. removeView");
 				windowManager.removeView(overlapView);
 				stopSelf();
 			}
-		}, 20 * 1000);
+		}, 30 * 1000);
 
 		return binder;
+	}
+
+	@Override
+	public boolean onUnbind(Intent intent) {
+		Log.d(TAG, "onUnbind");
+		return super.onUnbind(intent);
 	}
 
 	@Override

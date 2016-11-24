@@ -134,6 +134,9 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			currentPlayingPlayer = null;
 		}
 		currentPlayingPlayer = player;
+		//TODO: 外部プレイヤーだったらCHROMELESSに
+
+		player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
 		player.loadVideo(videoId);
 	}
 

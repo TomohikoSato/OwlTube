@@ -1,41 +1,41 @@
 package com.example.tomohiko_sato.owltube.presentation.common_component;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link VideoItem}.
- * {@link VideoItem} tap event call {@link OnVideoItemSelectedListener}.
+ * {@link RecyclerView.Adapter} that can display a {@link Video}.
+ * {@link Video} tap event call {@link OnVideoItemSelectedListener}.
  */
 public class VideoItemRecyclerViewAdapter extends RecyclerView.Adapter<VideoItemRecyclerViewHolder> {
 	public interface OnVideoItemSelectedListener {
-		void onVideoItemSelected(VideoItem item);
+		void onVideoItemSelected(Video item);
 	}
 
-	private List<VideoItem> items;
+	private List<Video> items;
 	private final OnVideoItemSelectedListener listener;
 	private Context context;
 
-	public VideoItemRecyclerViewAdapter(List<VideoItem> items, OnVideoItemSelectedListener listener, Context context) {
+	public VideoItemRecyclerViewAdapter(@NonNull List<Video> items, @NonNull OnVideoItemSelectedListener listener, @NonNull Context context) {
 		this.items = items;
 		this.listener = listener;
 		this.context = context;
 	}
 
-	public void setItems(List<VideoItem> items) {
-		this.items = items;
+	public void addItems(@NonNull List<Video> addItems) {
+		this.items.addAll(addItems);
+		notifyItemRangeInserted(items.size() - addItems.size() + 1, addItems.size());
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class VideoItemRecyclerViewAdapter extends RecyclerView.Adapter<VideoItem
 
 	@Override
 	public void onBindViewHolder(final VideoItemRecyclerViewHolder holder, int position) {
-		VideoItem item = items.get(position);
+		Video item = items.get(position);
 		holder.item = item;
 		holder.title.setText(item.title);
 		holder.channelTitle.setText(item.channelTitle);

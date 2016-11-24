@@ -2,8 +2,9 @@ package com.example.tomohiko_sato.owltube.domain.search;
 
 import android.os.Handler;
 
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
+import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.infra.api.google.GoogleRequest;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDao;
@@ -26,36 +27,37 @@ public class SearchUseCase {
 		this.dao = dao;
 	}
 
-	public void search(final String query, final Callback<List<VideoItem>> callback) {
+	public void search(final String query, final Callback<VideoResponse> callback) {
 		addSearchHistory(query);
 
 		final Handler handler = new Handler();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				final List<VideoItem> items = youtubeRequest.search(query);
+				final VideoResponse videoResponse= youtubeRequest.search(query);
+				final List<Video> videos = videoResponse.videos;
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						callback.onSuccess(items);
+						callback.onSuccess(videoResponse);
 					}
 				});
 
 				List<String> videoIds = new ArrayList<>();
-				for (VideoItem item : items) {
-					videoIds.add(item.videoId);
+				for (Video video : videos) {
+					videoIds.add(video.videoId);
 				}
 
-				Map<String, String> map = youtubeRequest.fetchStatistics(videoIds);
+				Map<String, String> map = youtubeRequest.fetchViewCount(videoIds);
 
-				for (VideoItem item : items) {
-					item.viewCount = map.get(item.videoId);
+				for (Video video : videos) {
+					video.viewCount = map.get(video.videoId);
 				}
 
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						callback.onSuccess(items);
+						callback.onSuccess(videoResponse);
 					}
 				});
 			}

@@ -22,7 +22,8 @@ import android.widget.Toast;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.di.DaggerSampleComponent;
 import com.example.tomohiko_sato.owltube.di.SampleModule;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
+import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
@@ -155,11 +156,11 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 	private void search(String query) {
 		hideKeyboard();
 		showSearchResultFragment();
-		searchUC.search(query, new Callback<List<VideoItem>>() {
+		searchUC.search(query, new Callback<VideoResponse>() {
 			@Override
-			public void onSuccess(List<VideoItem> items) {
+			public void onSuccess(VideoResponse videoResponse) {
 				Log.d(TAG, "Search onSuccess");
-				searchResultFragment.setVideoItems(items);
+				searchResultFragment.setVideoItems(videoResponse.videos);
 			}
 
 			@Override
@@ -193,7 +194,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 	}
 
 	@Override
-	public void onVideoItemSelected(VideoItem item) {
+	public void onVideoItemSelected(Video item) {
 		PlayerActivity.startPlayerActivity(this, item);
 	}
 }

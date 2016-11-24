@@ -9,10 +9,15 @@ import android.support.v7.widget.LinearLayoutManager;
 /**
  * {@link RecyclerView}のスクロールを検知して、ページングのイベントを発行するクラス
  * {@link LinearLayoutManager} を使っていることを前提としている
- */
+  */
 public class OnPagingScrollListener extends OnScrollListener {
 	public interface OnShouldLoadNextPageListener {
-		void onShouldLoadNextPage();
+
+		/**
+		 * ページングする必要があることを伝える
+		 * @param lastItemPosition 最後のリスト要素の位置
+		 */
+		void onShouldLoadNextPage(int lastItemPosition);
 	}
 
 	private boolean isLoading = false;
@@ -47,7 +52,7 @@ public class OnPagingScrollListener extends OnScrollListener {
 
 				if ((visibleItemCount + pastVisiblesItems + bufferToTheLast) >= totalItemCount) {
 					Log.d("...", "Last Item Wow !");
-					listener.onShouldLoadNextPage();
+					listener.onShouldLoadNextPage(totalItemCount);
 					isLoading = true;
 				}
 			}

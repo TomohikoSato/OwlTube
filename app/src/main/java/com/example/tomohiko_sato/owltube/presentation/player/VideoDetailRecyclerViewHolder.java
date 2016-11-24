@@ -2,14 +2,13 @@ package com.example.tomohiko_sato.owltube.presentation.player;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 
 public class VideoDetailRecyclerViewHolder extends RecyclerView.ViewHolder {
-	VideoItem item;
+	Video item;
 	View itemView;
 	TextView title;
 	TextView channelTitle;

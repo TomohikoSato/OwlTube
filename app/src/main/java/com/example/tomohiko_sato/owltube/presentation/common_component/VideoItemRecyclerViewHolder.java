@@ -6,10 +6,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 
 public class VideoItemRecyclerViewHolder extends RecyclerView.ViewHolder {
-	public VideoItem item;
+	public Video item;
 	public View itemView;
 	public TextView title;
 	public TextView channelTitle;

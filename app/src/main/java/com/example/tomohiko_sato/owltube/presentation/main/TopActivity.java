@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchActivity;
@@ -83,7 +83,7 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 	}
 
 	@Override
-	public void onVideoItemSelected(VideoItem item) {
+	public void onVideoItemSelected(Video item) {
 		PlayerActivity.startPlayerActivity(this, item);
 	}
 

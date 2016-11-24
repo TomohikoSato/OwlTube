@@ -17,7 +17,7 @@ import com.example.tomohiko_sato.owltube.config.Key;
 import com.example.tomohiko_sato.owltube.di.DaggerSampleComponent;
 import com.example.tomohiko_sato.owltube.di.SampleModule;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -57,7 +57,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		}
 	};
 
-	public static void startPlayerActivity(Context context, VideoItem item) {
+	public static void startPlayerActivity(Context context, Video item) {
 		Intent intent = new Intent(context, PlayerActivity.class);
 		intent.putExtra(KEY_INTENT_EXTRA_VIDEO_ITEM, item);
 		context.startActivity(intent);
@@ -66,8 +66,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		VideoItem videoItem = getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO_ITEM);
-		if (videoItem == null) {
+		Video video = getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO_ITEM);
+		if (video == null) {
 			throw new IllegalArgumentException("KEY_INTENT_EXTRA_VIDEO_ITEM must set");
 		}
 
@@ -75,14 +75,14 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		setContentView(R.layout.activity_player);
 
 		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-		adapter = new PlayerRecyclerViewAdapter(this, this, videoItem);
+		adapter = new PlayerRecyclerViewAdapter(this, this, video);
 		recyclerView.setAdapter(adapter);
-		videoId = videoItem.videoId;
+		videoId = video.videoId;
 		ExternalPlayerService.bindService(this, connection);
 
-		playerUseCase.addRecentlyWatched(videoItem);
-		playerUseCase.fetchRelatedVideo(videoId, new Callback<List<VideoItem>>() {
-			public void onSuccess(List<VideoItem> response) {
+		playerUseCase.addRecentlyWatched(video);
+		playerUseCase.fetchRelatedVideo(videoId, new Callback<List<Video>>() {
+			public void onSuccess(List<Video> response) {
 				adapter.setBodyItem(response);
 				adapter.notifyDataSetChanged();
 			}
@@ -171,7 +171,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	}
 
 	@Override
-	public void onVideoItemSelected(VideoItem item) {
+	public void onVideoItemSelected(Video item) {
 		startPlayerActivity(this, item);
 	}
 }

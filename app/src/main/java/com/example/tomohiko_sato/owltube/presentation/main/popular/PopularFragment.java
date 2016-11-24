@@ -15,7 +15,8 @@ import android.widget.Toast;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.di.DaggerSampleComponent;
 import com.example.tomohiko_sato.owltube.di.SampleModule;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
+import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.presentation.common_component.OnPagingScrollListener;
@@ -62,7 +63,7 @@ public class PopularFragment extends Fragment {
 		}
 	}
 
-
+	String nextPageToken;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,22 +76,12 @@ public class PopularFragment extends Fragment {
 
 		final LinearLayoutManager llm = new LinearLayoutManager(context);
 		recyclerView.setLayoutManager(llm);
-		adapter = new VideoItemRecyclerViewAdapter(new ArrayList<VideoItem>(), listener, context);
-		recyclerView.setAdapter(adapter);
-		recyclerView.addOnScrollListener(new OnPagingScrollListener(10, new OnPagingScrollListener.OnShouldLoadNextPageListener() {
-			@Override
-			public void onShouldLoadNextPage() {
-				//TODO: ページング処理
-				Log.d(TAG, "paging...");
 
-			}
-		}));
-
-		popularUC.fetchPopular(new Callback<List<VideoItem>>() {
+		final Callback<VideoResponse> fetchCallback = new Callback<VideoResponse>() {
 			@Override
-			public void onSuccess(List<VideoItem> items) {
-				adapter.setItems(items);
-				adapter.notifyDataSetChanged();
+			public void onSuccess(VideoResponse response) {
+				adapter.addItems(response.videos);
+				nextPageToken = response.pageToken;
 				progressBar.setVisibility(View.GONE);
 			}
 
@@ -99,7 +90,20 @@ public class PopularFragment extends Fragment {
 				Toast.makeText(context, "データの読み込みに失敗しました", Toast.LENGTH_LONG).show();
 				progressBar.setVisibility(View.GONE);
 			}
-		});
+		};
+
+		adapter = new VideoItemRecyclerViewAdapter(new ArrayList<Video>(), listener, context);
+		recyclerView.setAdapter(adapter);
+		recyclerView.addOnScrollListener(new OnPagingScrollListener(10, new OnPagingScrollListener.OnShouldLoadNextPageListener() {
+			@Override
+			public void onShouldLoadNextPage(int lastItemPosition) {
+				//TODO: ページング処理
+				Log.d(TAG, "paging...");
+				popularUC.fetchPopular(nextPageToken, fetchCallback);
+
+			}
+		}));
+		popularUC.fetchPopular(fetchCallback);
 
 		return rootView;
 	}

@@ -1,7 +1,6 @@
 package com.example.tomohiko_sato.owltube.presentation.search;
 
 import android.content.Context;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class SearchResultFragment extends Fragment {
 	public SearchResultFragment() {
 	}
 
-	public static SearchResultFragment newInstance(@Nullable List<VideoItem> items) {
+	public static SearchResultFragment newInstance(@Nullable List<Video> items) {
 		SearchResultFragment fragment = new SearchResultFragment();
 		if (items != null) {
 			Bundle bundle = new Bundle();
@@ -62,7 +61,7 @@ public class SearchResultFragment extends Fragment {
 
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
 		Bundle bundle = getArguments();
-		List<VideoItem> items = new ArrayList<>();
+		List<Video> items = new ArrayList<>();
 		if (bundle != null) {
 			progressBar.setVisibility(View.GONE);
 			items = bundle.getParcelableArrayList(KEY_VIDEO_ITEMS);
@@ -92,8 +91,8 @@ public class SearchResultFragment extends Fragment {
 		listener = null;
 	}
 
-	public void setVideoItems(List<VideoItem> videoItems) {
+	public void setVideoItems(List<Video> videos) {
 		progressBar.setVisibility(View.GONE);
-		adapter.setItems(videoItems);
+		adapter.addItems(videos);
 	}
 }

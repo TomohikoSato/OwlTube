@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.infra.db.DefaultDBHelper;
 
 import java.util.ArrayList;
@@ -30,13 +30,13 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	}
 
 	@Override
-	public List<VideoItem> selectAllOrderByRecentlyCreated(int limit) {
-		List<VideoItem> list = new ArrayList<>();
+	public List<Video> selectAllOrderByRecentlyCreated(int limit) {
+		List<Video> list = new ArrayList<>();
 		try (SQLiteDatabase db = helper.getReadableDatabase();
 			 Cursor c = db.rawQuery(helper.readSql(R.raw.sql_recently_watched_select_all), new String[]{String.valueOf(limit)})) {
 
 			for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-				list.add(new VideoItem(c.getString(COLUMN_VIDEO_ID),
+				list.add(new Video(c.getString(COLUMN_VIDEO_ID),
 						c.getString(COLUMN_TITLE),
 						c.getString(COLUMN_CHANNEL_TITLE),
 						c.getString(COLUMN_VIEW_COUNT),
@@ -52,7 +52,7 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	/**
 	 * @throws android.database.SQLException
 	 */
-	public void insertOrUpdate(VideoItem item) {
+	public void insertOrUpdate(Video item) {
 		if (selectByVideoId(item.videoId) == null) {
 			insert(item);
 		} else {
@@ -60,12 +60,12 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 		}
 	}
 
-	private VideoItem selectByVideoId(String videoId) {
-		VideoItem item = null;
+	private Video selectByVideoId(String videoId) {
+		Video item = null;
 		try (SQLiteDatabase db = helper.getReadableDatabase();
 			 Cursor c = db.rawQuery(helper.readSql(R.raw.sql_recently_watched_select_by_video_id), new String[]{videoId})) {
 			if (c.moveToFirst()) {
-				item = new VideoItem(c.getString(COLUMN_VIDEO_ID),
+				item = new Video(c.getString(COLUMN_VIDEO_ID),
 						c.getString(COLUMN_TITLE),
 						c.getString(COLUMN_CHANNEL_TITLE),
 						c.getString(COLUMN_VIEW_COUNT),
@@ -79,7 +79,7 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	/**
 	 * @throws android.database.SQLException
 	 */
-	private void update(VideoItem item) {
+	private void update(Video item) {
 		try (SQLiteDatabase db = helper.getWritableDatabase();
 			 SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_recently_watched_update))) {
 			stmt.bindString(1, item.title);
@@ -95,7 +95,7 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	/**
 	 * @throws android.database.SQLException
 	 */
-	private void insert(VideoItem item) {
+	private void insert(Video item) {
 		try (SQLiteDatabase db = helper.getWritableDatabase();
 			 SQLiteStatement stmt = db.compileStatement(helper.readSql(R.raw.sql_recently_watched_insert))) {
 			stmt.bindString(1, item.videoId);

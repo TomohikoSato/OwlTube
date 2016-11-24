@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewHolder;
 import com.example.tomohiko_sato.owltube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 	public interface OnVideoItemSelectedListener {
-		void onVideoItemSelected(VideoItem item);
+		void onVideoItemSelected(Video item);
 	}
 
 	enum ViewType {
@@ -58,18 +58,18 @@ public class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> 
 		}
 	}
 
-	private final VideoItem headerItem;
-	List<VideoItem> bodyItems = new ArrayList<>();
+	private final Video headerItem;
+	List<Video> bodyItems = new ArrayList<>();
 	private final Context context;
 	private final OnVideoItemSelectedListener listener;
 
-	public PlayerRecyclerViewAdapter(Context context, OnVideoItemSelectedListener listener, VideoItem headerItem) {
+	public PlayerRecyclerViewAdapter(Context context, OnVideoItemSelectedListener listener, Video headerItem) {
 		this.context = context;
 		this.listener = listener;
 		this.headerItem = headerItem;
 	}
 
-	public void setBodyItem(List<VideoItem> items) {
+	public void setBodyItem(List<Video> items) {
 		this.bodyItems = items;
 	}
 

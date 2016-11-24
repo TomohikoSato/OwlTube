@@ -6,7 +6,7 @@ import android.os.Handler;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.owltube.infra.dao.RecentlyWatchedDao;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 
 import java.util.List;
 
@@ -24,12 +24,12 @@ public class RecentlyWatchedUseCase {
 		this.recentlyWatchedDao = recentlyWatchedDao;
 	}
 
-	public void fetchRecentlyWatched(final Callback<List<VideoItem>> callback) {
+	public void fetchRecentlyWatched(final Callback<List<Video>> callback) {
 		final Handler handler = new Handler();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				final List<VideoItem> items= recentlyWatchedDao.selectAllOrderByRecentlyCreated(20);
+				final List<Video> items= recentlyWatchedDao.selectAllOrderByRecentlyCreated(20);
 				handler.post(new Runnable() {
 					@Override
 					public void run() {

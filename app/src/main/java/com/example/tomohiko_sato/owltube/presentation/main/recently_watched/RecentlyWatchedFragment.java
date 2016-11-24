@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.di.DaggerSampleComponent;
 import com.example.tomohiko_sato.owltube.di.SampleModule;
-import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.recently_watched.RecentlyWatchedUseCase;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
@@ -48,7 +48,7 @@ public class RecentlyWatchedFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	List<VideoItem> items = new ArrayList<>();
+	List<Video> items = new ArrayList<>();
 	VideoItemRecyclerViewAdapter adapter;
 
 	@Override
@@ -66,9 +66,9 @@ public class RecentlyWatchedFragment extends Fragment {
 	}
 
 	public void refreshItem() {
-		recentlyWatchedUC.fetchRecentlyWatched(new Callback<List<VideoItem>>() {
+		recentlyWatchedUC.fetchRecentlyWatched(new Callback<List<Video>>() {
 			@Override
-			public void onSuccess(List<VideoItem> response) {
+			public void onSuccess(List<Video> response) {
 				items.clear();
 				items.addAll(response);
 				adapter.notifyDataSetChanged();

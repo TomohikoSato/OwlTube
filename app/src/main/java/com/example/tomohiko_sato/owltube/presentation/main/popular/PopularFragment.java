@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.tomohiko_sato.owltube.di.SampleModule;
 import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
 import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
+import com.example.tomohiko_sato.owltube.presentation.common_component.OnPagingScrollListener;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 
@@ -60,6 +62,8 @@ public class PopularFragment extends Fragment {
 		}
 	}
 
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
@@ -69,9 +73,18 @@ public class PopularFragment extends Fragment {
 		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 		final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
 
-		recyclerView.setLayoutManager(new LinearLayoutManager(context));
+		final LinearLayoutManager llm = new LinearLayoutManager(context);
+		recyclerView.setLayoutManager(llm);
 		adapter = new VideoItemRecyclerViewAdapter(new ArrayList<VideoItem>(), listener, context);
 		recyclerView.setAdapter(adapter);
+		recyclerView.addOnScrollListener(new OnPagingScrollListener(10, new OnPagingScrollListener.OnShouldLoadNextPageListener() {
+			@Override
+			public void onShouldLoadNextPage() {
+				//TODO: ページング処理
+				Log.d(TAG, "paging...");
+
+			}
+		}));
 
 		popularUC.fetchPopular(new Callback<List<VideoItem>>() {
 			@Override

@@ -65,6 +65,34 @@ public class PopularFragment extends Fragment {
 
 	String nextPageToken;
 
+	final OnPagingScrollListener scrollListener = new OnPagingScrollListener(10, new OnPagingScrollListener.OnShouldLoadNextPageListener() {
+		@Override
+		public void onShouldLoadNextPage(int lastItemPosition) {
+			Log.d(TAG, "paging. nextPageToken: " + nextPageToken);
+			if (nextPageToken != null) {
+				popularUC.fetchPopular(nextPageToken, fetchCallback);
+			}
+		}
+	});
+
+	final Callback<VideoResponse> fetchCallback = new Callback<VideoResponse>() {
+		@Override
+		public void onSuccess(VideoResponse response) {
+			adapter.addItems(response.videos);
+			nextPageToken = response.pageToken;
+			progressBar.setVisibility(View.GONE);
+			scrollListener.onLoadCompleted();
+		}
+
+		@Override
+		public void onFailure(Throwable t) {
+			Toast.makeText(getContext(), "データの読み込みに失敗しました", Toast.LENGTH_LONG).show();
+			progressBar.setVisibility(View.GONE);
+		}
+	};
+
+	ProgressBar progressBar;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
@@ -72,37 +100,14 @@ public class PopularFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.fragment_popular, container, false);
 		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-		final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+		progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
 
 		final LinearLayoutManager llm = new LinearLayoutManager(context);
 		recyclerView.setLayoutManager(llm);
 
-		final Callback<VideoResponse> fetchCallback = new Callback<VideoResponse>() {
-			@Override
-			public void onSuccess(VideoResponse response) {
-				adapter.addItems(response.videos);
-				nextPageToken = response.pageToken;
-				progressBar.setVisibility(View.GONE);
-			}
-
-			@Override
-			public void onFailure(Throwable t) {
-				Toast.makeText(context, "データの読み込みに失敗しました", Toast.LENGTH_LONG).show();
-				progressBar.setVisibility(View.GONE);
-			}
-		};
-
 		adapter = new VideoItemRecyclerViewAdapter(new ArrayList<Video>(), listener, context);
 		recyclerView.setAdapter(adapter);
-		recyclerView.addOnScrollListener(new OnPagingScrollListener(10, new OnPagingScrollListener.OnShouldLoadNextPageListener() {
-			@Override
-			public void onShouldLoadNextPage(int lastItemPosition) {
-				//TODO: ページング処理
-				Log.d(TAG, "paging...");
-				popularUC.fetchPopular(nextPageToken, fetchCallback);
-
-			}
-		}));
+		recyclerView.addOnScrollListener(scrollListener);
 		popularUC.fetchPopular(fetchCallback);
 
 		return rootView;

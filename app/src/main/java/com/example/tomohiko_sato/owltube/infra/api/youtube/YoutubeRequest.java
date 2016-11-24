@@ -31,10 +31,10 @@ public class YoutubeRequest {
 		this.api = api;
 	}
 
-	public VideoResponse search(String keyword) {
+	public VideoResponse search(String keyword, @Nullable String pageToken) {
 		Log.d(TAG, "keyword: " + keyword);
 
-		Call<Search> searchRequest = api.search(keyword, null);
+		Call<Search> searchRequest = api.search(keyword, pageToken);
 		Response<Search> response = null;
 		try {
 			response = searchRequest.execute();

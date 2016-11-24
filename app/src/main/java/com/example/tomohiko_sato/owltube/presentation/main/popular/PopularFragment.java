@@ -102,8 +102,7 @@ public class PopularFragment extends Fragment {
 		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 		progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
 
-		final LinearLayoutManager llm = new LinearLayoutManager(context);
-		recyclerView.setLayoutManager(llm);
+		recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
 		adapter = new VideoItemRecyclerViewAdapter(new ArrayList<Video>(), listener, context);
 		recyclerView.setAdapter(adapter);

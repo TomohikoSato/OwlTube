@@ -1,6 +1,7 @@
 package com.example.tomohiko_sato.owltube.domain.search;
 
 import android.os.Handler;
+import android.support.annotation.Nullable;
 
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
@@ -27,14 +28,14 @@ public class SearchUseCase {
 		this.dao = dao;
 	}
 
-	public void search(final String query, final Callback<VideoResponse> callback) {
+	public void search(final String query, @Nullable final String pageToken, final Callback<VideoResponse> callback) {
 		addSearchHistory(query);
 
 		final Handler handler = new Handler();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				final VideoResponse videoResponse= youtubeRequest.search(query);
+				final VideoResponse videoResponse= youtubeRequest.search(query, pageToken);
 				final List<Video> videos = videoResponse.videos;
 				handler.post(new Runnable() {
 					@Override

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.ProgressBar;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
+import com.example.tomohiko_sato.owltube.presentation.common_component.OnPagingScrollListener;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -26,12 +28,24 @@ import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItem
  * Activities containing this fragment MUST implement the {@link OnVideoItemSelectedListener}
  * interface.
  */
-public class SearchResultFragment extends Fragment {
-	private OnVideoItemSelectedListener listener;
+public class SearchResultFragment extends Fragment implements OnVideoItemSelectedListener {
+	private final static String TAG = SearchResultFragment.class.getSimpleName();
+	private SearchResultFragmentInteractionListener listener;
 
 	private final static String KEY_VIDEO_ITEMS = "VIDEO_ITEMS";
 	private VideoItemRecyclerViewAdapter adapter;
 	private ProgressBar progressBar;
+
+	@Override
+	public void onVideoItemSelected(Video item) {
+		listener.onVideoItemSelected(item);
+	}
+
+	interface SearchResultFragmentInteractionListener {
+		void onLoadMore();
+
+		void onVideoItemSelected(Video item);
+	}
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,7 +72,7 @@ public class SearchResultFragment extends Fragment {
 
 		progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
 		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-
+		recyclerView.addOnScrollListener(scrollListener);
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
 		Bundle bundle = getArguments();
 		List<Video> items = new ArrayList<>();
@@ -67,18 +81,24 @@ public class SearchResultFragment extends Fragment {
 			items = bundle.getParcelableArrayList(KEY_VIDEO_ITEMS);
 		}
 
-		adapter = new VideoItemRecyclerViewAdapter(items, listener, context);
+		adapter = new VideoItemRecyclerViewAdapter(items, this, context);
 		recyclerView.setAdapter(adapter);
 
 		return rootView;
 	}
 
+	final OnPagingScrollListener scrollListener = new OnPagingScrollListener(10, new OnPagingScrollListener.OnShouldLoadNextPageListener() {
+		@Override
+		public void onShouldLoadNextPage(int lastItemPosition) {
+			listener.onLoadMore();
+		}
+	});
 
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		if (context instanceof OnVideoItemSelectedListener) {
-			listener = (OnVideoItemSelectedListener) context;
+		if (context instanceof SearchResultFragmentInteractionListener) {
+			listener = (SearchResultFragmentInteractionListener) context;
 		} else {
 			throw new UnsupportedOperationException(context.toString()
 					+ " must implement OnListFragmentInteractionListener");
@@ -91,8 +111,9 @@ public class SearchResultFragment extends Fragment {
 		listener = null;
 	}
 
-	public void setVideoItems(List<Video> videos) {
+	public void addVideoItems(List<Video> videos) {
 		progressBar.setVisibility(View.GONE);
+		scrollListener.onLoadCompleted();
 		adapter.addItems(videos);
 	}
 }

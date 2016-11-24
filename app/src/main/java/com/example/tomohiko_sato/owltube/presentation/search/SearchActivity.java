@@ -34,7 +34,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class SearchActivity extends AppCompatActivity implements OnVideoItemSelectedListener, SearchHistoryFragment.OnSearchHistoryFragmentInteractionListener {
+public class SearchActivity extends AppCompatActivity implements OnVideoItemSelectedListener, SearchHistoryFragment.OnSearchHistoryFragmentInteractionListener, SearchResultFragment.SearchResultFragmentInteractionListener {
 	private static final String TAG = SearchActivity.class.getSimpleName();
 
 	@Inject
@@ -153,14 +153,19 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		return true;
 	}
 
+	private String lastQueriedWord;
+	private String nextPageToken = null;
+
 	private void search(String query) {
+		lastQueriedWord = query;
 		hideKeyboard();
 		showSearchResultFragment();
-		searchUC.search(query, new Callback<VideoResponse>() {
+		searchUC.search(query, nextPageToken, new Callback<VideoResponse>() {
 			@Override
 			public void onSuccess(VideoResponse videoResponse) {
 				Log.d(TAG, "Search onSuccess");
-				searchResultFragment.setVideoItems(videoResponse.videos);
+				nextPageToken = videoResponse.pageToken;
+				searchResultFragment.addVideoItems(videoResponse.videos);
 			}
 
 			@Override
@@ -191,6 +196,11 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 	@Override
 	public void OnSearchHistoryFragmentInteraction(String searchHistory) {
 		searchView.setQuery(searchHistory, true);
+	}
+
+	@Override
+	public void onLoadMore() {
+		search(lastQueriedWord);
 	}
 
 	@Override

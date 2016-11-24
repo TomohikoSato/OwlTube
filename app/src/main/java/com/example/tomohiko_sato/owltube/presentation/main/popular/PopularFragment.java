@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,8 @@ public class PopularFragment extends Fragment {
 		}
 	}
 
+
+	int pastVisiblesItems, visibleItemCount, totalItemCount;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
@@ -69,9 +72,30 @@ public class PopularFragment extends Fragment {
 		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 		final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
 
-		recyclerView.setLayoutManager(new LinearLayoutManager(context));
+		final LinearLayoutManager llm = new LinearLayoutManager(context);
+		recyclerView.setLayoutManager(llm);
 		adapter = new VideoItemRecyclerViewAdapter(new ArrayList<VideoItem>(), listener, context);
 		recyclerView.setAdapter(adapter);
+
+
+
+		recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrolled(RecyclerView scrolledrv, int dx, int dy) {
+				Log.d(TAG, "scrolled: dx " + dx + " dy " + dy);
+				if (dy > 0) //check for scroll down
+				{
+					visibleItemCount = llm.getChildCount();
+					totalItemCount = llm.getItemCount();
+					pastVisiblesItems = llm.findFirstVisibleItemPosition();
+
+					if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+						Log.d("...", "Last Item Wow !");
+						//Do pagination.. i.e. fetch new data
+					}
+				}
+			}
+		});
 
 		popularUC.fetchPopular(new Callback<List<VideoItem>>() {
 			@Override

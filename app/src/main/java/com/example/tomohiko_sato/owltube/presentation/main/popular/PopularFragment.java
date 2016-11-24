@@ -18,6 +18,7 @@ import com.example.tomohiko_sato.owltube.di.SampleModule;
 import com.example.tomohiko_sato.owltube.domain.data.VideoItem;
 import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
+import com.example.tomohiko_sato.owltube.presentation.common_component.OnPagingScrollListener;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 
@@ -62,7 +63,7 @@ public class PopularFragment extends Fragment {
 	}
 
 
-	int pastVisiblesItems, visibleItemCount, totalItemCount;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
@@ -76,26 +77,14 @@ public class PopularFragment extends Fragment {
 		recyclerView.setLayoutManager(llm);
 		adapter = new VideoItemRecyclerViewAdapter(new ArrayList<VideoItem>(), listener, context);
 		recyclerView.setAdapter(adapter);
-
-
-
-		recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+		recyclerView.addOnScrollListener(new OnPagingScrollListener(10, new OnPagingScrollListener.OnShouldLoadNextPageListener() {
 			@Override
-			public void onScrolled(RecyclerView scrolledrv, int dx, int dy) {
-				Log.d(TAG, "scrolled: dx " + dx + " dy " + dy);
-				if (dy > 0) //check for scroll down
-				{
-					visibleItemCount = llm.getChildCount();
-					totalItemCount = llm.getItemCount();
-					pastVisiblesItems = llm.findFirstVisibleItemPosition();
+			public void onShouldLoadNextPage() {
+				//TODO: ページング処理
+				Log.d(TAG, "paging...");
 
-					if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-						Log.d("...", "Last Item Wow !");
-						//Do pagination.. i.e. fetch new data
-					}
-				}
 			}
-		});
+		}));
 
 		popularUC.fetchPopular(new Callback<List<VideoItem>>() {
 			@Override

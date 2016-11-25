@@ -109,13 +109,13 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 						Log.d(TAG, "onclick");
 					}
 				});
-				YouTubePlayerView externalPlayerView = (YouTubePlayerView) layout.findViewById(R.id.external_youtube_player);
+				externalPlayerView = (YouTubePlayerView) layout.findViewById(R.id.external_youtube_player);
 				externalPlayerView.initialize(Key.Youtube.API_KEY, PlayerActivity.this);
 				externalPlayerService.addView(layout);
 			}
 		});
 	}
-
+	private YouTubePlayerView externalPlayerView;
 /*
 	private int toPixel(int dp) {
 		final float scale = getResources().getDisplayMetrics().density;
@@ -134,10 +134,12 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			currentPlayingPlayer = null;
 		}
 		currentPlayingPlayer = player;
-		//TODO: 外部プレイヤーだったらCHROMELESSに
+		Log.d(TAG, "provider equals external player service: " + provider.equals(externalPlayerView));
 
-		player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-		player.loadVideo(videoId);
+		player.setPlayerStyle(provider.equals(externalPlayerView) ? YouTubePlayer.PlayerStyle.CHROMELESS : YouTubePlayer.PlayerStyle.DEFAULT);
+		if (!wasRestored) {
+			player.loadVideo(videoId);
+		}
 	}
 
 	@Override

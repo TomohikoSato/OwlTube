@@ -100,8 +100,8 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			@Override
 			public void onClick(View v) {
 				ExternalPlayerService.startService(PlayerActivity.this);
-
-				View layout = LayoutInflater.from(PlayerActivity.this).inflate(R.layout.view_external_player, null);
+				ExternalPlayerLayout layout = (ExternalPlayerLayout) LayoutInflater.from(PlayerActivity.this).inflate(R.layout.view_external_player, null);
+/*
 				Button closeButton = (Button) layout.findViewById(R.id.button_close);
 				closeButton.setOnClickListener(new View.OnClickListener() {
 					@Override
@@ -109,6 +109,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 						Log.d(TAG, "onclick");
 					}
 				});
+*/
 				externalPlayerView = (YouTubePlayerView) layout.findViewById(R.id.external_youtube_player);
 				externalPlayerView.initialize(Key.Youtube.API_KEY, PlayerActivity.this);
 				externalPlayerService.addView(layout);

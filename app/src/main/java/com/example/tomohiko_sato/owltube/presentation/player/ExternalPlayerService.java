@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -23,7 +24,7 @@ import com.google.android.youtube.player.YouTubePlayerView;
 /**
  * 他のアプリケーションの上でも表示できる動画再生プレイヤーの管理をするサービス
  */
-public class ExternalPlayerService extends Service {
+public class ExternalPlayerService extends Service implements View.OnTouchListener {
 	private final static String TAG = ExternalPlayerService.class.getSimpleName();
 
 	private WindowManager windowManager;
@@ -34,7 +35,7 @@ public class ExternalPlayerService extends Service {
 	public ExternalPlayerService() {
 	}
 
-	public static void bindService (Context context, ServiceConnection connection) {
+	public static void bindService(Context context, ServiceConnection connection) {
 		Intent intent = new Intent(context, ExternalPlayerService.class);
 		context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
 	}
@@ -45,7 +46,7 @@ public class ExternalPlayerService extends Service {
 	}
 
 	//bindするのか
-	public void addView (View view) {
+	public void addView(View view) {
 		overlapView.addView(view);
 	}
 
@@ -57,6 +58,29 @@ public class ExternalPlayerService extends Service {
 	}
 
 	private final ExternalPlayerServiceBinder binder = new ExternalPlayerServiceBinder();
+
+	private float dX, dY;
+	@Override
+	public boolean onTouch(View view, MotionEvent event) {
+		Log.d(TAG, event.toString());
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				dX = view.getX() - event.getRawX();
+				dY = view.getY() - event.getRawY();
+				break;
+			case MotionEvent.ACTION_MOVE:
+				view.animate()
+						.x(event.getRawX() + dX)
+						.y(event.getRawY() + dY)
+						.setDuration(0)
+						.start();
+				break;
+			default:
+				return false;
+		}
+		return true;
+	}
+
 	public class ExternalPlayerServiceBinder extends Binder {
 		public ExternalPlayerService getService() {
 			return ExternalPlayerService.this;
@@ -68,12 +92,12 @@ public class ExternalPlayerService extends Service {
 		Log.d(TAG, "onBind " + intent.toString());
 		windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 		overlapView = new FrameLayout(getApplicationContext());
+		overlapView.setOnTouchListener(this);
 		overlapViewParams = new WindowManager.LayoutParams(
 				WindowManager.LayoutParams.WRAP_CONTENT,
 				WindowManager.LayoutParams.WRAP_CONTENT,
 				WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,       // アプリケーションのTOPに配置
 				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |  // フォーカスを当てない(下の画面の操作がd系なくなるため)
-						WindowManager.LayoutParams.FLAG_FULLSCREEN |        // OverlapするViewを全画面表示
 						WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, // モーダル以外のタッチを背後のウィンドウへ送信
 				PixelFormat.TRANSLUCENT);  // viewを透明にする
 

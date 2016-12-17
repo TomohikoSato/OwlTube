@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.owltube.presentation.main.recently_watched;
+package com.example.tomohiko_sato.owltube.presentation.top.recently_watched;
 
 import android.content.Context;
 import android.os.Bundle;

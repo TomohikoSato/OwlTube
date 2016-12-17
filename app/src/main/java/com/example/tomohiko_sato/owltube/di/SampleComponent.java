@@ -1,7 +1,7 @@
 package com.example.tomohiko_sato.owltube.di;
 
-import com.example.tomohiko_sato.owltube.presentation.main.popular.PopularFragment;
-import com.example.tomohiko_sato.owltube.presentation.main.recently_watched.RecentlyWatchedFragment;
+import com.example.tomohiko_sato.owltube.presentation.top.popular.PopularFragment;
+import com.example.tomohiko_sato.owltube.presentation.top.recently_watched.RecentlyWatchedFragment;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchHistoryFragment;

@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".presentation.search.SearchActivity"/>
         <activity android:name=".presentation.player.PlayerActivity"/>
-        <activity android:name=".presentation.main.TopActivity">
+        <activity android:name=".presentation.top.TopActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

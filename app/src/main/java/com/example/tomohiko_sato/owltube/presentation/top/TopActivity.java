@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.owltube.presentation.main;
+package com.example.tomohiko_sato.owltube.presentation.top;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,8 +21,8 @@ import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItem
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchActivity;
 import com.example.tomohiko_sato.owltube.presentation.setting.SettingActivity;
-import com.example.tomohiko_sato.owltube.presentation.main.recently_watched.RecentlyWatchedFragment;
-import com.example.tomohiko_sato.owltube.presentation.main.popular.PopularFragment;
+import com.example.tomohiko_sato.owltube.presentation.top.recently_watched.RecentlyWatchedFragment;
+import com.example.tomohiko_sato.owltube.presentation.top.popular.PopularFragment;
 
 /**
  * 起動後最初に表示される、トップ画面を担うAcitivity.

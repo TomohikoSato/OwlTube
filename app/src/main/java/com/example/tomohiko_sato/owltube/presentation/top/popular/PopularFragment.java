@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.owltube.presentation.main.popular;
+package com.example.tomohiko_sato.owltube.presentation.top.popular;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -24,7 +24,6 @@ import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItem
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 

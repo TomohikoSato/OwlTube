@@ -5,7 +5,7 @@
              android:name="com.example.tomohiko_sato.mytube.presentation.ItemFragment"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.example.tomohiko_sato.owltube.presentation.main.popular.PopularFragment">
+             tools:context="com.example.tomohiko_sato.owltube.presentation.top.popular.PopularFragment">
 
     <ProgressBar
         android:id="@+id/progress_bar"

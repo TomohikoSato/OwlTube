@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.di.PresentationModule;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
 
@@ -68,7 +67,7 @@ public class SearchHistoryFragment extends Fragment {
 	@Override
 	public void onAttach(final Context context) {
 		super.onAttach(context);
-		((OwlTubeApp)context.getApplicationContext()).getComponent().getPresentationComponent(new PresentationModule()).inject(this);
+		((OwlTubeApp)context.getApplicationContext()).getComponent().inject(this);
 
 		searchUC.fetchSearchHistories(new Callback<List<String>>() {
 			@Override

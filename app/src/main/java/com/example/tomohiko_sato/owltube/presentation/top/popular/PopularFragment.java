@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.di.PresentationModule;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
@@ -53,7 +52,7 @@ public class PopularFragment extends Fragment {
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		((OwlTubeApp)context.getApplicationContext()).getComponent().getPresentationComponent(new PresentationModule()).inject(this);
+		((OwlTubeApp)context.getApplicationContext()).getComponent().inject(this);
 		if (context instanceof OnVideoItemSelectedListener) {
 			listener = (OnVideoItemSelectedListener) context;
 		} else {

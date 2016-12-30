@@ -39,6 +39,7 @@ android {
 ext {
     SL_VERSION = "24.2.1"
     LEAK_CANARY_VERSION = "1.5"
+    DAGGER_VERSION ="2.8"
 }
 
 dependencies {
@@ -53,7 +54,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$SL_VERSION"
     compile "com.android.support:design:$SL_VERSION"
     compile "com.android.support:support-vector-drawable:$SL_VERSION"
-    compile 'com.google.dagger:dagger:2.2'
+    compile "com.google.dagger:dagger:$DAGGER_VERSION"
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
@@ -75,5 +76,5 @@ dependencies {
     androidTestCompile 'com.crittercism.dexmaker:dexmaker-mockito:1.4'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.2'
+    annotationProcessor "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
 }

@@ -10,6 +10,7 @@ import com.squareup.leakcanary.LeakCanary;
 
 
 public class OwlTubeApp extends Application {
+
     private ApplicationComponent applicationComponent;
 
     @Override

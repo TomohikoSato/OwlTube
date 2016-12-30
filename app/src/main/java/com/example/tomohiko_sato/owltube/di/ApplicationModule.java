@@ -17,10 +17,9 @@ import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDao;
 import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDaoImpl;
 import com.example.tomohiko_sato.owltube.infra.db.DefaultDBHelper;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import dagger.Reusable;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -34,25 +33,28 @@ public class ApplicationModule {
     }
 
     @Provides
-    @Singleton
+    @Reusable
     Context provideContext() {
         Log.d(TAG, "provicdeContext");
         return context;
     }
 
     @Provides
+    @Reusable
     PopularUseCase providePopularUseCase(YoutubeRequest youtubeRequest) {
         Log.d(TAG, "provicdePopularUseCase");
         return new PopularUseCase(youtubeRequest);
     }
 
     @Provides
+    @Reusable
     RecentlyWatchedUseCase provideRecentlyWatchedUseCase(YoutubeRequest youtubeRequest, Context context, RecentlyWatchedDao recentlyWatchedDao) {
         Log.d(TAG, "provicdeRecentlyWatchedUseCase");
         return new RecentlyWatchedUseCase(youtubeRequest, context, recentlyWatchedDao);
     }
 
     @Provides
+    @Reusable
     PlayerUseCase providePlayerUseCase(RecentlyWatchedDao dao, YoutubeRequest request) {
         Log.d(TAG, "provicdePlayerUseCase");
         return new PlayerUseCase(dao, request);
@@ -60,18 +62,21 @@ public class ApplicationModule {
 
 
     @Provides
+    @Reusable
     SearchUseCase provideSearchUseCase(YoutubeRequest youtubeRequest, GoogleRequest googleRequest, SearchHistoryDao dao) {
         Log.d(TAG, "provideSearchUseCase");
         return new SearchUseCase(youtubeRequest, googleRequest, dao);
     }
 
     @Provides
+    @Reusable
     YoutubeRequest provideYoutubeRequest(YoutubeAPI api) {
         Log.d(TAG, "provideYoutubeRequest");
         return new YoutubeRequest(api);
     }
 
     @Provides
+    @Reusable
     YoutubeAPI provideYoutubeAPI() {
         Log.d(TAG, "provideYoutubeAPI");
         return new Retrofit.Builder()
@@ -81,12 +86,14 @@ public class ApplicationModule {
     }
 
     @Provides
+    @Reusable
     GoogleRequest provideGoogleRequest() {
         Log.d(TAG, "provideGoogleRequest");
         return new GoogleRequest();
     }
 
     @Provides
+    @Reusable
     GoogleAPI provideGoogleAPI() {
         Log.d(TAG, "provideGoogleAPI");
         return new Retrofit.Builder()
@@ -96,18 +103,21 @@ public class ApplicationModule {
     }
 
     @Provides
+    @Reusable
     RecentlyWatchedDao provideRecentlyWatchedDao(DefaultDBHelper helper) {
         Log.d(TAG, "provideRecentlyWatchedDao");
         return new RecentlyWatchedDaoImpl(helper);
     }
 
     @Provides
+    @Reusable
     DefaultDBHelper provideDefaultDBHelper() {
         Log.d(TAG, "provideDefaultDBHelper");
         return new DefaultDBHelper(context);
     }
 
     @Provides
+    @Reusable
     SearchHistoryDao provideSearcHistoryDao (DefaultDBHelper helper) {
         Log.d(TAG, "provideSearcHistoryDao");
         return new SearchHistoryDaoImpl(helper);

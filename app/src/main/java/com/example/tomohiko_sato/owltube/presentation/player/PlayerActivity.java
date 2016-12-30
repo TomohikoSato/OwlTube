@@ -12,10 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.config.Key;
-import com.example.tomohiko_sato.owltube.di.DaggerSampleComponent;
-import com.example.tomohiko_sato.owltube.di.SampleModule;
+import com.example.tomohiko_sato.owltube.di.PresentationModule;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
@@ -71,7 +71,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			throw new IllegalArgumentException("KEY_INTENT_EXTRA_VIDEO_ITEM must set");
 		}
 
-		DaggerSampleComponent.builder().sampleModule(new SampleModule(this)).build().inject(this);
+		((OwlTubeApp)getApplication()).getComponent().getPresentationComponent(new PresentationModule()).inject(this);
 		setContentView(R.layout.activity_player);
 
 		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);

@@ -19,13 +19,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.di.DaggerSampleComponent;
-import com.example.tomohiko_sato.owltube.di.SampleModule;
+import com.example.tomohiko_sato.owltube.di.PresentationModule;
+import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
-import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
@@ -56,7 +56,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-		DaggerSampleComponent.builder().sampleModule(new SampleModule(this)).build().inject(this);
+		((OwlTubeApp)getApplication()).getComponent().getPresentationComponent(new PresentationModule()).inject(this);
 
 		searchHistoryFragment = SearchHistoryFragment.newInstance();
 		searchResultFragment = SearchResultFragment.newInstance(null);

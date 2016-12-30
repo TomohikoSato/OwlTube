@@ -10,12 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.di.DaggerSampleComponent;
-import com.example.tomohiko_sato.owltube.di.SampleModule;
+import com.example.tomohiko_sato.owltube.di.PresentationModule;
+import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.recently_watched.RecentlyWatchedUseCase;
-import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 
@@ -85,7 +85,7 @@ public class RecentlyWatchedFragment extends Fragment {
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		DaggerSampleComponent.builder().sampleModule(new SampleModule(context)).build().inject(this);
+		((OwlTubeApp)context.getApplicationContext()).getComponent().getPresentationComponent(new PresentationModule()).inject(this);
 		if (context instanceof OnVideoItemSelectedListener) {
 			listener = (OnVideoItemSelectedListener) context;
 		} else {

@@ -9,16 +9,12 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.config.Key;
 import com.google.android.youtube.player.YouTubePlayerView;
 
 /**

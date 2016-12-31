@@ -14,7 +14,7 @@ import android.widget.Button;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.config.Key;
+import com.example.tomohiko_sato.owltube.infra.api.youtube.config.Api;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
@@ -92,7 +92,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		});
 
 //		playerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
-//		playerView.initialize(Key.Youtube.API_KEY, this);
+//		playerView.initialize(Api.Youtube.API_KEY, this);
 
 		Button external = (Button) findViewById(R.id.button_external);
 		external.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +110,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 				});
 */
 				externalPlayerView = (YouTubePlayerView) layout.findViewById(R.id.external_youtube_player);
-				externalPlayerView.initialize(Key.Youtube.API_KEY, PlayerActivity.this);
+				externalPlayerView.initialize(Api.Youtube.API_KEY, PlayerActivity.this);
 				externalPlayerService.addView(layout);
 			}
 		});
@@ -154,7 +154,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(TAG, "onActivityResult" + requestCode);
 		if (REQUEST_CODE_PLAYER_RECOVERY_DIALOG == requestCode) {
-			playerView.initialize(Key.Youtube.API_KEY, this);
+			playerView.initialize(Api.Youtube.API_KEY, this);
 		}
 	}
 

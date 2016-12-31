@@ -16,7 +16,7 @@ cf. https://developers.google.com/youtube/v3/getting-started
 
 4) Fill the KEY in the following file
 
-https://github.com/TomohikoSato/OwlTube/blob/master/app/src/main/java/com/example/tomohiko_sato/owltube/config/Key.java
+https://github.com/TomohikoSato/OwlTube/blob/master/app/src/main/java/com/example/tomohiko_sato/owltube/infra/api/youtube/config/Api.java
 
 5) Compile and run the app
 

@@ -52,7 +52,7 @@ public class YoutubeRequest {
 	/**
 	 * ViewCount(視聴回数)を取得する
 	 *
-	 * @return Map<Key:videoId, Value:viewCount>
+	 * @return Map<Api:videoId, Value:viewCount>
 	 */
 	public Map<String, String> fetchViewCount(@NonNull List<String> videoIds) {
 		Call<VideoList> call = api.videoListStatistics(toCommaSeparetedString(videoIds));

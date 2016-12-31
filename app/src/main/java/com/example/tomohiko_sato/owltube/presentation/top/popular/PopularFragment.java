@@ -82,6 +82,8 @@ public class PopularFragment extends Fragment {
 			nextPageToken = response.pageToken;
 			progressBar.setVisibility(View.GONE);
 			scrollListener.onLoadCompleted();
+
+			Toast.makeText(getContext(), "hogehoge", Toast.LENGTH_SHORT).show();
 		}
 
 		@Override

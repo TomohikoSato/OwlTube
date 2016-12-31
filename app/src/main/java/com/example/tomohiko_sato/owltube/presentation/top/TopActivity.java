@@ -2,11 +2,13 @@ package com.example.tomohiko_sato.owltube.presentation.top;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,67 +26,56 @@ import com.example.tomohiko_sato.owltube.presentation.setting.SettingActivity;
 import com.example.tomohiko_sato.owltube.presentation.top.popular.PopularFragment;
 import com.example.tomohiko_sato.owltube.presentation.top.recently_watched.RecentlyWatchedFragment;
 
+import java.util.Objects;
+
 /**
  * 起動後最初に表示される、トップ画面を担うAcitivity.
  */
 public class TopActivity extends AppCompatActivity implements VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private final static String TAG = TopActivity.class.getSimpleName();
-
-
-	private final static int TAB_POPULAR = 0;
-	private final static int TAB_RECENTLY_WATCHED = 1;
-
-	SectionPagerAdapter adapter;
+	private final static int TAB_INDEX_POPULAR = 0;
+	private final static int TAB_INDEX_RECENTLY_WATCHED = 1;
+	private final static String TAB_TITLE_POPULAR_TITLE = "Popular";
+	private final static String TAB_TITLE_RECENTLY_WATCHED = "Recently Watched";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-		setSupportActionBar(toolbar);
+		setSupportActionBar((Toolbar) findViewById(R.id.tool_bar));
 
 		ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-		adapter = new SectionPagerAdapter(getSupportFragmentManager());
-		viewPager.setAdapter(adapter);
-		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-			}
+		viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
 
-			@Override
-			public void onPageSelected(int position) {
-				if (position == TAB_RECENTLY_WATCHED) {
-					RecentlyWatchedFragment fragment = ((RecentlyWatchedFragment) adapter.getRegisteredFragment(position));
-					fragment.refreshItem();
-				}
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int state) {
-			}
-		});
-
-		final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		tabLayout.setupWithViewPager(viewPager);
+		tabLayout.addOnTabSelectedListener(new TitleChangeListener(this));
 
-		tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-			@Override
-			public void onTabSelected(TabLayout.Tab tab) {
-				getSupportActionBar().setTitle((String) tab.getTag());
-			}
+		Objects.requireNonNull(tabLayout.getTabAt(TAB_INDEX_POPULAR)).setTag(TAB_TITLE_POPULAR_TITLE).setIcon(R.drawable.main_tab_top).select();
+		Objects.requireNonNull(tabLayout.getTabAt(TAB_INDEX_RECENTLY_WATCHED)).setTag(TAB_TITLE_RECENTLY_WATCHED).setIcon(R.drawable.main_tab_recent);
+	}
 
-			@Override
-			public void onTabUnselected(TabLayout.Tab tab) {
-			}
+	static class TitleChangeListener implements TabLayout.OnTabSelectedListener {
+		@NonNull
+		private final ActionBar bar;
 
-			@Override
-			public void onTabReselected(TabLayout.Tab tab) {
-				getSupportActionBar().setTitle((String) tab.getTag());
-			}
-		});
+		TitleChangeListener(@NonNull AppCompatActivity activity) {
+			bar = Objects.requireNonNull(activity.getSupportActionBar());
+		}
 
-		tabLayout.getTabAt(TAB_POPULAR).setTag("Popular").setIcon(R.drawable.main_tab_top).select();
-		tabLayout.getTabAt(TAB_RECENTLY_WATCHED).setTag("Recently Watched").setIcon(R.drawable.main_tab_recent);
+		@Override
+		public void onTabSelected(TabLayout.Tab tab) {
+			bar.setTitle((String) tab.getTag());
+		}
+
+		@Override
+		public void onTabUnselected(TabLayout.Tab tab) {
+		}
+
+		@Override
+		public void onTabReselected(TabLayout.Tab tab) {
+			bar.setTitle((String) tab.getTag());
+		}
 	}
 
 	@Override
@@ -104,9 +95,9 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 			Log.d(TAG, "position: " + position);
 
 			switch (position) {
-				case TAB_POPULAR:
+				case TAB_INDEX_POPULAR:
 					return PopularFragment.newInstance();
-				case TAB_RECENTLY_WATCHED:
+				case TAB_INDEX_RECENTLY_WATCHED:
 					return RecentlyWatchedFragment.newInstance();
 				default:
 					throw new IllegalArgumentException("Illegal position: " + position);

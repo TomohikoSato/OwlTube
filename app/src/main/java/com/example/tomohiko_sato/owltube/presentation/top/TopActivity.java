@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -33,7 +32,7 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 	private final static String TAG = TopActivity.class.getSimpleName();
 
 	private enum TAB {
-		POPULAR(0, "Popular", R.drawable.main_tab_top) {
+		POPULAR(0, "Popular", R.drawable.main_tab_popular) {
 			@Override
 			public Fragment getFragment() {
 				return PopularFragment.newInstance();
@@ -79,17 +78,17 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		tabLayout.setupWithViewPager(viewPager);
-		tabLayout.addOnTabSelectedListener(new TitleChangeListener(this.getSupportActionBar()));
+		tabLayout.addOnTabSelectedListener(new ActionBarTitleChanger(this.getSupportActionBar()));
 
 		Objects.requireNonNull(tabLayout.getTabAt(TAB.POPULAR.position)).setTag(TAB.POPULAR.title).setIcon(TAB.POPULAR.icon).select();
 		Objects.requireNonNull(tabLayout.getTabAt(TAB.RECENTLY_WATCHED.position)).setTag(TAB.RECENTLY_WATCHED.title).setIcon(TAB.RECENTLY_WATCHED.icon);
 	}
 
-	static class TitleChangeListener implements TabLayout.OnTabSelectedListener {
+	static class ActionBarTitleChanger implements TabLayout.OnTabSelectedListener {
 		@NonNull
 		private final ActionBar bar;
 
-		TitleChangeListener(@NonNull ActionBar bar) {
+		ActionBarTitleChanger(@NonNull ActionBar bar) {
 			this.bar = Objects.requireNonNull(bar);
 		}
 

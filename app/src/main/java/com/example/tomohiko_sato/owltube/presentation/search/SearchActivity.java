@@ -2,6 +2,7 @@ package com.example.tomohiko_sato.owltube.presentation.search;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.provider.BaseColumns;
@@ -46,6 +47,10 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 	private SearchHistoryFragment searchHistoryFragment;
 	private SearchView searchView;
 	private Fragment currentShowingFragment;
+
+	public static void startSearchActivity(Context context) {
+		context.startActivity(new Intent(context, SearchActivity.class));
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

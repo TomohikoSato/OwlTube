@@ -1,6 +1,5 @@
 package com.example.tomohiko_sato.owltube.presentation.top;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -137,10 +136,10 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_main_search:
-				startActivity(new Intent(this, SearchActivity.class));
+				SearchActivity.startSearchActivity(this);
 				return true;
 			case R.id.menu_main_setting:
-				startActivity(new Intent(this, SettingActivity.class));
+				SettingActivity.startSettingActivity(this);
 				return true;
 		}
 		return false;

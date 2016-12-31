@@ -26,11 +26,11 @@ import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
-import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -39,9 +39,6 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 
 	@Inject
 	SearchUseCase searchUC;
-
-	@Inject
-	YoutubeRequest youtubeRequest;
 
 	private SearchResultFragment searchResultFragment;
 	private SearchHistoryFragment searchHistoryFragment;
@@ -56,11 +53,10 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-		setSupportActionBar(toolbar);
-		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		setSupportActionBar((Toolbar) findViewById(R.id.tool_bar));
+		Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
-		((OwlTubeApp)getApplication()).getComponent().inject(this);
+		((OwlTubeApp) getApplication()).getComponent().inject(this);
 
 		searchHistoryFragment = SearchHistoryFragment.newInstance();
 		searchResultFragment = SearchResultFragment.newInstance(null);
@@ -183,7 +179,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 	private void hideKeyboard() {
 		View view = this.getCurrentFocus();
 		if (view != null) {
-			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 		}
 	}

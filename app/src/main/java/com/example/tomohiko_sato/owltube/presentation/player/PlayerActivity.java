@@ -14,10 +14,10 @@ import android.widget.Button;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.infra.api.youtube.config.Api;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
+import com.example.tomohiko_sato.owltube.infra.api.youtube.config.Api;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -110,7 +110,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 				});
 */
 				externalPlayerView = (YouTubePlayerView) layout.findViewById(R.id.external_youtube_player);
-				externalPlayerView.initialize(Api.Youtube.API_KEY, PlayerActivity.this);
+				externalPlayerView.initialize(Api.API_KEY, PlayerActivity.this);
 				externalPlayerService.addView(layout);
 			}
 		});
@@ -154,7 +154,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(TAG, "onActivityResult" + requestCode);
 		if (REQUEST_CODE_PLAYER_RECOVERY_DIALOG == requestCode) {
-			playerView.initialize(Api.Youtube.API_KEY, this);
+			playerView.initialize(Api.API_KEY, this);
 		}
 	}
 

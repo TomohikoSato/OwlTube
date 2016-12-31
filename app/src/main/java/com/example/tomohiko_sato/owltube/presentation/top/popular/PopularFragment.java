@@ -42,8 +42,7 @@ public class PopularFragment extends Fragment {
 	PopularUseCase popularUC;
 
 	public static PopularFragment newInstance() {
-		PopularFragment fragment = new PopularFragment();
-		return fragment;
+		return new PopularFragment();
 	}
 
 	public PopularFragment() {
@@ -52,7 +51,7 @@ public class PopularFragment extends Fragment {
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		((OwlTubeApp)context.getApplicationContext()).getComponent().inject(this);
+		((OwlTubeApp) context.getApplicationContext()).getComponent().inject(this);
 		if (context instanceof OnVideoItemSelectedListener) {
 			listener = (OnVideoItemSelectedListener) context;
 		} else {
@@ -73,9 +72,12 @@ public class PopularFragment extends Fragment {
 		}
 	});
 
+	// TODO: Callbackが呼ばれてる頃にはFragmentがDestroyされていることがある。それによってメモリリークや予期せぬ不具合が起きることがある。
+	// RxやEventBusを導入して修正したい
 	final Callback<VideoResponse> fetchCallback = new Callback<VideoResponse>() {
 		@Override
 		public void onSuccess(VideoResponse response) {
+			Log.d(TAG, "onSuccess");
 			adapter.addItems(response.videos);
 			nextPageToken = response.pageToken;
 			progressBar.setVisibility(View.GONE);
@@ -94,16 +96,12 @@ public class PopularFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		final Context context = getContext();
-
 		View rootView = inflater.inflate(R.layout.fragment_popular, container, false);
-		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 		progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
 
-		recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-		adapter = new VideoItemRecyclerViewAdapter(new ArrayList<Video>(), listener, context);
-		recyclerView.setAdapter(adapter);
+		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+		recyclerView.setAdapter(adapter = new VideoItemRecyclerViewAdapter(new ArrayList<Video>(), listener, getContext()));
 		recyclerView.addOnScrollListener(scrollListener);
 		popularUC.fetchPopular(fetchCallback);
 
@@ -113,6 +111,7 @@ public class PopularFragment extends Fragment {
 	@Override
 	public void onDetach() {
 		super.onDetach();
+		Log.d(TAG, "onDetach");
 		listener = null;
 	}
 }

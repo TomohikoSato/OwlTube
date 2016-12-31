@@ -47,17 +47,16 @@ public class RecentlyWatchedFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	List<Video> items = new ArrayList<>();
-	VideoItemRecyclerViewAdapter adapter;
+	private final List<Video> items = new ArrayList<>();
+	private VideoItemRecyclerViewAdapter adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recently_watched, container, false);
-		Context context = recyclerView.getContext();
-		recyclerView.setLayoutManager(new LinearLayoutManager(context));
+		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-		adapter = new VideoItemRecyclerViewAdapter(items, listener, context);
+		adapter = new VideoItemRecyclerViewAdapter(items, listener, getContext());
 		recyclerView.setAdapter(adapter);
 		refreshItem();
 

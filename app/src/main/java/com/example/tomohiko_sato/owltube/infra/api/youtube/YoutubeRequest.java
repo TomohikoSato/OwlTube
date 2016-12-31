@@ -6,11 +6,11 @@ import android.util.ArrayMap;
 import android.util.Log;
 
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
+import com.example.tomohiko_sato.owltube.infra.api.mapper.VideoMapper;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.data.popular.Popular;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.data.search.Search;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.data.statistics.Item;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.data.statistics.VideoList;
-import com.example.tomohiko_sato.owltube.infra.api.mapper.VideoMapper;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,9 +55,13 @@ public class YoutubeRequest {
 	 * @return Map<Api:videoId, Value:viewCount>
 	 */
 	public Map<String, String> fetchViewCount(@NonNull List<String> videoIds) {
+		Map<String, String> map = new ArrayMap<>();
+		if (videoIds.size() == 0) {
+			return map;
+		}
+
 		Call<VideoList> call = api.videoListStatistics(toCommaSeparetedString(videoIds));
 
-		Map<String, String> map = new ArrayMap<>();
 		try {
 			Response<VideoList> response = call.execute();
 			for (Item item : response.body().items) {

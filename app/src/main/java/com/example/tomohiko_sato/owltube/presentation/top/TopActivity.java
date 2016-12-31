@@ -21,14 +21,19 @@ import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItem
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchActivity;
 import com.example.tomohiko_sato.owltube.presentation.setting.SettingActivity;
-import com.example.tomohiko_sato.owltube.presentation.top.recently_watched.RecentlyWatchedFragment;
 import com.example.tomohiko_sato.owltube.presentation.top.popular.PopularFragment;
+import com.example.tomohiko_sato.owltube.presentation.top.recently_watched.RecentlyWatchedFragment;
 
 /**
  * 起動後最初に表示される、トップ画面を担うAcitivity.
  */
 public class TopActivity extends AppCompatActivity implements VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private final static String TAG = TopActivity.class.getSimpleName();
+
+
+	private final static int TAB_POPULAR = 0;
+	private final static int TAB_RECENTLY_WATCHED = 1;
+
 	SectionPagerAdapter adapter;
 
 	@Override
@@ -48,7 +53,7 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 
 			@Override
 			public void onPageSelected(int position) {
-				if (position == 1) {
+				if (position == TAB_RECENTLY_WATCHED) {
 					RecentlyWatchedFragment fragment = ((RecentlyWatchedFragment) adapter.getRegisteredFragment(position));
 					fragment.refreshItem();
 				}
@@ -78,8 +83,8 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 			}
 		});
 
-		tabLayout.getTabAt(0).setTag("Popular").setIcon(R.drawable.main_tab_top).select();
-		tabLayout.getTabAt(1).setTag("Recently Watched").setIcon(R.drawable.main_tab_recent);
+		tabLayout.getTabAt(TAB_POPULAR).setTag("Popular").setIcon(R.drawable.main_tab_top).select();
+		tabLayout.getTabAt(TAB_RECENTLY_WATCHED).setTag("Recently Watched").setIcon(R.drawable.main_tab_recent);
 	}
 
 	@Override
@@ -99,9 +104,9 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 			Log.d(TAG, "position: " + position);
 
 			switch (position) {
-				case 0:
+				case TAB_POPULAR:
 					return PopularFragment.newInstance();
-				case 1:
+				case TAB_RECENTLY_WATCHED:
 					return RecentlyWatchedFragment.newInstance();
 				default:
 					throw new IllegalArgumentException("Illegal position: " + position);

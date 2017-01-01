@@ -51,6 +51,7 @@ public class YoutubeRequest {
 		Call<VideoList> call = api.videoListStatistics(toCommaSeparetedString(videoIds));
 
 		try {
+			//TODO: 畳み込み演算?とかできるのか試す
 			Response<VideoList> response = call.execute();
 			for (Item item : response.body().items) {
 				map.put(item.id, item.statistics.viewCount);
@@ -60,6 +61,22 @@ public class YoutubeRequest {
 		}
 		return map;
 	}
+
+	public Observable<Map<String, String>> fetchViewCountObservable(@NonNull List<String> videoIds) {
+		if (videoIds.size() == 0) {
+			Observable.error(new IllegalArgumentException());
+		}
+
+		return api.videoListStatisticsObservable(toCommaSeparetedString(videoIds))
+				.map(videoList -> {
+					Map<String, String> map = new ArrayMap<>();
+					for (Item item : videoList.items) {
+						map.put(item.id, item.statistics.viewCount);
+					}
+					return map;
+				});
+	}
+
 
 	private String toCommaSeparetedString(List<String> items) {
 		final StringBuilder sb = new StringBuilder();

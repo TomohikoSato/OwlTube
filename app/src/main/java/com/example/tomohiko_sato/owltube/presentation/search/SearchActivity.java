@@ -24,7 +24,6 @@ import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
-import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
@@ -33,6 +32,9 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class SearchActivity extends AppCompatActivity implements OnVideoItemSelectedListener, SearchHistoryFragment.OnSearchHistoryFragmentInteractionListener, SearchResultFragment.SearchResultFragmentInteractionListener {
 	private static final String TAG = SearchActivity.class.getSimpleName();
@@ -160,7 +162,18 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		lastQueriedWord = query;
 		hideKeyboard();
 		showSearchResultFragment();
-		searchUC.search(query, nextPageToken, new Callback<VideoResponse>() {
+		searchUC.search(query, nextPageToken)
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(videoResponse -> {
+					nextPageToken = videoResponse.pageToken;
+					searchResultFragment.addVideoItems(videoResponse.videos);
+				}, throwable -> {
+					Log.e(TAG, "Search onFailure " + throwable);
+					Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
+				});
+
+				/*, new Callback<VideoResponse>() {
 			@Override
 			public void onSuccess(VideoResponse videoResponse) {
 				Log.d(TAG, "Search onSuccess");
@@ -173,7 +186,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 				Log.e(TAG, "Search onFailure " + t);
 				Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
 			}
-		});
+		});*/
 	}
 
 	private void hideKeyboard() {

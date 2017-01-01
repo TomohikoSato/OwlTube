@@ -8,6 +8,7 @@ import com.example.tomohiko_sato.owltube.infra.api.youtube.data.popular.Popular;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.data.search.Search;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.data.statistics.VideoList;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -16,7 +17,7 @@ public interface YoutubeAPI {
 	int MAX_RESULTS = 50;
 
 	@GET("search?part=snippet&regionCode=JP&type=video&maxResults=" + MAX_RESULTS + "&key=" + Api.API_KEY)
-	Call<Search> search(@NonNull @Query("q") String q, @Nullable @Query("pageToken") String pageToken);
+	Observable<Search> search(@NonNull @Query("q") String q, @Nullable @Query("pageToken") String pageToken);
 
 	@GET("videos?part=statistics&key=" + Api.API_KEY)
 	Call<VideoList> videoListStatistics(@NonNull @Query("id") String videoIds);

@@ -18,6 +18,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -31,10 +32,17 @@ public class YoutubeRequest {
 		this.api = api;
 	}
 
-	public VideoResponse search(String keyword, @Nullable String pageToken) {
+	public Observable<VideoResponse> search(String keyword, @Nullable String pageToken) {
 		Log.d(TAG, "keyword: " + keyword);
 
-		Call<Search> searchRequest = api.search(keyword, pageToken);
+		return api.search(keyword, pageToken).map(VideoMapper::map);
+/*
+		searchRequest.subscribe(s -> {
+			VideoMapper.map(s);
+		});
+*/
+
+/*
 		Response<Search> response = null;
 		try {
 			response = searchRequest.execute();
@@ -47,6 +55,7 @@ public class YoutubeRequest {
 		}
 
 		return VideoMapper.map(response.body());
+*/
 	}
 
 	/**

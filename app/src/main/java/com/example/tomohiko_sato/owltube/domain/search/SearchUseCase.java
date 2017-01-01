@@ -3,18 +3,17 @@ package com.example.tomohiko_sato.owltube.domain.search;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 
-import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.infra.api.google.GoogleRequest;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDao;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
 
 public class SearchUseCase {
 	private final YoutubeRequest youtubeRequest;
@@ -28,15 +27,21 @@ public class SearchUseCase {
 		this.dao = dao;
 	}
 
-	public void search(final String query, @Nullable final String pageToken, final Callback<VideoResponse> callback) {
+	public Observable<VideoResponse> search(final String query, @Nullable final String pageToken) {
 		addSearchHistory(query);
 
+		return youtubeRequest.search(query, pageToken);
+
+/*
 		final Handler handler = new Handler();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				final VideoResponse videoResponse= youtubeRequest.search(query, pageToken);
-				final List<Video> videos = videoResponse.videos;
+
+//				final VideoResponse videoResponse= youtubeRequest.search(query, pageToken);
+				*/
+/*final List<Video> videos = videoResponse.videos;
+
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
@@ -61,8 +66,11 @@ public class SearchUseCase {
 						callback.onSuccess(videoResponse);
 					}
 				});
+*//*
+
 			}
 		}).start();
+*/
 	}
 
 	public void fetchSuggest(final String query, final Callback<List<String>> callback) {
@@ -93,7 +101,7 @@ public class SearchUseCase {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				final List<String> searchHistories= dao.selectAllSearchHistories();
+				final List<String> searchHistories = dao.selectAllSearchHistories();
 				handler.post(new Runnable() {
 					@Override
 					public void run() {

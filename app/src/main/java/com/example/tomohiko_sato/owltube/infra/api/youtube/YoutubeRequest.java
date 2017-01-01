@@ -34,28 +34,7 @@ public class YoutubeRequest {
 
 	public Observable<VideoResponse> search(String keyword, @Nullable String pageToken) {
 		Log.d(TAG, "keyword: " + keyword);
-
 		return api.search(keyword, pageToken).map(VideoMapper::map);
-/*
-		searchRequest.subscribe(s -> {
-			VideoMapper.map(s);
-		});
-*/
-
-/*
-		Response<Search> response = null;
-		try {
-			response = searchRequest.execute();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if (response.body() == null) {
-			return null;
-		}
-
-		return VideoMapper.map(response.body());
-*/
 	}
 
 	/**

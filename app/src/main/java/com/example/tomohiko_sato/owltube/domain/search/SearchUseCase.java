@@ -4,12 +4,15 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.infra.api.google.GoogleRequest;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -30,47 +33,23 @@ public class SearchUseCase {
 	public Observable<VideoResponse> search(final String query, @Nullable final String pageToken) {
 		addSearchHistory(query);
 
-		return youtubeRequest.search(query, pageToken);
-
-/*
-		final Handler handler = new Handler();
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-
-//				final VideoResponse videoResponse= youtubeRequest.search(query, pageToken);
-				*/
-/*final List<Video> videos = videoResponse.videos;
-
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						callback.onSuccess(videoResponse);
+		return youtubeRequest.search(query, pageToken).map(
+				videoResponse -> {
+					final List<Video> videos = videoResponse.videos;
+					List<String> videoIds = new ArrayList<>();
+					for (Video video : videos) {
+						videoIds.add(video.videoId);
 					}
-				});
 
-				List<String> videoIds = new ArrayList<>();
-				for (Video video : videos) {
-					videoIds.add(video.videoId);
-				}
+					Map<String, String> map = youtubeRequest.fetchViewCount(videoIds);
 
-				Map<String, String> map = youtubeRequest.fetchViewCount(videoIds);
-
-				for (Video video : videos) {
-					video.viewCount = map.get(video.videoId);
-				}
-
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						callback.onSuccess(videoResponse);
+					for (Video video : videos) {
+						video.viewCount = map.get(video.videoId);
 					}
-				});
-*//*
+					return videoResponse;
+				}
+		);
 
-			}
-		}).start();
-*/
 	}
 
 	public void fetchSuggest(final String query, final Callback<List<String>> callback) {

@@ -16,6 +16,7 @@ import com.example.tomohiko_sato.owltube.infra.dao.RecentlyWatchedDaoImpl;
 import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDao;
 import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDaoImpl;
 import com.example.tomohiko_sato.owltube.infra.db.DefaultDBHelper;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import dagger.Module;
 import dagger.Provides;
@@ -82,6 +83,7 @@ public class ApplicationModule {
         return new Retrofit.Builder()
                 .baseUrl("https://www.googleapis.com/youtube/v3/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build().create(YoutubeAPI.class);
     }
 

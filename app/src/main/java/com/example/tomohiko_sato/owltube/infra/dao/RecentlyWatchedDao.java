@@ -13,5 +13,5 @@ public interface RecentlyWatchedDao {
 	/**
 	 * テーブル内に存在しない{@link Video#videoId}であればInsert、既に存在すればUpdateする。
 	˙ */
-	void insertOrUpdate(@NonNull Video item);
+	void add(@NonNull Video item);
 }

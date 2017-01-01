@@ -52,7 +52,7 @@ public class RecentlyWatchedDaoImpl implements RecentlyWatchedDao {
 	/**
 	 * @throws android.database.SQLException
 	 */
-	public void insertOrUpdate(Video item) {
+	public void add(Video item) {
 		if (selectByVideoId(item.videoId) == null) {
 			insert(item);
 		} else {

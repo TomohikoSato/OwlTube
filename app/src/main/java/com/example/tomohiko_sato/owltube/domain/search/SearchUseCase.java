@@ -83,11 +83,8 @@ public class SearchUseCase {
 	}
 
 	private void addSearchHistory(final String searchHistory) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				dao.insertOrUpdateSearchHistory(searchHistory);
-			}
+		new Thread(() -> {
+			dao.addSearchHistory(searchHistory);
 		}).start();
 	}
 

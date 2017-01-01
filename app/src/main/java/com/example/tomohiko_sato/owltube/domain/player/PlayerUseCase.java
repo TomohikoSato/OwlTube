@@ -28,7 +28,7 @@ public class PlayerUseCase {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				recentlyWatchedDao.insertOrUpdate(item);
+				recentlyWatchedDao.add(item);
 			}
 		}).start();
 	}

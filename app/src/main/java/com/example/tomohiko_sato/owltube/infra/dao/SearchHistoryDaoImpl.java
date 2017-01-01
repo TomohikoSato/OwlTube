@@ -36,7 +36,7 @@ public class SearchHistoryDaoImpl implements SearchHistoryDao {
 	}
 
 	//TODO: 1以上あったら削除すればいいのかも
-	public void insertOrUpdateSearchHistory(String query) {
+	public void addSearchHistory(String query) {
 		try (SQLiteDatabase db = helper.getWritableDatabase()) {
 			if (countByQuery(query, db) == 0) {
 				insert(query, db);

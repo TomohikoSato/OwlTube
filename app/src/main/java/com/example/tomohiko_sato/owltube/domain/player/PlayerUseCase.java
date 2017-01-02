@@ -8,7 +8,6 @@ import com.example.tomohiko_sato.owltube.infra.dao.RecentlyWatchedDao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -37,11 +36,11 @@ public class PlayerUseCase {
 				videoIds.add(video.videoId);
 			}
 
-			Map<String, String> map = youtubeRequest.fetchViewCount(videoIds);
-
-			for (Video video : videos) {
-				video.viewCount = map.get(video.videoId);
-			}
+			youtubeRequest.fetchViewCount(videoIds).subscribe(map -> {
+				for (Video video : videos) {
+					video.viewCount = map.get(video.videoId);
+				}
+			});
 
 			return videos;
 		}).subscribeOn(Schedulers.io());

@@ -12,7 +12,6 @@ import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -41,15 +40,15 @@ public class SearchUseCase {
 						videoIds.add(video.videoId);
 					}
 
-					Map<String, String> map = youtubeRequest.fetchViewCount(videoIds);
+					youtubeRequest.fetchViewCount(videoIds).subscribe(map -> {
+						for (Video video : videos) {
+							video.viewCount = map.get(video.videoId);
+						}
+					});
 
-					for (Video video : videos) {
-						video.viewCount = map.get(video.videoId);
-					}
 					return videoResponse;
 				}
 		);
-
 	}
 
 	public void fetchSuggest(final String query, final Callback<List<String>> callback) {

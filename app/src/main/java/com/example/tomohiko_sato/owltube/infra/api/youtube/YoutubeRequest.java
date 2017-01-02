@@ -91,16 +91,7 @@ public class YoutubeRequest {
 		return api.videoListPopular(pageToken).map(VideoMapper::map);
 	}
 
-	public VideoResponse fetchRealtedToVideoId(String videoId) {
-		Call<Search> call = api.relatedToVideoId(videoId);
-
-		Search response = null;
-		try {
-			response = call.execute().body();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return VideoMapper.map(response);
+	public Observable<VideoResponse> fetchRealtedToVideoId(String videoId) {
+		return api.relatedToVideoId(videoId).map(VideoMapper::map);
 	}
 }

@@ -17,19 +17,19 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
-	public interface OnVideoItemSelectedListener {
+class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
+	interface OnVideoItemSelectedListener {
 		void onVideoItemSelected(Video item);
 	}
 
-	enum ViewType {
-		Header(0, R.layout.list_item_video_detail),
-		Body(1, R.layout.list_item_video);
+	private enum ViewType {
+		Player(0, R.layout.list_item_video_detail),
+		RelatedVideos(1, R.layout.list_item_video);
 
 		public final int viewTypeInt;
 		public final int layoutId;
 
-		private ViewType(final int viewType, @LayoutRes final int layoutId) {
+		ViewType(final int viewType, @LayoutRes final int layoutId) {
 			this.viewTypeInt = viewType;
 			this.layoutId = layoutId;
 		}
@@ -50,7 +50,7 @@ public class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> 
 		}
 
 		public ViewHolder getViewHolder(View view) {
-			if (this == ViewType.Header) {
+			if (this == ViewType.Player) {
 				return new VideoDetailRecyclerViewHolder(view);
 			} else {
 				return new VideoItemRecyclerViewHolder(view);
@@ -59,45 +59,45 @@ public class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> 
 	}
 
 	private final Video headerItem;
-	List<Video> bodyItems = new ArrayList<>();
+	private final List<Video> bodyItems = new ArrayList<>();
 	private final Context context;
 	private final OnVideoItemSelectedListener listener;
 
-	public PlayerRecyclerViewAdapter(Context context, OnVideoItemSelectedListener listener, Video headerItem) {
+	PlayerRecyclerViewAdapter(Context context, OnVideoItemSelectedListener listener, Video headerItem) {
 		this.context = context;
 		this.listener = listener;
 		this.headerItem = headerItem;
 	}
 
-	public void setBodyItem(List<Video> items) {
-		this.bodyItems = items;
+	void setBodyItem(List<Video> items) {
+		this.bodyItems.clear();
+		this.bodyItems.addAll(items);
 	}
 
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewTypeInt) {
 		ViewType viewType = ViewType.fromInt(viewTypeInt);
-		View view = viewType.getView(parent);
-		return viewType.getViewHolder(view);
+		return viewType.getViewHolder(viewType.getView(parent));
 	}
 
 	@Override
 	public int getItemViewType(int position) {
 		if (position == 0) {
-			return ViewType.Header.viewTypeInt;
+			return ViewType.Player.viewTypeInt;
 		}
-		return ViewType.Body.viewTypeInt;
+		return ViewType.RelatedVideos.viewTypeInt;
 	}
 
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, int position) {
 		ViewType viewType = ViewType.fromInt(getItemViewType(position));
-		if (viewType == ViewType.Header) {
+		if (viewType == ViewType.Player) {
 			VideoDetailRecyclerViewHolder vdvh = (VideoDetailRecyclerViewHolder) holder;
 			vdvh.item = headerItem;
 			vdvh.title.setText(headerItem.title);
 			vdvh.channelTitle.setText(headerItem.channelTitle);
 			vdvh.viewCount.setText(StringUtil.convertDisplayViewCount(headerItem.viewCount));
-		} else if (viewType == ViewType.Body) {
+		} else if (viewType == ViewType.RelatedVideos) {
 			final VideoItemRecyclerViewHolder vivh = (VideoItemRecyclerViewHolder) holder;
 
 			int bodyPosition = position - 1;
@@ -108,17 +108,13 @@ public class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> 
 			vivh.viewCount.setText(StringUtil.convertDisplayViewCount(bodyItems.get(bodyPosition).viewCount));
 			Picasso.with(context).load(bodyItems.get(bodyPosition).thumbnailUrl).into(vivh.thumbnail);
 
-			vivh.itemView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (listener == null || vivh.item == null) {
-						return;
-					}
-					listener.onVideoItemSelected(vivh.item);
+			vivh.itemView.setOnClickListener(v -> {
+				if (listener == null || vivh.item == null) {
+					return;
 				}
+				listener.onVideoItemSelected(vivh.item);
 			});
 		}
-
 	}
 
 	@Override

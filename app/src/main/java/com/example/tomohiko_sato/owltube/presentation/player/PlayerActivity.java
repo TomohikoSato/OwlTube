@@ -14,7 +14,6 @@ import android.widget.Button;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.config.Api;
@@ -23,19 +22,21 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
-import java.util.List;
-
 import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener, PlayerRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private static final String KEY_INTENT_EXTRA_VIDEO_ITEM = "VIDEO_ITEM";
 	private static final int REQUEST_CODE_PLAYER_RECOVERY_DIALOG = 22;
 	private static final String TAG = PlayerActivity.class.getSimpleName();
+	private final CompositeDisposable disposables = new CompositeDisposable();
+
 	private String videoId;
 	private YouTubePlayerView playerView;
-
 	private PlayerRecyclerViewAdapter adapter;
-	ExternalPlayerService externalPlayerService;
+	private ExternalPlayerService externalPlayerService;
 	private boolean isBound = false;
 
 	@Inject
@@ -70,7 +71,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			throw new IllegalArgumentException("KEY_INTENT_EXTRA_VIDEO_ITEM must set");
 		}
 
-		((OwlTubeApp)getApplication()).getComponent().inject(this);
+		((OwlTubeApp) getApplication()).getComponent().inject(this);
 		setContentView(R.layout.activity_player);
 
 		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -80,16 +81,15 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 		ExternalPlayerService.bindService(this, connection);
 
 		playerUseCase.addRecentlyWatched(video);
-		playerUseCase.fetchRelatedVideo(videoId, new Callback<List<Video>>() {
-			public void onSuccess(List<Video> response) {
-				adapter.setBodyItem(response);
-				adapter.notifyDataSetChanged();
-			}
-
-			public void onFailure(Throwable t) {
-				t.printStackTrace();
-			}
-		});
+		disposables.add(playerUseCase.fetchRelatedVideo(videoId)
+				.subscribeOn(AndroidSchedulers.mainThread())
+				.subscribe(videos -> {
+							adapter.setBodyItem(videos);
+							adapter.notifyDataSetChanged();
+						}, t -> {
+							t.printStackTrace();
+						}
+				));
 
 //		playerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 //		playerView.initialize(Api.Youtube.API_KEY, this);
@@ -115,6 +115,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			}
 		});
 	}
+
 	private YouTubePlayerView externalPlayerView;
 /*
 	private int toPixel(int dp) {
@@ -167,6 +168,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 			unbindService(connection);
 			isBound = false;
 		}
+		disposables.dispose();
 	}
 
 	@Override

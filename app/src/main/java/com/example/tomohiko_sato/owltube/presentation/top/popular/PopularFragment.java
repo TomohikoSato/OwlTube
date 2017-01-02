@@ -14,8 +14,6 @@ import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.callback.Callback;
-import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.OnPagingScrollListener;
@@ -26,6 +24,10 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+
 /**
  * 人気な動画の一覧が観れるFragment.
  * <p>
@@ -35,8 +37,23 @@ import javax.inject.Inject;
  */
 public class PopularFragment extends Fragment {
 	private final static String TAG = PopularFragment.class.getSimpleName();
+	private final CompositeDisposable disposables = new CompositeDisposable();
 	private OnVideoItemSelectedListener listener;
-	VideoItemRecyclerViewAdapter adapter;
+	private VideoItemRecyclerViewAdapter adapter;
+	private String nextPageToken;
+	private ProgressBar progressBar;
+	private final OnPagingScrollListener scrollListener = new OnPagingScrollListener(new OnPagingScrollListener.OnShouldLoadNextPageListener() {
+		@Override
+		public void onShouldLoadNextPage(int lastItemPosition) {
+			Log.d(TAG, "paging. nextPageToken: " + nextPageToken);
+			if (nextPageToken != null) {
+				disposables.add(popularUC
+						.fetchNextPopular(nextPageToken)
+						.observeOn(AndroidSchedulers.mainThread())
+						.subscribeWith(new VideoResponseObserver(PopularFragment.this)));
+			}
+		}
+	});
 
 	@Inject
 	PopularUseCase popularUC;
@@ -60,39 +77,6 @@ public class PopularFragment extends Fragment {
 		}
 	}
 
-	String nextPageToken;
-
-	final OnPagingScrollListener scrollListener = new OnPagingScrollListener(10, new OnPagingScrollListener.OnShouldLoadNextPageListener() {
-		@Override
-		public void onShouldLoadNextPage(int lastItemPosition) {
-			Log.d(TAG, "paging. nextPageToken: " + nextPageToken);
-			if (nextPageToken != null) {
-				popularUC.fetchPopular(nextPageToken, fetchCallback);
-			}
-		}
-	});
-
-	// TODO: Callbackが呼ばれてる頃にはFragmentがDestroyされていることがある。それによってメモリリークや予期せぬ不具合が起きることがある。
-	// RxやEventBusを導入して修正したい
-	final Callback<VideoResponse> fetchCallback = new Callback<VideoResponse>() {
-		@Override
-		public void onSuccess(VideoResponse response) {
-			Log.d(TAG, "onSuccess");
-			adapter.addItems(response.videos);
-			nextPageToken = response.pageToken;
-			progressBar.setVisibility(View.GONE);
-			scrollListener.onLoadCompleted();
-		}
-
-		@Override
-		public void onFailure(Throwable t) {
-			Toast.makeText(getContext(), "データの読み込みに失敗しました", Toast.LENGTH_LONG).show();
-			progressBar.setVisibility(View.GONE);
-		}
-	};
-
-	ProgressBar progressBar;
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
@@ -101,9 +85,11 @@ public class PopularFragment extends Fragment {
 
 		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-		recyclerView.setAdapter(adapter = new VideoItemRecyclerViewAdapter(new ArrayList<Video>(), listener, getContext()));
+		recyclerView.setAdapter(adapter = new VideoItemRecyclerViewAdapter(new ArrayList<>(), listener, getContext()));
 		recyclerView.addOnScrollListener(scrollListener);
-		popularUC.fetchPopular(fetchCallback);
+		disposables.add(popularUC.fetchNextPopular()
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeWith(new VideoResponseObserver(PopularFragment.this)));
 
 		return rootView;
 	}
@@ -112,6 +98,33 @@ public class PopularFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		Log.d(TAG, "onDetach");
+		disposables.dispose();
 		listener = null;
+	}
+
+	static class VideoResponseObserver extends DisposableObserver<VideoResponse> {
+		private PopularFragment f;
+
+		VideoResponseObserver(PopularFragment f) {
+			this.f = f;
+		}
+
+		@Override
+		public void onComplete() {
+		}
+
+		@Override
+		public void onError(Throwable t) {
+			Toast.makeText(f.getContext(), "データの読み込みに失敗しました", Toast.LENGTH_LONG).show();
+			f.progressBar.setVisibility(View.GONE);
+		}
+
+		@Override
+		public void onNext(VideoResponse videoResponse) {
+			f.adapter.addItems(videoResponse.videos);
+			f.nextPageToken = videoResponse.pageToken;
+			f.progressBar.setVisibility(View.GONE);
+			f.scrollListener.onLoadCompleted();
+		}
 	}
 }

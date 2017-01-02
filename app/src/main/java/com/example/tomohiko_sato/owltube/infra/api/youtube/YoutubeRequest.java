@@ -87,20 +87,8 @@ public class YoutubeRequest {
 		return sb.deleteCharAt(sb.length() - 1).toString();
 	}
 
-	public VideoResponse fetchPopular(@Nullable String pageToken) {
-		Call<Popular> call = api.videoListPopular(pageToken);
-		Popular response = null;
-		try {
-			response = call.execute().body();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		if (response == null) {
-			return null;
-		}
-
-		return VideoMapper.map(response);
+	public Observable<VideoResponse> fetchPopular(@Nullable String pageToken) {
+		return api.videoListPopular(pageToken).map(VideoMapper::map);
 	}
 
 	public VideoResponse fetchRealtedToVideoId(String videoId) {

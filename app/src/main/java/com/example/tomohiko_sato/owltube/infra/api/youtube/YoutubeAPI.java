@@ -26,7 +26,7 @@ public interface YoutubeAPI {
 	Observable<VideoList> videoListStatisticsObservable(@NonNull @Query("id") String videoIds);
 
 	@GET("videos?part=snippet,statistics&chart=mostPopular&regionCode=JP&maxResults=" + MAX_RESULTS + "&key=" + Api.API_KEY)
-	Call<Popular> videoListPopular(@Nullable @Query("pageToken") String pageToken);
+	Observable<Popular> videoListPopular(@Nullable @Query("pageToken") String pageToken);
 
 	@GET("search?part=snippet&maxResults=10&type=video&key=" + Api.API_KEY)
 	Call<Search> relatedToVideoId(@NonNull @Query("relatedToVideoId") String videoId);

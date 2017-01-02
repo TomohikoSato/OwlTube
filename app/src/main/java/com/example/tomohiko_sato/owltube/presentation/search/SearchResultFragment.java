@@ -87,7 +87,7 @@ public class SearchResultFragment extends Fragment implements OnVideoItemSelecte
 		return rootView;
 	}
 
-	final OnPagingScrollListener scrollListener = new OnPagingScrollListener(10, new OnPagingScrollListener.OnShouldLoadNextPageListener() {
+	final OnPagingScrollListener scrollListener = new OnPagingScrollListener(new OnPagingScrollListener.OnShouldLoadNextPageListener() {
 		@Override
 		public void onShouldLoadNextPage(int lastItemPosition) {
 			listener.onLoadMore();

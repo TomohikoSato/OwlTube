@@ -22,6 +22,8 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -67,9 +69,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Video video = getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO_ITEM);
-		if (video == null) {
-			throw new IllegalArgumentException("KEY_INTENT_EXTRA_VIDEO_ITEM must set");
-		}
+		Objects.requireNonNull(video);
 
 		((OwlTubeApp) getApplication()).getComponent().inject(this);
 		setContentView(R.layout.activity_player);
@@ -82,7 +82,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
 		playerUseCase.addRecentlyWatched(video);
 		disposables.add(playerUseCase.fetchRelatedVideo(videoId)
-				.subscribeOn(AndroidSchedulers.mainThread())
+				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(videos -> {
 							adapter.setBodyItem(videos);
 							adapter.notifyDataSetChanged();

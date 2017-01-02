@@ -34,6 +34,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class SearchActivity extends AppCompatActivity implements OnVideoItemSelectedListener, SearchHistoryFragment.OnSearchHistoryFragmentInteractionListener, SearchResultFragment.SearchResultFragmentInteractionListener {
@@ -46,6 +47,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 	private SearchHistoryFragment searchHistoryFragment;
 	private SearchView searchView;
 	private Fragment currentShowingFragment;
+	private final CompositeDisposable disposables = new CompositeDisposable();
 
 	public static void startSearchActivity(Context context) {
 		context.startActivity(new Intent(context, SearchActivity.class));
@@ -162,7 +164,8 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		lastQueriedWord = query;
 		hideKeyboard();
 		showSearchResultFragment();
-		searchUC.search(query, nextPageToken)
+
+		disposables.add(searchUC.search(query, nextPageToken)
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(videoResponse -> {
@@ -171,22 +174,13 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 				}, throwable -> {
 					Log.e(TAG, "Search onFailure " + throwable);
 					Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
-				});
+				}));
+	}
 
-				/*, new Callback<VideoResponse>() {
-			@Override
-			public void onSuccess(VideoResponse videoResponse) {
-				Log.d(TAG, "Search onSuccess");
-				nextPageToken = videoResponse.pageToken;
-				searchResultFragment.addVideoItems(videoResponse.videos);
-			}
-
-			@Override
-			public void onFailure(Throwable t) {
-				Log.e(TAG, "Search onFailure " + t);
-				Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
-			}
-		});*/
+	@Override
+	protected void onStop() {
+		super.onStop();
+		disposables.dispose();
 	}
 
 	private void hideKeyboard() {

@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
-             android:name="com.example.tomohiko_sato.mytube.presentation.search.SearchHistoryFragment"
+             android:name="com.example.tomohiko_sato.owltube.presentation.search.SearchHistoryFragment"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 

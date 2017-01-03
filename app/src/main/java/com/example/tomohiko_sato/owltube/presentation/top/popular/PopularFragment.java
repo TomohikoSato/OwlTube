@@ -87,7 +87,7 @@ public class PopularFragment extends Fragment {
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerView.setAdapter(adapter = new VideoItemRecyclerViewAdapter(new ArrayList<>(), listener, getContext()));
 		recyclerView.addOnScrollListener(scrollListener);
-		disposables.add(popularUC.fetchNextPopular()
+		disposables.add(popularUC.fetchPopular()
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribeWith(new VideoResponseObserver(PopularFragment.this)));
 

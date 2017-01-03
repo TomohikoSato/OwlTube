@@ -19,7 +19,7 @@ public class PopularUseCase {
 		this.youtubeRequest = youtubeRequest;
 	}
 
-	public Observable<VideoResponse> fetchNextPopular() {
+	public Observable<VideoResponse> fetchPopular() {
 		return youtubeRequest.fetchPopular(null).subscribeOn(Schedulers.io());
 	}
 

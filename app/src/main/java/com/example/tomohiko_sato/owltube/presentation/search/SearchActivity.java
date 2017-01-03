@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
@@ -35,6 +34,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class SearchActivity extends AppCompatActivity implements OnVideoItemSelectedListener, SearchHistoryFragment.OnSearchHistoryFragmentInteractionListener, SearchResultFragment.SearchResultFragmentInteractionListener {
@@ -137,24 +137,44 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 
 			@Override
 			public boolean onQueryTextChange(final String newText) {
+				if (newText.length() == 0) {
+					return false;
+				}
+				Log.d(TAG, "onQueryTextChange" + newText);
 				showSearchHistoryFragment();
-				Log.d(TAG, "query text change" + newText);
-				searchUC.fetchSuggest(newText, new Callback<List<String>>() {
-					@Override
-					public void onSuccess(List<String> suggests) {
-						Log.d(TAG, "Suggest onSuccess");
-						populateAdapter(newText, suggests, simpleCursorAdapter);
-					}
 
-					@Override
-					public void onFailure(Throwable t) {
-						Log.e(TAG, "Suggest onFailure " + t);
-					}
-				});
+				disposables.add(searchUC.fetchSuggest(newText)
+						.observeOn(AndroidSchedulers.mainThread())
+						.subscribeWith(new SuggestsObserver(newText, simpleCursorAdapter)));
 				return false;
 			}
 		});
 		return true;
+	}
+
+	class SuggestsObserver extends DisposableObserver<List<String>> {
+		private final String newText;
+		private final SimpleCursorAdapter adapter;
+
+		SuggestsObserver(String newText , SimpleCursorAdapter adapter) {
+			this.newText = newText;
+			this.adapter = adapter;
+		}
+
+		@Override
+		public void onNext(List<String> suggests) {
+			populateAdapter(newText, suggests, adapter);
+		}
+
+		@Override
+		public void onError(Throwable t) {
+			t.printStackTrace();
+		}
+
+		@Override
+		public void onComplete() {
+
+		}
 	}
 
 	private String lastQueriedWord;

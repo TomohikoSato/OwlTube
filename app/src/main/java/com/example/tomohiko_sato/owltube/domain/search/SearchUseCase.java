@@ -16,6 +16,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 public class SearchUseCase {
 	private final YoutubeRequest youtubeRequest;
@@ -51,21 +52,9 @@ public class SearchUseCase {
 		);
 	}
 
-	public void fetchSuggest(final String query, final Callback<List<String>> callback) {
-		final Handler handler = new Handler();
-
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				final List<String> suggests = googleRequest.fetchSuggestKeywordForYoutube(query);
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						callback.onSuccess(suggests);
-					}
-				});
-			}
-		}).start();
+	public Observable<List<String>> fetchSuggest(final String query) {
+		return googleRequest.fetchSuggestKeywordForYoutube(query)
+				.subscribeOn(Schedulers.io());
 	}
 
 	private void addSearchHistory(final String searchHistory) {

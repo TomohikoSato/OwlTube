@@ -49,6 +49,13 @@ public class YoutubeRequest {
 				});
 	}
 
+	public Observable<VideoResponse> fetchPopular(@Nullable String pageToken) {
+		return api.videoListPopular(pageToken).map(VideoMapper::map);
+	}
+
+	public Observable<VideoResponse> fetchRealtedToVideoId(String videoId) {
+		return api.relatedToVideoId(videoId).map(VideoMapper::map);
+	}
 
 	private String toCommaSeparetedString(List<String> items) {
 		final StringBuilder sb = new StringBuilder();
@@ -57,13 +64,5 @@ public class YoutubeRequest {
 			sb.append(item).append(separator);
 		}
 		return sb.deleteCharAt(sb.length() - 1).toString();
-	}
-
-	public Observable<VideoResponse> fetchPopular(@Nullable String pageToken) {
-		return api.videoListPopular(pageToken).map(VideoMapper::map);
-	}
-
-	public Observable<VideoResponse> fetchRealtedToVideoId(String videoId) {
-		return api.relatedToVideoId(videoId).map(VideoMapper::map);
 	}
 }

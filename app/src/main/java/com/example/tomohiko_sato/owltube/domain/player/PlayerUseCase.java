@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 public class PlayerUseCase {
@@ -28,7 +29,7 @@ public class PlayerUseCase {
 		new Thread(() -> recentlyWatchedDao.add(item)).start();
 	}
 
-	public Observable<List<Video>> fetchRelatedVideo(@NonNull final String videoId) {
+	public Single<List<Video>> fetchRelatedVideo(@NonNull final String videoId) {
 		return youtubeRequest.fetchRealtedToVideoId(videoId).map(videoResponse -> {
 			final List<Video> videos = videoResponse.videos;
 			List<String> videoIds = new ArrayList<>();

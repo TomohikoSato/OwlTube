@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 
 /**
  * 人気な動画の一覧が観れるFragment.
@@ -102,7 +103,7 @@ public class PopularFragment extends Fragment {
 		listener = null;
 	}
 
-	static class VideoResponseObserver extends DisposableObserver<VideoResponse> {
+	static class VideoResponseObserver extends DisposableSingleObserver<VideoResponse> {
 		private PopularFragment f;
 
 		VideoResponseObserver(PopularFragment f) {
@@ -110,21 +111,17 @@ public class PopularFragment extends Fragment {
 		}
 
 		@Override
-		public void onComplete() {
+		public void onSuccess(VideoResponse response) {
+			f.adapter.addItems(response.videos);
+			f.nextPageToken = response.pageToken;
+			f.progressBar.setVisibility(View.GONE);
+			f.scrollListener.onLoadCompleted();
 		}
 
 		@Override
 		public void onError(Throwable t) {
 			Toast.makeText(f.getContext(), "データの読み込みに失敗しました", Toast.LENGTH_LONG).show();
 			f.progressBar.setVisibility(View.GONE);
-		}
-
-		@Override
-		public void onNext(VideoResponse videoResponse) {
-			f.adapter.addItems(videoResponse.videos);
-			f.nextPageToken = videoResponse.pageToken;
-			f.progressBar.setVisibility(View.GONE);
-			f.scrollListener.onLoadCompleted();
 		}
 	}
 }

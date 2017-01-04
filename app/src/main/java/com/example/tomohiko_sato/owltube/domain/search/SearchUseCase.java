@@ -16,6 +16,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 public class SearchUseCase {
@@ -30,7 +31,7 @@ public class SearchUseCase {
 		this.dao = dao;
 	}
 
-	public Observable<VideoResponse> search(final String query, @Nullable final String pageToken) {
+	public Single<VideoResponse> search(final String query, @Nullable final String pageToken) {
 		addSearchHistory(query);
 
 		return youtubeRequest.search(query, pageToken).map(

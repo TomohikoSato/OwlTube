@@ -14,7 +14,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.Single;
 
 
 public class YoutubeRequest {
@@ -26,7 +27,7 @@ public class YoutubeRequest {
 		this.api = api;
 	}
 
-	public Observable<VideoResponse> search(String keyword, @Nullable String pageToken) {
+	public Single<VideoResponse> search(String keyword, @Nullable String pageToken) {
 		Log.d(TAG, "keyword: " + keyword);
 		return api.search(keyword, pageToken).map(VideoMapper::map);
 	}
@@ -34,9 +35,9 @@ public class YoutubeRequest {
 	/**
 	 * ViewCount(視聴回数)を取得する
 	 */
-	public Observable<Map<String, String>> fetchViewCount(@NonNull List<String> videoIds) {
+	public Single<Map<String, String>> fetchViewCount(@NonNull List<String> videoIds) {
 		if (videoIds.size() == 0) {
-			Observable.error(new IllegalArgumentException());
+			Single.error(new IllegalArgumentException());
 		}
 
 		return api.videoListStatistics(toCommaSeparetedString(videoIds))
@@ -49,11 +50,11 @@ public class YoutubeRequest {
 				});
 	}
 
-	public Observable<VideoResponse> fetchPopular(@Nullable String pageToken) {
+	public Single<VideoResponse> fetchPopular(@Nullable String pageToken) {
 		return api.videoListPopular(pageToken).map(VideoMapper::map);
 	}
 
-	public Observable<VideoResponse> fetchRealtedToVideoId(String videoId) {
+	public Single<VideoResponse> fetchRealtedToVideoId(String videoId) {
 		return api.relatedToVideoId(videoId).map(VideoMapper::map);
 	}
 

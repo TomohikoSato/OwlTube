@@ -11,23 +11,23 @@ import com.squareup.leakcanary.LeakCanary;
 
 public class OwlTubeApp extends Application {
 
-    private ApplicationComponent applicationComponent;
+	private ApplicationComponent applicationComponent;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Stetho.initializeWithDefaults(this);
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		Stetho.initializeWithDefaults(this);
+		if (LeakCanary.isInAnalyzerProcess(this)) {
+			// This process is dedicated to LeakCanary for heap analysis.
+			// You should not init your app in this process.
+			return;
+		}
+		LeakCanary.install(this);
 
-        applicationComponent = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(getApplicationContext())).build();
-    }
+		applicationComponent = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(getApplicationContext())).build();
+	}
 
-    public ApplicationComponent getComponent() {
-        return applicationComponent;
-    }
+	public ApplicationComponent getComponent() {
+		return applicationComponent;
+	}
 }

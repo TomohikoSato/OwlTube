@@ -4,23 +4,19 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.owltube.infra.dao.RecentlyWatchedDao;
-import com.example.tomohiko_sato.owltube.domain.data.Video;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 public class RecentlyWatchedUseCase {
-	private final YoutubeRequest youtubeRequest;
-	private final Context context;
 	private final RecentlyWatchedDao recentlyWatchedDao;
 
 	@Inject
-	public RecentlyWatchedUseCase(YoutubeRequest youtubeRequest, Context context, RecentlyWatchedDao recentlyWatchedDao) {
-		this.youtubeRequest = youtubeRequest;
-		this.context = context;
+	public RecentlyWatchedUseCase(RecentlyWatchedDao recentlyWatchedDao) {
 		this.recentlyWatchedDao = recentlyWatchedDao;
 	}
 

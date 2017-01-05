@@ -1,9 +1,8 @@
 package com.example.tomohiko_sato.owltube.domain.search;
 
-import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.util.Pair;
 
-import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.infra.api.google.GoogleRequest;
@@ -12,9 +11,13 @@ import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
@@ -31,37 +34,64 @@ public class SearchUseCase {
 		this.dao = dao;
 	}
 
-	public Single<VideoResponse> search(final String query, @Nullable final String pageToken) {
-		addSearchHistory(query);
+	/**
+	 * @return Single<VideoResponse> 検索結果, Completable 検索履歴の追加に成功したか
+	 */
+/*
+	public Pair<Single<VideoResponse>, Completable> search(final String query, @Nullable final String pageToken) {
+		Single<VideoResponse> response = youtubeRequest.search(query, pageToken)
+				.map(videoResponse -> {
+							final List<Video> videos = videoResponse.videos;
+							List<String> videoIds = new ArrayList<>();
+							for (Video video : videos) {
+								videoIds.add(video.videoId);
+							}
 
-		return youtubeRequest.search(query, pageToken).map(
-				videoResponse -> {
-					final List<Video> videos = videoResponse.videos;
-					List<String> videoIds = new ArrayList<>();
-					for (Video video : videos) {
-						videoIds.add(video.videoId);
-					}
+							Map<String, String> map = youtubeRequest.fetchViewCount(videoIds).blockingGet();
+							for (Video video : videos) {
+								video.viewCount = map.get(video.videoId);
+							}
 
-					youtubeRequest.fetchViewCount(videoIds).subscribe(map -> {
-						for (Video video : videos) {
-							video.viewCount = map.get(video.videoId);
+							return videoResponse;
 						}
-					});
+				);
 
-					return videoResponse;
-				}
-		);
+		return Pair.create(response, addSearchHistory(query));
 	}
+*/
+
+	public Maybe<VideoResponse> search(final String query, @Nullable final String pageToken) {
+		Single<VideoResponse> response = youtubeRequest.search(query, pageToken)
+				.map(videoResponse -> {
+							final List<Video> videos = videoResponse.videos;
+							List<String> videoIds = new ArrayList<>();
+							for (Video video : videos) {
+								videoIds.add(video.videoId);
+							}
+
+							Map<String, String> map = youtubeRequest.fetchViewCount(videoIds).blockingGet();
+							for (Video video : videos) {
+								video.viewCount = map.get(video.videoId);
+							}
+
+							return videoResponse;
+						}
+				);
+
+
+
+		return Pair.create(response, addSearchHistory(query));
+	}
+
 
 	public Observable<List<String>> fetchSuggest(final String query) {
 		return googleRequest.fetchSuggestKeywordForYoutube(query)
 				.subscribeOn(Schedulers.io());
 	}
 
-	private void addSearchHistory(final String searchHistory) {
-		new Thread(() -> {
-			dao.addSearchHistory(searchHistory);
-		}).start();
+	private Completable addSearchHistory(final String searchHistory) {
+		return dao.addSearchHistory(searchHistory)
+				.subscribeOn(Schedulers.io());
 	}
 
 	public Single<List<String>> fetchSearchHistories() {

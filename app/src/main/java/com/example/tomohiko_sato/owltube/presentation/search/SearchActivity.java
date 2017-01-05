@@ -185,7 +185,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		hideKeyboard();
 		showSearchResultFragment();
 
-		disposables.add(searchUC.search(query, nextPageToken)
+		disposables.add(searchUC.search(query, nextPageToken).first
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(videoResponse -> {

@@ -13,6 +13,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableObserver;
+import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
@@ -44,15 +48,19 @@ public class SearchHistoryDao {
 		});
 	}
 
-	//TODO: 1以上あったら削除すればいいのかも
-	public void addSearchHistory(String query) {
-		try (SQLiteDatabase db = helper.getWritableDatabase()) {
-			if (countByQuery(query, db) == 0) {
-				insert(query, db);
-			} else {
-				update(query, db);
+	public Completable addSearchHistory(String query) {
+		return Completable.create(emitter -> {
+			try (SQLiteDatabase db = helper.getWritableDatabase()) {
+				if (countByQuery(query, db) == 0) {
+					insert(query, db);
+				} else {
+					update(query, db);
+				}
+			} catch (SQLException e) {
+				emitter.onError(e);
 			}
-		}
+			emitter.onComplete();
+		});
 	}
 
 	private int countByQuery(String query, SQLiteDatabase db) {

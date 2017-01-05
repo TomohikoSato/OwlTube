@@ -64,11 +64,8 @@ public class SearchUseCase {
 		}).start();
 	}
 
-	public void fetchSearchHistories(final Callback<List<String>> callback) {
-		final Handler handler = new Handler();
-		new Thread(() -> {
-			final List<String> searchHistories = dao.selectAllSearchHistories();
-			handler.post(() -> callback.onSuccess(searchHistories));
-		}).start();
+	public Single<List<String>> fetchSearchHistories() {
+		return dao.selectAllSearchHistories()
+				.subscribeOn(Schedulers.io());
 	}
 }

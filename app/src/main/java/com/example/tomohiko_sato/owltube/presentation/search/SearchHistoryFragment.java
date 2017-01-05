@@ -20,6 +20,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -54,8 +56,6 @@ public class SearchHistoryFragment extends Fragment {
 
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
-		new ArrayList<String>();
-
 		adapter = new SearchHistoryRecyclerViewAdapter(new ArrayList<String>(), listener);
 
 		recyclerView.setAdapter(adapter);
@@ -67,20 +67,12 @@ public class SearchHistoryFragment extends Fragment {
 	@Override
 	public void onAttach(final Context context) {
 		super.onAttach(context);
-		((OwlTubeApp)context.getApplicationContext()).getComponent().inject(this);
+		((OwlTubeApp) context.getApplicationContext()).getComponent().inject(this);
 
-		searchUC.fetchSearchHistories(new Callback<List<String>>() {
-			@Override
-			public void onSuccess(List<String> searchHistories) {
-				adapter.refreshSearchHistories(searchHistories);
-			}
+		searchUC.fetchSearchHistories()
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(histories -> adapter.refreshSearchHistories(histories), Throwable::printStackTrace);
 
-			@Override
-			public void onFailure(Throwable t) {
-				t.printStackTrace();
-				Log.e(TAG, "search histories onFailure");
-			}
-		});
 		if (context instanceof OnSearchHistoryFragmentInteractionListener) {
 			listener = (OnSearchHistoryFragmentInteractionListener) context;
 		} else {

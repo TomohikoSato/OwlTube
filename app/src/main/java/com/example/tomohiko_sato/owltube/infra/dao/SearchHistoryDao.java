@@ -1,6 +1,7 @@
 package com.example.tomohiko_sato.owltube.infra.dao;
 
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
@@ -12,6 +13,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
+
 public class SearchHistoryDao {
 	private final static int COLUMN_QUERY = 0;
 
@@ -22,17 +27,21 @@ public class SearchHistoryDao {
 		this.helper = helper;
 	}
 
-	public List<String> selectAllSearchHistories() {
-		List<String> result = new ArrayList<>();
-		try (SQLiteDatabase db = helper.getReadableDatabase();
-			 Cursor c = db.rawQuery(helper.readSql(R.raw.sql_search_history_select_all), null)) {
+	public Single<List<String>> selectAllSearchHistories() {
+		return Single.create(emitter -> {
+			List<String> result = new ArrayList<>();
+			try (SQLiteDatabase db = helper.getReadableDatabase();
+				 Cursor c = db.rawQuery(helper.readSql(R.raw.sql_search_history_select_all), null)) {
 
-			for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-				result.add((c.getString(COLUMN_QUERY)));
+				for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+					result.add((c.getString(COLUMN_QUERY)));
+				}
+			} catch (SQLException e) {
+				emitter.onError(e);
 			}
-		}
 
-		return result;
+			emitter.onSuccess(result);
+		});
 	}
 
 	//TODO: 1以上あったら削除すればいいのかも

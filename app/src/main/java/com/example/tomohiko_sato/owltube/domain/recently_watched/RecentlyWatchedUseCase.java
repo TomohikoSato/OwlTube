@@ -22,17 +22,9 @@ public class RecentlyWatchedUseCase {
 
 	public void fetchRecentlyWatched(final Callback<List<Video>> callback) {
 		final Handler handler = new Handler();
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				final List<Video> items= recentlyWatchedDao.selectAllOrderByRecentlyCreated(20);
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						callback.onSuccess(items);
-					}
-				});
-			}
+		new Thread(() -> {
+			final List<Video> items = recentlyWatchedDao.selectAllOrderByRecentlyCreated(20);
+			handler.post(() -> callback.onSuccess(items));
 		}).start();
 	}
 }

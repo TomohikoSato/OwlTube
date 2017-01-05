@@ -66,17 +66,9 @@ public class SearchUseCase {
 
 	public void fetchSearchHistories(final Callback<List<String>> callback) {
 		final Handler handler = new Handler();
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				final List<String> searchHistories = dao.selectAllSearchHistories();
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						callback.onSuccess(searchHistories);
-					}
-				});
-			}
+		new Thread(() -> {
+			final List<String> searchHistories = dao.selectAllSearchHistories();
+			handler.post(() -> callback.onSuccess(searchHistories));
 		}).start();
 	}
 }

@@ -1,7 +1,20 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.2'
+    }
+}
+
 plugins {
     id "me.tatarka.retrolambda" version "3.4.0"
 }
+
+
 apply plugin: 'com.android.application'
+apply plugin: 'com.getkeepsafe.dexcount'
+
 
 android {
     compileSdkVersion 25

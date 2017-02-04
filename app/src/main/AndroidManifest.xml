@@ -12,16 +12,27 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".presentation.search.SearchActivity"/>
-        <activity android:name=".presentation.player.PlayerActivity"/>
-        <activity android:name=".presentation.top.TopActivity">
+        <activity
+            android:name=".presentation.top.TopActivity"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.setting.SettingActivity"/>
+        <activity
+            android:name=".presentation.search.SearchActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".presentation.player.PlayerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".presentation.setting.SettingActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".presentation.player.ExternalPlayerService"
@@ -29,5 +40,4 @@
             android:exported="true">
         </service>
     </application>
-
 </manifest>

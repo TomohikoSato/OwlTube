@@ -2,6 +2,7 @@ package com.example.tomohiko_sato.owltube.presentation.player;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
 import com.pierfrancescosoffritti.youtubeplayer.AbstractYouTubeListener;
+import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
 
 import java.util.Objects;
@@ -29,6 +31,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRecyclerV
 	private final CompositeDisposable disposables = new CompositeDisposable();
 	private String videoId;
 	private PlayerRecyclerViewAdapter adapter;
+	private YouTubePlayerView youTubePlayerView;
 ///	private ExternalPlayerService externalPlayerService;
 //	private boolean isBound = false;
 
@@ -84,13 +87,31 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRecyclerV
 						}, Throwable::printStackTrace
 				));
 
-		YouTubePlayerView youTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
+		FullScreenManager fullScreenManager = new FullScreenManager(this);
+
+		youTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 		youTubePlayerView.initialize(new AbstractYouTubeListener() {
 			@Override
 			public void onReady() {
 				youTubePlayerView.loadVideo(videoId, 0);
 			}
 		}, true);
+
+		youTubePlayerView.addFullScreenListener(new YouTubePlayerFullScreenListener() {
+			@Override
+			public void onYouTubePlayerEnterFullScreen() {
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+				fullScreenManager.enterFullScreen();
+			}
+
+			@Override
+			public void onYouTubePlayerExitFullScreen() {
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				fullScreenManager.exitFullScreen();
+			}
+		});
+
+
 //		playerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 //		playerView.initialize(Api.Youtube.API_KEY, this);
 
@@ -176,6 +197,12 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRecyclerV
 		}
 */
 		disposables.dispose();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		youTubePlayerView.release();
 	}
 
 	@Override

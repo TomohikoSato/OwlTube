@@ -68,7 +68,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile "com.android.support:support-compat:$SL_VERSION"
     compile "com.android.support:support-core-ui:$SL_VERSION"
     compile "com.android.support:appcompat-v7:$SL_VERSION"

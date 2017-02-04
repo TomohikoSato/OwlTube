@@ -5,6 +5,7 @@ import android.app.Application;
 import com.example.tomohiko_sato.owltube.di.ApplicationComponent;
 import com.example.tomohiko_sato.owltube.di.ApplicationModule;
 import com.example.tomohiko_sato.owltube.di.DaggerApplicationComponent;
+import com.example.tomohiko_sato.owltube.util.StethoWrapper;
 import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -16,6 +17,7 @@ public class OwlTubeApp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		StethoWrapper.setUp(this);
 		Stetho.initializeWithDefaults(this);
 		if (LeakCanary.isInAnalyzerProcess(this)) {
 			// This process is dedicated to LeakCanary for heap analysis.

@@ -70,7 +70,6 @@ dependencies {
     compile files('libs/YouTubeAndroidPlayerApi.jar')
     compile "com.android.support:support-compat:$SL_VERSION"
     compile "com.android.support:support-core-ui:$SL_VERSION"
-
     compile "com.android.support:appcompat-v7:$SL_VERSION"
     compile "com.android.support:recyclerview-v7:$SL_VERSION"
     compile "com.android.support:design:$SL_VERSION"
@@ -83,8 +82,8 @@ dependencies {
     compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.facebook.stetho:stetho:1.4.1'
     compile 'com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:0.7.7'
+    debugCompile 'com.facebook.stetho:stetho:1.4.1'
     debugCompile "com.squareup.leakcanary:leakcanary-android:$LEAK_CANARY_VERSION"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$LEAK_CANARY_VERSION"
 

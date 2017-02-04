@@ -1,10 +1,10 @@
 package com.example.tomohiko_sato.owltube;
 
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.data.search.Search;
+import com.example.tomohiko_sato.owltube.util.Logger;
 
 import junit.framework.Assert;
 
@@ -43,17 +43,17 @@ public class YoutubeRequestInstrumentedTest {
 
 	@Test
 	public void asyncRequest() {
-		Callback<Search> callback= new Callback<Search>() {
+		Callback<Search> callback = new Callback<Search>() {
 			@Override
 			public void onResponse(Call<Search> call, Response<Search> response) {
 				System.out.print(String.format("Response: %s", response.body()));
-				Log.d(TAG, "response");
+				Logger.d("response");
 				Assert.assertEquals("JP", response.body().regionCode);
 			}
 
 			@Override
 			public void onFailure(Call<Search> call, Throwable t) {
-				Log.d(TAG, "failure");
+				Logger.d("failure");
 				System.out.print(t.toString());
 				fail();
 			}

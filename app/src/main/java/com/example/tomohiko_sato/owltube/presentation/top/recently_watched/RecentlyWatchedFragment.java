@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.recently_watched.RecentlyWatchedUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
+import com.example.tomohiko_sato.owltube.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,6 @@ import javax.inject.Inject;
  * interface.
  */
 public class RecentlyWatchedFragment extends Fragment {
-	private static final String TAG = RecentlyWatchedFragment.class.getSimpleName();
 	private OnVideoItemSelectedListener listener;
 	@Inject
 	RecentlyWatchedUseCase recentlyWatchedUC;
@@ -75,7 +74,7 @@ public class RecentlyWatchedFragment extends Fragment {
 			@Override
 			public void onFailure(Throwable t) {
 				t.printStackTrace();
-				Log.d(TAG, "fetch RecentlyWatched onFailure");
+				Logger.d("fetch RecentlyWatched onFailure");
 			}
 		});
 	}
@@ -83,7 +82,7 @@ public class RecentlyWatchedFragment extends Fragment {
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		((OwlTubeApp)context.getApplicationContext()).getComponent().inject(this);
+		((OwlTubeApp) context.getApplicationContext()).getComponent().inject(this);
 		if (context instanceof OnVideoItemSelectedListener) {
 			listener = (OnVideoItemSelectedListener) context;
 		} else {

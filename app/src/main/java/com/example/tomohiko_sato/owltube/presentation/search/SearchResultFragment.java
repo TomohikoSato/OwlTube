@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,10 @@ import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.presentation.common_component.OnPagingScrollListener;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 
 /**
  * A fragment representing a list of Items.
@@ -29,7 +27,6 @@ import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItem
  * interface.
  */
 public class SearchResultFragment extends Fragment implements OnVideoItemSelectedListener {
-	private final static String TAG = SearchResultFragment.class.getSimpleName();
 	private SearchResultFragmentInteractionListener listener;
 
 	private final static String KEY_VIDEO_ITEMS = "VIDEO_ITEMS";

@@ -3,11 +3,11 @@ package com.example.tomohiko_sato.owltube.infra.api.youtube;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.ArrayMap;
-import android.util.Log;
 
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.infra.api.mapper.VideoMapper;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.data.statistics.Item;
+import com.example.tomohiko_sato.owltube.util.Logger;
 
 import java.util.List;
 import java.util.Map;
@@ -15,11 +15,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import io.reactivex.Single;
-import io.reactivex.Single;
 
 
 public class YoutubeRequest {
-	private final static String TAG = YoutubeRequest.class.getSimpleName();
 	private final YoutubeAPI api;
 
 	@Inject
@@ -28,7 +26,7 @@ public class YoutubeRequest {
 	}
 
 	public Single<VideoResponse> search(String keyword, @Nullable String pageToken) {
-		Log.d(TAG, "keyword: " + keyword);
+		Logger.d("keyword: " + keyword);
 		return api.search(keyword, pageToken).map(VideoMapper::map);
 	}
 

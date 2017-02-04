@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.OnPagingScrollListener;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
+import com.example.tomohiko_sato.owltube.util.Logger;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,6 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 
 /**
@@ -37,7 +36,6 @@ import io.reactivex.observers.DisposableSingleObserver;
  * </p>
  */
 public class PopularFragment extends Fragment {
-	private final static String TAG = PopularFragment.class.getSimpleName();
 	private final CompositeDisposable disposables = new CompositeDisposable();
 	private OnVideoItemSelectedListener listener;
 	private VideoItemRecyclerViewAdapter adapter;
@@ -46,7 +44,7 @@ public class PopularFragment extends Fragment {
 	private final OnPagingScrollListener scrollListener = new OnPagingScrollListener(new OnPagingScrollListener.OnShouldLoadNextPageListener() {
 		@Override
 		public void onShouldLoadNextPage(int lastItemPosition) {
-			Log.d(TAG, "paging. nextPageToken: " + nextPageToken);
+			Logger.d("paging. nextPageToken: " + nextPageToken);
 			if (nextPageToken != null) {
 				disposables.add(popularUC
 						.fetchNextPopular(nextPageToken)
@@ -98,7 +96,7 @@ public class PopularFragment extends Fragment {
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		Log.d(TAG, "onDetach");
+		Logger.d("onDetach");
 		disposables.dispose();
 		listener = null;
 	}

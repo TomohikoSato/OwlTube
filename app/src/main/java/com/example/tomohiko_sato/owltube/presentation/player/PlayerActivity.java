@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +16,7 @@ import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.config.Api;
+import com.example.tomohiko_sato.owltube.util.Logger;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -32,7 +32,6 @@ import io.reactivex.disposables.CompositeDisposable;
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener, PlayerRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private static final String KEY_INTENT_EXTRA_VIDEO_ITEM = "VIDEO_ITEM";
 	private static final int REQUEST_CODE_PLAYER_RECOVERY_DIALOG = 22;
-	private static final String TAG = PlayerActivity.class.getSimpleName();
 	private final CompositeDisposable disposables = new CompositeDisposable();
 
 	private String videoId;
@@ -47,14 +46,14 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	private ServiceConnection connection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder binder) {
-			Log.d(TAG, "onServiceConnected");
+			Logger.d("onServiceConnected");
 			isBound = true;
 			externalPlayerService = ((ExternalPlayerService.ExternalPlayerServiceBinder) binder).getService();
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
-			Log.d(TAG, "onServiceDisconnected");
+			Logger.d("onServiceDisconnected");
 			isBound = false;
 		}
 	};
@@ -105,7 +104,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 				closeButton.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						Log.d(TAG, "onclick");
+						Logger.d( "onclick");
 					}
 				});
 */
@@ -129,13 +128,13 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
 	@Override
 	public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
-		Log.d(TAG, "onInitializationSuccess");
+		Logger.d("onInitializationSuccess");
 		if (currentPlayingPlayer != null) {
 			currentPlayingPlayer.release();
 			currentPlayingPlayer = null;
 		}
 		currentPlayingPlayer = player;
-		Log.d(TAG, "provider equals external player service: " + provider.equals(externalPlayerView));
+		Logger.d("provider equals external player service: " + provider.equals(externalPlayerView));
 
 		player.setPlayerStyle(provider.equals(externalPlayerView) ? YouTubePlayer.PlayerStyle.CHROMELESS : YouTubePlayer.PlayerStyle.DEFAULT);
 		if (!wasRestored) {
@@ -145,7 +144,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
 	@Override
 	public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
-		Log.d(TAG, "onInitializationFailure" + errorReason.toString());
+		Logger.d("onInitializationFailure" + errorReason.toString());
 		if (errorReason.isUserRecoverableError()) {
 			errorReason.getErrorDialog(this, REQUEST_CODE_PLAYER_RECOVERY_DIALOG);
 		}
@@ -153,7 +152,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(TAG, "onActivityResult" + requestCode);
+		Logger.d("onActivityResult" + requestCode);
 		if (REQUEST_CODE_PLAYER_RECOVERY_DIALOG == requestCode) {
 			playerView.initialize(Api.API_KEY, this);
 		}
@@ -162,7 +161,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Log.d(TAG, "onStop");
+		Logger.d("onStop");
 
 		if (isBound) {
 			unbindService(connection);
@@ -174,7 +173,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Log.d(TAG, "onDestroy");
+		Logger.d("onDestroy");
 	}
 
 	@Override

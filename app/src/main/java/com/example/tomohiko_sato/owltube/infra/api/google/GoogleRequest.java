@@ -12,8 +12,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class GoogleRequest {
-	private final static String TAG = GoogleRequest.class.getSimpleName();
-
 	private final OkHttpClient client = new OkHttpClient();
 
 	public GoogleRequest() {

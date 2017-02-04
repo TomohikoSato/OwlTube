@@ -3,7 +3,8 @@ package com.example.tomohiko_sato.owltube.presentation.common_component;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.util.Log;
+
+import com.example.tomohiko_sato.owltube.util.Logger;
 
 
 /**
@@ -59,7 +60,7 @@ public class OnPagingScrollListener extends OnScrollListener {
 				int pastVisiblesItems = llm.findFirstVisibleItemPosition();
 
 				if ((visibleItemCount + pastVisiblesItems + bufferToTheLast) >= totalItemCount) {
-					Log.d("...", "Last Item Wow !");
+					Logger.d("Last Item Wow !");
 					listener.onShouldLoadNextPage(totalItemCount);
 					isLoading = true;
 				}

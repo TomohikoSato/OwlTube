@@ -12,12 +12,16 @@ public class Logger {
 		Log.d(getCallerClassName(), String.format(str, args));
 	}
 
-	public static void e(String str, Object... args) {
-		Log.e(getCallerClassName(), String.format(str, args));
+	public static void i(String str, Object... args) {
+		Log.i(getCallerClassName(), String.format(str, args));
 	}
 
 	public static void w(String str, Object... args) {
 		Log.w(getCallerClassName(), String.format(str, args));
+	}
+
+	public static void e(String str, Object... args) {
+		Log.e(getCallerClassName(), String.format(str, args));
 	}
 
 	static class TagGenerater {

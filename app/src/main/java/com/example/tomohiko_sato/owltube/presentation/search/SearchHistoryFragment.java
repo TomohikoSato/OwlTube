@@ -5,18 +5,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -29,8 +26,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  * interface.
  */
 public class SearchHistoryFragment extends Fragment {
-	private final static String TAG = SearchHistoryFragment.class.getSimpleName();
-
 	private OnSearchHistoryFragmentInteractionListener listener;
 	private SearchHistoryRecyclerViewAdapter adapter;
 

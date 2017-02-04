@@ -14,7 +14,6 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -26,6 +25,7 @@ import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
+import com.example.tomohiko_sato.owltube.util.Logger;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,8 +38,6 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class SearchActivity extends AppCompatActivity implements OnVideoItemSelectedListener, SearchHistoryFragment.OnSearchHistoryFragmentInteractionListener, SearchResultFragment.SearchResultFragmentInteractionListener {
-	private static final String TAG = SearchActivity.class.getSimpleName();
-
 	@Inject
 	SearchUseCase searchUC;
 
@@ -113,13 +111,13 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
 			@Override
 			public boolean onSuggestionSelect(int position) {
-				Log.d(TAG, "onSuggestionSelect");
+				Logger.d("onSuggestionSelect");
 				return false;
 			}
 
 			@Override
 			public boolean onSuggestionClick(int position) {
-				Log.d(TAG, "onSuggestionClick");
+				Logger.d("onSuggestionClick");
 				MatrixCursor cursor = (MatrixCursor) simpleCursorAdapter.getItem(position);
 				String query = cursor.getString(1);
 				searchView.setQuery(query, true);
@@ -140,7 +138,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 				if (newText.length() == 0) {
 					return false;
 				}
-				Log.d(TAG, "onQueryTextChange" + newText);
+				Logger.d("onQueryTextChange" + newText);
 				showSearchHistoryFragment();
 
 				disposables.add(searchUC.fetchSuggest(newText)
@@ -192,7 +190,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 					nextPageToken = videoResponse.pageToken;
 					searchResultFragment.addVideoItems(videoResponse.videos);
 				}, throwable -> {
-					Log.e(TAG, "Search onFailure " + throwable);
+					Logger.e("Search onFailure " + throwable);
 					Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
 				}));
 	}

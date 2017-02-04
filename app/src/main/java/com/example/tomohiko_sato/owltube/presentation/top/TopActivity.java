@@ -32,8 +32,6 @@ import java.util.Objects;
  * 起動後最初に表示される、トップ画面を担うAcitivity.
  */
 public class TopActivity extends AppCompatActivity implements VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener {
-	private final static String TAG = TopActivity.class.getSimpleName();
-
 	private enum TopTab {
 		POPULAR(0, R.string.popular, R.drawable.main_tab_popular) {
 			@Override

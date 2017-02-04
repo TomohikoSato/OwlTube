@@ -8,21 +8,19 @@ import android.graphics.PixelFormat;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.tomohiko_sato.owltube.util.Logger;
 import com.google.android.youtube.player.YouTubePlayerView;
 
 /**
  * 他のアプリケーションの上でも表示できる動画再生プレイヤーの管理をするサービス
  */
 public class ExternalPlayerService extends Service implements View.OnTouchListener {
-	private final static String TAG = ExternalPlayerService.class.getSimpleName();
-
 	private WindowManager windowManager;
 	private FrameLayout overlapView;
 	private WindowManager.LayoutParams overlapViewParams;
@@ -48,7 +46,7 @@ public class ExternalPlayerService extends Service implements View.OnTouchListen
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.i(TAG, "onStartCommand Received start id " + startId + ": " + intent);
+		Logger.i("onStartCommand Received start id " + startId + ": " + intent);
 		Toast.makeText(this, "ExternalPlayerService#onStartCommand", Toast.LENGTH_SHORT).show();
 		return START_STICKY;
 	}
@@ -56,9 +54,10 @@ public class ExternalPlayerService extends Service implements View.OnTouchListen
 	private final ExternalPlayerServiceBinder binder = new ExternalPlayerServiceBinder();
 
 	private float dX, dY;
+
 	@Override
 	public boolean onTouch(View view, MotionEvent event) {
-		Log.d(TAG, event.toString());
+		Logger.d(event.toString());
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				dX = view.getX() - event.getRawX();
@@ -85,7 +84,7 @@ public class ExternalPlayerService extends Service implements View.OnTouchListen
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		Log.d(TAG, "onBind " + intent.toString());
+		Logger.d("onBind " + intent.toString());
 		windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 		overlapView = new FrameLayout(getApplicationContext());
 		overlapView.setOnTouchListener(this);
@@ -102,7 +101,7 @@ public class ExternalPlayerService extends Service implements View.OnTouchListen
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				Log.d(TAG, "delay time has come. removeView");
+				Logger.d("delay time has come. removeView");
 				windowManager.removeView(overlapView);
 				stopSelf();
 			}
@@ -113,13 +112,13 @@ public class ExternalPlayerService extends Service implements View.OnTouchListen
 
 	@Override
 	public boolean onUnbind(Intent intent) {
-		Log.d(TAG, "onUnbind");
+		Logger.d("onUnbind");
 		return super.onUnbind(intent);
 	}
 
 	@Override
 	public void onDestroy() {
-		Log.i(TAG, "onDestroy");
+		Logger.i("onDestroy");
 		Toast.makeText(this, "ExternalPlayerService#onDestroy", Toast.LENGTH_SHORT).show();
 	}
 }

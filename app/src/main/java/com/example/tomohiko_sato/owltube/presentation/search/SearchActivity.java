@@ -156,7 +156,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		private final String newText;
 		private final SimpleCursorAdapter adapter;
 
-		SuggestsObserver(String newText , SimpleCursorAdapter adapter) {
+		SuggestsObserver(String newText, SimpleCursorAdapter adapter) {
 			this.newText = newText;
 			this.adapter = adapter;
 		}
@@ -185,7 +185,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		hideKeyboard();
 		showSearchResultFragment();
 
-		disposables.add(searchUC.search(query, nextPageToken).first
+		disposables.add(searchUC.search(query, nextPageToken)
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(videoResponse -> {

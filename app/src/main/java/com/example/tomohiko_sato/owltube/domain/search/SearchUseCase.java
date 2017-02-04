@@ -1,7 +1,6 @@
 package com.example.tomohiko_sato.owltube.domain.search;
 
 import android.support.annotation.Nullable;
-import android.support.v4.util.Pair;
 
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
@@ -16,8 +15,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
@@ -59,8 +56,7 @@ public class SearchUseCase {
 		return Pair.create(response, addSearchHistory(query));
 	}
 */
-
-	public Maybe<VideoResponse> search(final String query, @Nullable final String pageToken) {
+	public Single<VideoResponse> search(final String query, @Nullable final String pageToken) {
 		Single<VideoResponse> response = youtubeRequest.search(query, pageToken)
 				.map(videoResponse -> {
 							final List<Video> videos = videoResponse.videos;
@@ -78,9 +74,8 @@ public class SearchUseCase {
 						}
 				);
 
-
-
-		return Pair.create(response, addSearchHistory(query));
+		addSearchHistory(query).subscribe();
+		return response;
 	}
 
 

@@ -45,9 +45,9 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 			}
 		};
 
-		public final int position;
-		public final String title;
-		public final int icon;
+		private final int position;
+		private final String title;
+		private final int icon;
 
 		TAB(int position, String title, @DrawableRes int icon) {
 			this.position = position;
@@ -55,7 +55,7 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 			this.icon = icon;
 		}
 
-		public static TAB fromPosition(int position) {
+		public static TAB from(int position) {
 			for (TAB value : values()) {
 				if (value.position == position) {
 					return value;
@@ -65,6 +65,12 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 		}
 
 		public abstract Fragment getFragment();
+
+		static void initialize(TabLayout layout) {
+			for (TAB value : values()) {
+				Objects.requireNonNull(layout.getTabAt(value.position)).setIcon(value.icon);
+			}
+		}
 	}
 
 	@Override
@@ -80,8 +86,7 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 		tabLayout.setupWithViewPager(viewPager);
 		tabLayout.addOnTabSelectedListener(new ActionBarTitleChanger(this.getSupportActionBar()));
 
-		Objects.requireNonNull(tabLayout.getTabAt(TAB.POPULAR.position)).setTag(TAB.POPULAR.title).setIcon(TAB.POPULAR.icon).select();
-		Objects.requireNonNull(tabLayout.getTabAt(TAB.RECENTLY_WATCHED.position)).setTag(TAB.RECENTLY_WATCHED.title).setIcon(TAB.RECENTLY_WATCHED.icon);
+		TAB.initialize(tabLayout);
 	}
 
 	static class ActionBarTitleChanger implements TabLayout.OnTabSelectedListener {
@@ -119,7 +124,7 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 
 		@Override
 		public Fragment getItem(int position) {
-			return TAB.fromPosition(position).getFragment();
+			return TAB.from(position).getFragment();
 		}
 
 		@Override

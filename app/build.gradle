@@ -59,6 +59,7 @@ ext {
     RETROFIT_VERSION = "2.1.0"
     DEXMAKER_VERSION = "1.4"
     TESTRUNNER_VERSION = "0.5"
+    STETHO_VERSION ="1.4.2"
 }
 
 dependencies {
@@ -83,7 +84,8 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:0.7.7'
-    debugCompile 'com.facebook.stetho:stetho:1.4.1'
+    debugCompile "com.facebook.stetho:stetho:$STETHO_VERSION"
+    debugCompile "com.facebook.stetho:stetho-okhttp3:$STETHO_VERSION"
     debugCompile "com.squareup.leakcanary:leakcanary-android:$LEAK_CANARY_VERSION"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$LEAK_CANARY_VERSION"
 

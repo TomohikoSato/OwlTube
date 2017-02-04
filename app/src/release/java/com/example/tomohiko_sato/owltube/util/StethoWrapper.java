@@ -9,4 +9,8 @@ public class StethoWrapper {
 	public static void setUp(Context context) {
 		/** no op */
 	}
+
+	public static OkHttpClient.Builder addStethoInterCeptor(OkHttpClient.Builder builder) {
+		return builder;
+	}
 }

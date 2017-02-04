@@ -17,3 +17,9 @@
 #}
 
 -dontwarn java.lang.invoke.*
+
+-keep public class com.pierfrancescosoffritti.youtubeplayer.** {
+   public *;
+}
+
+-keepnames class com.pierfrancescosoffritti.youtubeplayer.*

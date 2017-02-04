@@ -1,9 +1,12 @@
 package com.example.tomohiko_sato.owltube.presentation.top;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TabLayout.Tab;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -31,14 +34,14 @@ import java.util.Objects;
 public class TopActivity extends AppCompatActivity implements VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private final static String TAG = TopActivity.class.getSimpleName();
 
-	private enum TAB {
-		POPULAR(0, "Popular", R.drawable.main_tab_popular) {
+	private enum TopTab {
+		POPULAR(0, R.string.popular, R.drawable.main_tab_popular) {
 			@Override
 			public Fragment getFragment() {
 				return PopularFragment.newInstance();
 			}
 		},
-		RECENTLY_WATCHED(1, "Recently Watched", R.drawable.main_tab_recent) {
+		RECENTLY_WATCHED(1, R.string.recently_watched, R.drawable.main_tab_recent) {
 			@Override
 			public Fragment getFragment() {
 				return RecentlyWatchedFragment.newInstance();
@@ -46,17 +49,19 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 		};
 
 		private final int position;
-		private final String title;
+		@StringRes
+		final int title;
+		@DrawableRes
 		private final int icon;
 
-		TAB(int position, String title, @DrawableRes int icon) {
+		TopTab(int position, @StringRes int title, @DrawableRes int icon) {
 			this.position = position;
 			this.title = title;
 			this.icon = icon;
 		}
 
-		public static TAB from(int position) {
-			for (TAB value : values()) {
+		public static TopTab from(int position) {
+			for (TopTab value : values()) {
 				if (value.position == position) {
 					return value;
 				}
@@ -64,11 +69,19 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 			throw new IllegalArgumentException();
 		}
 
+		public static TopTab from(Tab tab) {
+			return from(tab.getPosition());
+		}
+
 		public abstract Fragment getFragment();
 
 		static void initialize(TabLayout layout) {
-			for (TAB value : values()) {
-				Objects.requireNonNull(layout.getTabAt(value.position)).setIcon(value.icon);
+			for (TopTab value : values()) {
+				Tab tab = Objects.requireNonNull(layout.getTabAt(value.position));
+				tab.setIcon(value.icon);
+				if (value == TopTab.POPULAR) {
+					tab.select();
+				}
 			}
 		}
 	}
@@ -84,31 +97,35 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		tabLayout.setupWithViewPager(viewPager);
-		tabLayout.addOnTabSelectedListener(new ActionBarTitleChanger(this.getSupportActionBar()));
+		tabLayout.addOnTabSelectedListener(new ActionBarTitleChanger(this.getSupportActionBar(), this));
 
-		TAB.initialize(tabLayout);
+		TopTab.initialize(tabLayout);
 	}
 
 	static class ActionBarTitleChanger implements TabLayout.OnTabSelectedListener {
 		@NonNull
 		private final ActionBar bar;
 
-		ActionBarTitleChanger(@NonNull ActionBar bar) {
+		@NonNull
+		private final Context context;
+
+		ActionBarTitleChanger(@NonNull ActionBar bar, @NonNull Context context) {
 			this.bar = Objects.requireNonNull(bar);
+			this.context = context;
 		}
 
 		@Override
-		public void onTabSelected(TabLayout.Tab tab) {
-			bar.setTitle((String) tab.getTag());
+		public void onTabSelected(Tab tab) {
+			bar.setTitle(context.getString(TopTab.from(tab).title));
 		}
 
 		@Override
-		public void onTabUnselected(TabLayout.Tab tab) {
+		public void onTabUnselected(Tab tab) {
 		}
 
 		@Override
-		public void onTabReselected(TabLayout.Tab tab) {
-			bar.setTitle((String) tab.getTag());
+		public void onTabReselected(Tab tab) {
+			bar.setTitle(context.getString(TopTab.from(tab).title));
 		}
 	}
 
@@ -124,12 +141,12 @@ public class TopActivity extends AppCompatActivity implements VideoItemRecyclerV
 
 		@Override
 		public Fragment getItem(int position) {
-			return TAB.from(position).getFragment();
+			return TopTab.from(position).getFragment();
 		}
 
 		@Override
 		public int getCount() {
-			return TAB.values().length;
+			return TopTab.values().length;
 		}
 	}
 

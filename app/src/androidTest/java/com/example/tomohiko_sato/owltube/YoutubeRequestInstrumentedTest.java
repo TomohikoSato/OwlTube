@@ -2,22 +2,7 @@ package com.example.tomohiko_sato.owltube;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
-import com.example.tomohiko_sato.owltube.infra.api.youtube.data.search.Search;
-import com.example.tomohiko_sato.owltube.util.Logger;
-
-import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 /**
  * Instrumentation test, which will execute on an Android device.
@@ -26,45 +11,5 @@ import static org.junit.Assert.fail;
  */
 @RunWith(AndroidJUnit4.class)
 public class YoutubeRequestInstrumentedTest {
-	private YoutubeRequest request = null;
-	private final String TAG = YoutubeRequestInstrumentedTest.class.getSimpleName();
 
-	@Before
-	public void before() {
-		this.request = new YoutubeRequest();
-	}
-
-	@Test
-	public void syncRequest() {
-		Response<Search> repo = request.search("dir en grey");
-		assertEquals("JP", repo.body().regionCode);
-		assertEquals("youtube#searchResult", repo.body().items.iterator().next().kind);
-	}
-
-	@Test
-	public void asyncRequest() {
-		Callback<Search> callback = new Callback<Search>() {
-			@Override
-			public void onResponse(Call<Search> call, Response<Search> response) {
-				System.out.print(String.format("Response: %s", response.body()));
-				Logger.d("response");
-				Assert.assertEquals("JP", response.body().regionCode);
-			}
-
-			@Override
-			public void onFailure(Call<Search> call, Throwable t) {
-				Logger.d("failure");
-				System.out.print(t.toString());
-				fail();
-			}
-		};
-
-		request.searchAsync("dir en grey", callback);
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
 }

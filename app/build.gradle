@@ -69,7 +69,9 @@ dependencies {
     })
 
     compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile "com.android.support:support-v4:$SL_VERSION"
+    compile "com.android.support:support-compat:$SL_VERSION"
+    compile "com.android.support:support-core-ui:$SL_VERSION"
+
     compile "com.android.support:appcompat-v7:$SL_VERSION"
     compile "com.android.support:recyclerview-v7:$SL_VERSION"
     compile "com.android.support:design:$SL_VERSION"

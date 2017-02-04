@@ -2,6 +2,7 @@ package com.example.tomohiko_sato.owltube.presentation.player;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -63,7 +64,7 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 	private final Context context;
 	private final OnVideoItemSelectedListener listener;
 
-	PlayerRecyclerViewAdapter(Context context, OnVideoItemSelectedListener listener, Video headerItem) {
+	PlayerRecyclerViewAdapter(@NonNull Context context, @NonNull OnVideoItemSelectedListener listener, @NonNull Video headerItem) {
 		this.context = context;
 		this.listener = listener;
 		this.headerItem = headerItem;

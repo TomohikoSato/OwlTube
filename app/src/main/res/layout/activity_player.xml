@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity">
 
-    <com.google.android.youtube.player.YouTubePlayerView
+    <com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView
         android:id="@+id/youtube_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

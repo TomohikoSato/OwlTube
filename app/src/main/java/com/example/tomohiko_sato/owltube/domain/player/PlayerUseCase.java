@@ -28,6 +28,7 @@ public class PlayerUseCase {
 		new Thread(() -> recentlyWatchedDao.add(item)).start();
 	}
 
+	@NonNull
 	public Single<List<Video>> fetchRelatedVideo(@NonNull final String videoId) {
 		return youtubeRequest.fetchRealtedToVideoId(videoId).map(videoResponse -> {
 			final List<Video> videos = videoResponse.videos;

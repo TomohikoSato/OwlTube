@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.util.Logger;
-import com.google.android.youtube.player.YouTubePlayerView;
+
 
 /**
  * 他のアプリケーションの上でも表示できる動画再生プレイヤーの管理をするサービス
@@ -24,7 +24,6 @@ public class ExternalPlayerService extends Service implements View.OnTouchListen
 	private WindowManager windowManager;
 	private FrameLayout overlapView;
 	private WindowManager.LayoutParams overlapViewParams;
-	private YouTubePlayerView externalPlayerView;
 
 	public ExternalPlayerService() {
 	}

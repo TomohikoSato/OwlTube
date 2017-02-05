@@ -87,7 +87,7 @@ public class TopActivity extends AppCompatActivity implements VideoItemViewAdapt
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_top);
 		setSupportActionBar((Toolbar) findViewById(R.id.tool_bar));
 
 		ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);

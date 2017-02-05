@@ -49,12 +49,9 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRecyclerV
 		playerUseCase.addRecentlyWatched(video);
 		disposables.add(playerUseCase.fetchRelatedVideo(video.videoId)
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(videos -> {
-							PlayerRecyclerViewAdapter adapter = new PlayerRecyclerViewAdapter(this, this, video);
-							((RecyclerView) findViewById(R.id.recycler_view)).setAdapter(adapter);
-							adapter.setBodyItem(videos);
-							adapter.notifyDataSetChanged();
-						}, Throwable::printStackTrace
+				.subscribe(videos -> ((RecyclerView) findViewById(R.id.recycler_view))
+								.setAdapter(new PlayerRecyclerViewAdapter(this, this, video, videos))
+						, Throwable::printStackTrace
 				));
 
 		initYoutubePlayer(video);

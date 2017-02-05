@@ -24,10 +24,21 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 	}
 
 	private enum ViewType {
-		Player(0, R.layout.list_item_video_detail),
-		RelatedVideos(1, R.layout.list_item_video);
+		Player(0, R.layout.list_item_video_detail) {
+			@Override
+			public ViewHolder getViewHolder(View view) {
+				return new VideoDetailRecyclerViewHolder(view);
+			}
+		},
+		RelatedVideos(1, R.layout.list_item_video) {
+			@Override
+			public ViewHolder getViewHolder(View view) {
+				return new VideoItemRecyclerViewHolder(view);
+			}
+		};
 
 		public final int viewTypeInt;
+		@LayoutRes
 		public final int layoutId;
 
 		ViewType(final int viewType, @LayoutRes final int layoutId) {
@@ -35,7 +46,7 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 			this.layoutId = layoutId;
 		}
 
-		public static ViewType fromInt(int viewType) {
+		public static ViewType from(int viewType) {
 			for (ViewType value : values()) {
 				if (value.viewTypeInt == viewType) {
 					return value;
@@ -50,34 +61,28 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 					.inflate(layoutId, parent, false);
 		}
 
-		public ViewHolder getViewHolder(View view) {
-			if (this == ViewType.Player) {
-				return new VideoDetailRecyclerViewHolder(view);
-			} else {
-				return new VideoItemRecyclerViewHolder(view);
-			}
-		}
+		public abstract ViewHolder getViewHolder(View view);
 	}
 
+	@NonNull
 	private final Video headerItem;
-	private final List<Video> bodyItems = new ArrayList<>();
+	@NonNull
+	private final List<Video> bodyItems;
+	@NonNull
 	private final Context context;
+	@NonNull
 	private final OnVideoItemSelectedListener listener;
 
-	PlayerRecyclerViewAdapter(@NonNull Context context, @NonNull OnVideoItemSelectedListener listener, @NonNull Video headerItem) {
+	PlayerRecyclerViewAdapter(@NonNull Context context, @NonNull OnVideoItemSelectedListener listener, @NonNull Video headerItem, @NonNull List<Video> bodyItems) {
 		this.context = context;
 		this.listener = listener;
 		this.headerItem = headerItem;
-	}
-
-	void setBodyItem(List<Video> items) {
-		this.bodyItems.clear();
-		this.bodyItems.addAll(items);
+		this.bodyItems = new ArrayList<>(bodyItems);
 	}
 
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewTypeInt) {
-		ViewType viewType = ViewType.fromInt(viewTypeInt);
+		ViewType viewType = ViewType.from(viewTypeInt);
 		return viewType.getViewHolder(viewType.getView(parent));
 	}
 
@@ -91,7 +96,7 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, int position) {
-		ViewType viewType = ViewType.fromInt(getItemViewType(position));
+		ViewType viewType = ViewType.from(getItemViewType(position));
 		if (viewType == ViewType.Player) {
 			VideoDetailRecyclerViewHolder vdvh = (VideoDetailRecyclerViewHolder) holder;
 			vdvh.item = headerItem;
@@ -110,7 +115,7 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 			Picasso.with(context).load(bodyItems.get(bodyPosition).thumbnailUrl).into(vivh.thumbnail);
 
 			vivh.itemView.setOnClickListener(v -> {
-				if (listener == null || vivh.item == null) {
+				if (vivh.item == null) {
 					return;
 				}
 				listener.onVideoItemSelected(vivh.item);
@@ -120,6 +125,6 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 	@Override
 	public int getItemCount() {
-		return bodyItems.size() + (headerItem == null ? 0 : 1);
+		return bodyItems.size() + 1;
 	}
 }

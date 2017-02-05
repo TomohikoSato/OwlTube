@@ -57,6 +57,10 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRecyclerV
 						}, Throwable::printStackTrace
 				));
 
+		initYoutubePlayer(video);
+	}
+
+	private void initYoutubePlayer(Video video) {
 		youTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 		youTubePlayerView.initialize(new AbstractYouTubeListener() {
 			@Override

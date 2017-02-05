@@ -57,7 +57,7 @@ public class VideoItemRecyclerViewAdapter extends RecyclerView.Adapter<VideoItem
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (listener == null || holder.item == null) {
+				if (holder.item == null) {
 					return;
 				}
 				listener.onVideoItemSelected(holder.item);

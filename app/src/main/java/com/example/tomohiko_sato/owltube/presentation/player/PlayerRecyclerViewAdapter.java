@@ -24,18 +24,8 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 	}
 
 	private enum ViewType {
-		Player(0, R.layout.list_item_video_detail) {
-			@Override
-			public ViewHolder getViewHolder(View view) {
-				return new VideoDetailRecyclerViewHolder(view);
-			}
-		},
-		RelatedVideos(1, R.layout.list_item_video) {
-			@Override
-			public ViewHolder getViewHolder(View view) {
-				return new VideoItemRecyclerViewHolder(view);
-			}
-		};
+		Player(0, R.layout.list_item_video_detail),
+		RelatedVideos(1, R.layout.list_item_video);
 
 		public final int viewTypeInt;
 		@LayoutRes
@@ -56,12 +46,18 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 			throw new IllegalArgumentException();
 		}
 
-		public View getView(ViewGroup parent) {
+		public ViewHolder getViewHolder(ViewGroup parent) {
+			if (this == ViewType.Player) {
+				return new VideoDetailRecyclerViewHolder(getView(parent));
+			} else {
+				return new VideoItemRecyclerViewHolder(getView(parent));
+			}
+		}
+
+		private View getView(ViewGroup parent) {
 			return LayoutInflater.from(parent.getContext())
 					.inflate(layoutId, parent, false);
 		}
-
-		public abstract ViewHolder getViewHolder(View view);
 	}
 
 	@NonNull
@@ -82,8 +78,7 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewTypeInt) {
-		ViewType viewType = ViewType.from(viewTypeInt);
-		return viewType.getViewHolder(viewType.getView(parent));
+		return ViewType.from(viewTypeInt).getViewHolder(parent);
 	}
 
 	@Override

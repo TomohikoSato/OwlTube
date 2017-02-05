@@ -34,10 +34,5 @@
             android:name=".presentation.setting.SettingActivity"
             android:screenOrientation="portrait"/>
 
-        <service
-            android:name=".presentation.player.ExternalPlayerService"
-            android:enabled="true"
-            android:exported="true">
-        </service>
     </application>
 </manifest>

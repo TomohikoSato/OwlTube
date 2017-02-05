@@ -16,44 +16,22 @@ import com.pierfrancescosoffritti.youtubeplayer.AbstractYouTubeListener;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
 
-import java.util.Objects;
-
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static java.util.Objects.requireNonNull;
+
 public class PlayerActivity extends AppCompatActivity implements PlayerRecyclerViewAdapter.OnVideoItemSelectedListener {
 	private static final String KEY_INTENT_EXTRA_VIDEO_ITEM = "VIDEO_ITEM";
-	private static final int REQUEST_CODE_PLAYER_RECOVERY_DIALOG = 22;
 
 	@NonNull
 	private final CompositeDisposable disposables = new CompositeDisposable();
-	private String videoId;
-	private PlayerRecyclerViewAdapter adapter;
 	private YouTubePlayerView youTubePlayerView;
-///	private ExternalPlayerService externalPlayerService;
-//	private boolean isBound = false;
 
 	@Inject
 	PlayerUseCase playerUseCase;
-
-/*
-	private ServiceConnection connection = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder binder) {
-			Logger.d("onServiceConnected");
-			isBound = true;
-			externalPlayerService = ((ExternalPlayerService.ExternalPlayerServiceBinder) binder).getService();
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			Logger.d("onServiceDisconnected");
-			isBound = false;
-		}
-	};
-*/
 
 	public static void startPlayerActivity(@NonNull Context context, @NonNull Video item) {
 		Intent intent = new Intent(context, PlayerActivity.class);
@@ -64,40 +42,32 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRecyclerV
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (getIntent() == null) {
-			throw new RuntimeException("should start intent with key");
-		}
-
-		Video video = Objects.requireNonNull(getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO_ITEM));
+		Video video = requireNonNull(getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO_ITEM));
 		((OwlTubeApp) getApplication()).getComponent().inject(this);
 		setContentView(R.layout.activity_player);
 
-		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-		adapter = new PlayerRecyclerViewAdapter(this, this, video);
-		recyclerView.setAdapter(adapter);
-		videoId = video.videoId;
-//		ExternalPlayerService.bindService(this, connection);
-
 		playerUseCase.addRecentlyWatched(video);
-		disposables.add(playerUseCase.fetchRelatedVideo(videoId)
+		disposables.add(playerUseCase.fetchRelatedVideo(video.videoId)
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(videos -> {
+							PlayerRecyclerViewAdapter adapter = new PlayerRecyclerViewAdapter(this, this, video);
+							((RecyclerView) findViewById(R.id.recycler_view)).setAdapter(adapter);
 							adapter.setBodyItem(videos);
 							adapter.notifyDataSetChanged();
 						}, Throwable::printStackTrace
 				));
 
-		FullScreenManager fullScreenManager = new FullScreenManager(this);
-
 		youTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 		youTubePlayerView.initialize(new AbstractYouTubeListener() {
 			@Override
 			public void onReady() {
-				youTubePlayerView.loadVideo(videoId, 0);
+				youTubePlayerView.loadVideo(video.videoId, 0);
 			}
 		}, true);
 
 		youTubePlayerView.addFullScreenListener(new YouTubePlayerFullScreenListener() {
+			private final FullScreenManager fullScreenManager = new FullScreenManager(PlayerActivity.this);
+
 			@Override
 			public void onYouTubePlayerEnterFullScreen() {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -110,98 +80,12 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRecyclerV
 				fullScreenManager.exitFullScreen();
 			}
 		});
-
-
-//		playerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
-//		playerView.initialize(Api.Youtube.API_KEY, this);
-
-/*
-		Button external = (Button) findViewById(R.id.button_external);
-		external.setOnClickListener(v -> {
-			ExternalPlayerService.startService(PlayerActivity.this);
-			ExternalPlayerLayout layout = (ExternalPlayerLayout) LayoutInflater.from(PlayerActivity.this).inflate(R.layout.view_external_player, null);
-*/
-/*
-			Button closeButton = (Button) layout.findViewById(R.id.button_close);
-			closeButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Logger.d( "onclick");
-				}
-			});
-*//*
-
-			externalPlayerView = (YouTubePlayerView) layout.findViewById(R.id.external_youtube_player);
-			externalPlayerView.initialize(Api.API_KEY, PlayerActivity.this);
-			externalPlayerService.addView(layout);
-		});
-*/
 	}
 
-	/*private YouTubePlayerView externalPlayerView;*/
-/*
-	private int toPixel(int dp) {
-		final float scale = getResources().getDisplayMetrics().density;
-		int pixel = (int) (dp * scale + 0.5f); //TODO: 0.5?
-		return pixel;
-	}
-*/
-
-/*	private YouTubePlayer currentPlayingPlayer;*/
-
-	/*
-		@Override
-		public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
-			Logger.d("onInitializationSuccess");
-			if (currentPlayingPlayer != null) {
-				currentPlayingPlayer.release();
-				currentPlayingPlayer = null;
-			}
-			currentPlayingPlayer = player;
-			Logger.d("provider equals external player service: " + provider.equals(externalPlayerView));
-
-			player.setPlayerStyle(provider.equals(externalPlayerView) ? YouTubePlayer.PlayerStyle.CHROMELESS : YouTubePlayer.PlayerStyle.DEFAULT);
-			if (!wasRestored) {
-				player.loadVideo(videoId);
-			}
-		}
-
-		@Override
-		public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
-			Logger.d("onInitializationFailure" + errorReason.toString());
-			if (errorReason.isUserRecoverableError()) {
-				errorReason.getErrorDialog(this, REQUEST_CODE_PLAYER_RECOVERY_DIALOG);
-			}
-		}
-
-	*/
-/*
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Logger.d("onActivityResult" + requestCode);
-		if (REQUEST_CODE_PLAYER_RECOVERY_DIALOG == requestCode) {
-			playerView.initialize(Api.API_KEY, this);
-		}
-	}
-
-*/
 	@Override
 	protected void onStop() {
 		super.onStop();
-/*
-		Logger.d("onStop");
-
-		if (isBound) {
-			unbindService(connection);
-			isBound = false;
-		}
-*/
 		disposables.dispose();
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
 		youTubePlayerView.release();
 	}
 

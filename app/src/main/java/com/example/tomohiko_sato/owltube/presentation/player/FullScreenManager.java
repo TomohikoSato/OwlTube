@@ -8,7 +8,7 @@ class FullScreenManager {
 	@NonNull
 	private final Activity activity;
 
-	FullScreenManager(Activity activity) {
+	FullScreenManager(@NonNull Activity activity) {
 		this.activity = activity;
 	}
 

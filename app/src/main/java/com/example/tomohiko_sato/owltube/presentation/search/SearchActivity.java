@@ -23,7 +23,7 @@ import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
-import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter.OnVideoItemSelectedListener;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.util.Logger;
 

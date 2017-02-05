@@ -27,7 +27,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  */
 public class SearchHistoryFragment extends Fragment {
 	private OnSearchHistoryFragmentInteractionListener listener;
-	private SearchHistoryRecyclerViewAdapter adapter;
+	private SearchHistoryViewAdapter adapter;
 
 	@Inject
 	SearchUseCase searchUC;
@@ -51,7 +51,7 @@ public class SearchHistoryFragment extends Fragment {
 
 		Context context = recyclerView.getContext();
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
-		adapter = new SearchHistoryRecyclerViewAdapter(new ArrayList<String>(), listener);
+		adapter = new SearchHistoryViewAdapter(new ArrayList<String>(), listener);
 
 		recyclerView.setAdapter(adapter);
 

@@ -19,7 +19,7 @@ import android.view.MenuItem;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
-import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchActivity;
 import com.example.tomohiko_sato.owltube.presentation.setting.SettingActivity;
@@ -31,7 +31,7 @@ import java.util.Objects;
 /**
  * 起動後最初に表示される、トップ画面を担うAcitivity.
  */
-public class TopActivity extends AppCompatActivity implements VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener {
+public class TopActivity extends AppCompatActivity implements VideoItemViewAdapter.OnVideoItemSelectedListener {
 	private enum TopTab {
 		POPULAR(0, R.string.popular, R.drawable.main_tab_popular) {
 			@Override

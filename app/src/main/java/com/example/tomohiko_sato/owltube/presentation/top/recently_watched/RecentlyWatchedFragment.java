@@ -14,8 +14,8 @@ import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.recently_watched.RecentlyWatchedUseCase;
-import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
-import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter.OnVideoItemSelectedListener;
 import com.example.tomohiko_sato.owltube.util.Logger;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class RecentlyWatchedFragment extends Fragment {
 	}
 
 	private final List<Video> items = new ArrayList<>();
-	private VideoItemRecyclerViewAdapter adapter;
+	private VideoItemViewAdapter adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +55,7 @@ public class RecentlyWatchedFragment extends Fragment {
 		RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_recently_watched, container, false);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-		adapter = new VideoItemRecyclerViewAdapter(items, listener, getContext());
+		adapter = new VideoItemViewAdapter(items, listener, getContext());
 		recyclerView.setAdapter(adapter);
 		refreshItem();
 

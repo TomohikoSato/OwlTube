@@ -11,7 +11,7 @@ import com.example.tomohiko_sato.owltube.domain.data.Video;
 
 import static java.util.Objects.requireNonNull;
 
-public class VideoItemRecyclerViewHolder extends RecyclerView.ViewHolder {
+public class VideoItemViewHolder extends RecyclerView.ViewHolder {
 	public Video item;
 	@NonNull
 	public final View itemView;
@@ -24,7 +24,7 @@ public class VideoItemRecyclerViewHolder extends RecyclerView.ViewHolder {
 	@NonNull
 	public final ImageView thumbnail;
 
-	public VideoItemRecyclerViewHolder(@NonNull View view) {
+	public VideoItemViewHolder(@NonNull View view) {
 		super(view);
 		itemView = view;
 		title = requireNonNull((TextView) view.findViewById(R.id.title));

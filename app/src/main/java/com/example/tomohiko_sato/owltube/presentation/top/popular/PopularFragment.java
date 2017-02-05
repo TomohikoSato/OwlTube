@@ -16,8 +16,8 @@ import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.OnPagingScrollListener;
-import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
-import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter.OnVideoItemSelectedListener;
 import com.example.tomohiko_sato.owltube.util.Logger;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 public class PopularFragment extends Fragment {
 	private final CompositeDisposable disposables = new CompositeDisposable();
 	private OnVideoItemSelectedListener listener;
-	private VideoItemRecyclerViewAdapter adapter;
+	private VideoItemViewAdapter adapter;
 	private String nextPageToken;
 	private ProgressBar progressBar;
 	private final OnPagingScrollListener scrollListener = new OnPagingScrollListener(new OnPagingScrollListener.OnShouldLoadNextPageListener() {
@@ -84,7 +84,7 @@ public class PopularFragment extends Fragment {
 
 		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-		recyclerView.setAdapter(adapter = new VideoItemRecyclerViewAdapter(new ArrayList<>(), listener, getContext()));
+		recyclerView.setAdapter(adapter = new VideoItemViewAdapter(new ArrayList<>(), listener, getContext()));
 		recyclerView.addOnScrollListener(scrollListener);
 		disposables.add(popularUC.fetchPopular()
 				.observeOn(AndroidSchedulers.mainThread())

@@ -23,7 +23,7 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import static java.util.Objects.requireNonNull;
 
-public class PlayerActivity extends AppCompatActivity implements PlayerRecyclerViewAdapter.OnVideoItemSelectedListener {
+public class PlayerActivity extends AppCompatActivity implements PlayerViewAdapter.OnVideoItemSelectedListener {
 	private static final String KEY_INTENT_EXTRA_VIDEO_ITEM = "VIDEO_ITEM";
 
 	@NonNull
@@ -50,7 +50,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRecyclerV
 		disposables.add(playerUseCase.fetchRelatedVideo(video.videoId)
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(videos -> ((RecyclerView) findViewById(R.id.recycler_view))
-								.setAdapter(new PlayerRecyclerViewAdapter(this, this, video, videos))
+								.setAdapter(new PlayerViewAdapter(this, this, video, videos))
 						, Throwable::printStackTrace
 				));
 

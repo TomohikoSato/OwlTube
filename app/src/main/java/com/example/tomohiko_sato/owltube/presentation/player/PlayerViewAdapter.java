@@ -11,14 +11,14 @@ import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
-import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewHolder;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewHolder;
 import com.example.tomohiko_sato.owltube.presentation.util.StringUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
+class PlayerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 	interface OnVideoItemSelectedListener {
 		void onVideoItemSelected(Video item);
 	}
@@ -48,9 +48,9 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 		public ViewHolder getViewHolder(ViewGroup parent) {
 			if (this == ViewType.Player) {
-				return new VideoDetailRecyclerViewHolder(getView(parent));
+				return new VideoDetailViewHolder(getView(parent));
 			} else {
-				return new VideoItemRecyclerViewHolder(getView(parent));
+				return new VideoItemViewHolder(getView(parent));
 			}
 		}
 
@@ -69,7 +69,7 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 	@NonNull
 	private final OnVideoItemSelectedListener listener;
 
-	PlayerRecyclerViewAdapter(@NonNull Context context, @NonNull OnVideoItemSelectedListener listener, @NonNull Video headerItem, @NonNull List<Video> bodyItems) {
+	PlayerViewAdapter(@NonNull Context context, @NonNull OnVideoItemSelectedListener listener, @NonNull Video headerItem, @NonNull List<Video> bodyItems) {
 		this.context = context;
 		this.listener = listener;
 		this.headerItem = headerItem;
@@ -93,13 +93,13 @@ class PlayerRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 	public void onBindViewHolder(final ViewHolder holder, int position) {
 		ViewType viewType = ViewType.from(getItemViewType(position));
 		if (viewType == ViewType.Player) {
-			VideoDetailRecyclerViewHolder vdvh = (VideoDetailRecyclerViewHolder) holder;
+			VideoDetailViewHolder vdvh = (VideoDetailViewHolder) holder;
 			vdvh.item = headerItem;
 			vdvh.title.setText(headerItem.title);
 			vdvh.channelTitle.setText(headerItem.channelTitle);
 			vdvh.viewCount.setText(StringUtil.convertDisplayViewCount(headerItem.viewCount));
 		} else if (viewType == ViewType.RelatedVideos) {
-			final VideoItemRecyclerViewHolder vivh = (VideoItemRecyclerViewHolder) holder;
+			final VideoItemViewHolder vivh = (VideoItemViewHolder) holder;
 
 			int bodyPosition = position - 1;
 

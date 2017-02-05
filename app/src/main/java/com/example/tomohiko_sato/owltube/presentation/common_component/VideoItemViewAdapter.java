@@ -18,7 +18,7 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link Video}.
  * {@link Video} tap event call {@link OnVideoItemSelectedListener}.
  */
-public class VideoItemRecyclerViewAdapter extends RecyclerView.Adapter<VideoItemRecyclerViewHolder> {
+public class VideoItemViewAdapter extends RecyclerView.Adapter<VideoItemViewHolder> {
 	public interface OnVideoItemSelectedListener {
 		void onVideoItemSelected(Video item);
 	}
@@ -27,7 +27,7 @@ public class VideoItemRecyclerViewAdapter extends RecyclerView.Adapter<VideoItem
 	private final OnVideoItemSelectedListener listener;
 	private Context context;
 
-	public VideoItemRecyclerViewAdapter(@NonNull List<Video> items, @NonNull OnVideoItemSelectedListener listener, @NonNull Context context) {
+	public VideoItemViewAdapter(@NonNull List<Video> items, @NonNull OnVideoItemSelectedListener listener, @NonNull Context context) {
 		this.items = items;
 		this.listener = listener;
 		this.context = context;
@@ -39,14 +39,14 @@ public class VideoItemRecyclerViewAdapter extends RecyclerView.Adapter<VideoItem
 	}
 
 	@Override
-	public VideoItemRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	public VideoItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext())
 				.inflate(R.layout.list_item_video, parent, false);
-		return new VideoItemRecyclerViewHolder(view);
+		return new VideoItemViewHolder(view);
 	}
 
 	@Override
-	public void onBindViewHolder(final VideoItemRecyclerViewHolder holder, int position) {
+	public void onBindViewHolder(final VideoItemViewHolder holder, int position) {
 		Video item = items.get(position);
 		holder.item = item;
 		holder.title.setText(item.title);

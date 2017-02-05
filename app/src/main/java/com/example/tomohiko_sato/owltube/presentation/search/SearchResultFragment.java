@@ -14,8 +14,8 @@ import android.widget.ProgressBar;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.presentation.common_component.OnPagingScrollListener;
-import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter;
-import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemRecyclerViewAdapter.OnVideoItemSelectedListener;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter;
+import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter.OnVideoItemSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class SearchResultFragment extends Fragment implements OnVideoItemSelecte
 	private SearchResultFragmentInteractionListener listener;
 
 	private final static String KEY_VIDEO_ITEMS = "VIDEO_ITEMS";
-	private VideoItemRecyclerViewAdapter adapter;
+	private VideoItemViewAdapter adapter;
 	private ProgressBar progressBar;
 
 	@Override
@@ -78,7 +78,7 @@ public class SearchResultFragment extends Fragment implements OnVideoItemSelecte
 			items = bundle.getParcelableArrayList(KEY_VIDEO_ITEMS);
 		}
 
-		adapter = new VideoItemRecyclerViewAdapter(items, this, context);
+		adapter = new VideoItemViewAdapter(items, this, context);
 		recyclerView.setAdapter(adapter);
 
 		return rootView;

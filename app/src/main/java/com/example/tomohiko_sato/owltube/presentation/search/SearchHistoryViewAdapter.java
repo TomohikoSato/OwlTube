@@ -14,18 +14,18 @@ import java.util.List;
 /**
  * {@link RecyclerView.Adapter} that can display a {@link String} and makes a call to the
  * specified {@link OnSearchHistoryFragmentInteractionListener}.
-  */
-public class SearchHistoryRecyclerViewAdapter extends RecyclerView.Adapter<SearchHistoryRecyclerViewAdapter.ViewHolder> {
+ */
+public class SearchHistoryViewAdapter extends RecyclerView.Adapter<SearchHistoryViewAdapter.ViewHolder> {
 
 	private List<String> searchHistories;
 	private final OnSearchHistoryFragmentInteractionListener listener;
 
-	public SearchHistoryRecyclerViewAdapter(List<String> searchHistories, OnSearchHistoryFragmentInteractionListener listener) {
+	public SearchHistoryViewAdapter(List<String> searchHistories, OnSearchHistoryFragmentInteractionListener listener) {
 		this.searchHistories = searchHistories;
 		this.listener = listener;
 	}
 
-	public void refreshSearchHistories (List<String> searchHistories) {
+	public void refreshSearchHistories(List<String> searchHistories) {
 		this.searchHistories.addAll(searchHistories);
 		notifyItemInserted(0);
 	}

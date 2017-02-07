@@ -7,7 +7,7 @@ import android.util.ArrayMap;
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.infra.api.mapper.VideoMapper;
 import com.example.tomohiko_sato.owltube.infra.api.youtube.data.statistics.Item;
-import com.example.tomohiko_sato.owltube.util.Logger;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 import java.util.List;
 import java.util.Map;

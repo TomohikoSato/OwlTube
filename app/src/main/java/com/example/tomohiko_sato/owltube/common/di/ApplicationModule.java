@@ -1,7 +1,8 @@
-package com.example.tomohiko_sato.owltube.di;
+package com.example.tomohiko_sato.owltube.common.di;
 
 import android.content.Context;
 
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
 import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.owltube.domain.recently_watched.RecentlyWatchedUseCase;
@@ -13,7 +14,6 @@ import com.example.tomohiko_sato.owltube.infra.api.youtube.YoutubeRequest;
 import com.example.tomohiko_sato.owltube.infra.dao.RecentlyWatchedDao;
 import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDao;
 import com.example.tomohiko_sato.owltube.infra.db.DefaultDBHelper;
-import com.example.tomohiko_sato.owltube.util.Logger;
 import com.example.tomohiko_sato.owltube.util.StethoWrapper;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 

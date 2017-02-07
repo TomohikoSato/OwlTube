@@ -2,8 +2,8 @@ package com.example.tomohiko_sato.owltube;
 
 import android.app.Application;
 
-import com.example.tomohiko_sato.owltube.di.ApplicationComponent;
-import com.example.tomohiko_sato.owltube.di.ApplicationModule;
+import com.example.tomohiko_sato.owltube.common.di.ApplicationComponent;
+import com.example.tomohiko_sato.owltube.common.di.ApplicationModule;
 import com.example.tomohiko_sato.owltube.di.DaggerApplicationComponent;
 import com.example.tomohiko_sato.owltube.util.StethoWrapper;
 import com.facebook.stetho.Stetho;

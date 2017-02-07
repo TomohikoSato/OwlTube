@@ -4,7 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 
-import com.example.tomohiko_sato.owltube.util.Logger;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 
 /**

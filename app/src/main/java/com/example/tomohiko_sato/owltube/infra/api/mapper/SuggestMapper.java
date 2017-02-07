@@ -1,7 +1,7 @@
 package com.example.tomohiko_sato.owltube.infra.api.mapper;
 
 
-import com.example.tomohiko_sato.owltube.util.Logger;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;

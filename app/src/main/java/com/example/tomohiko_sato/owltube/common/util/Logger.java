@@ -1,13 +1,13 @@
-package com.example.tomohiko_sato.owltube.util;
+package com.example.tomohiko_sato.owltube.common.util;
 
 import android.util.Log;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.example.tomohiko_sato.owltube.util.Logger.TagGenerater.getCallerClassName;
-import static com.example.tomohiko_sato.owltube.util.Logger.TagGenerater.getCallerMethodName;
-import static com.example.tomohiko_sato.owltube.util.Logger.TagGenerater.trim;
+import static com.example.tomohiko_sato.owltube.common.util.Logger.TagGenerater.getCallerClassName;
+import static com.example.tomohiko_sato.owltube.common.util.Logger.TagGenerater.getCallerMethodName;
+import static com.example.tomohiko_sato.owltube.common.util.Logger.TagGenerater.trim;
 
 public class Logger {
 	public static void d() {

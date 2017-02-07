@@ -1,12 +1,10 @@
-package com.example.tomohiko_sato.owltube.di;
+package com.example.tomohiko_sato.owltube.common.di;
 
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchHistoryFragment;
 import com.example.tomohiko_sato.owltube.presentation.top.popular.PopularFragment;
 import com.example.tomohiko_sato.owltube.presentation.top.recently_watched.RecentlyWatchedFragment;
-
-import javax.inject.Singleton;
 
 import dagger.Component;
 

@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.util.Logger;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 /**
  * WindowManager上で{@link PlayerView}を動かすためのサービス

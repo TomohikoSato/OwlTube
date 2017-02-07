@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.domain.callback.Callback;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.recently_watched.RecentlyWatchedUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter;
@@ -23,6 +22,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -33,6 +34,8 @@ public class RecentlyWatchedFragment extends Fragment {
 	private OnVideoItemSelectedListener listener;
 	@Inject
 	RecentlyWatchedUseCase recentlyWatchedUC;
+
+	private final CompositeDisposable disposables = new CompositeDisposable();
 
 	public RecentlyWatchedFragment() {
 	}
@@ -63,20 +66,15 @@ public class RecentlyWatchedFragment extends Fragment {
 	}
 
 	public void refreshItem() {
-		recentlyWatchedUC.fetchRecentlyWatched(new Callback<List<Video>>() {
-			@Override
-			public void onSuccess(List<Video> response) {
-				items.clear();
-				items.addAll(response);
-				adapter.notifyDataSetChanged();
-			}
-
-			@Override
-			public void onFailure(Throwable t) {
-				t.printStackTrace();
-				Logger.d("fetch RecentlyWatched onFailure");
-			}
-		});
+		disposables.add(recentlyWatchedUC.fetchRecentlyWatched()
+				.subscribe((videos) -> {
+					items.clear();
+					items.addAll(videos);
+					adapter.notifyDataSetChanged();
+				}, t -> {
+					t.printStackTrace();
+					Logger.e("fetch RecentlyWatched onFailure");
+				}));
 	}
 
 	@Override
@@ -95,5 +93,6 @@ public class RecentlyWatchedFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		listener = null;
+		disposables.dispose();
 	}
 }

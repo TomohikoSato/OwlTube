@@ -18,6 +18,7 @@ import com.example.tomohiko_sato.owltube.util.Logger;
  * WindowManager上で{@link PlayerView}を動かすためのサービス
  */
 public class ExternalPlayerService extends Service {
+	private static final String KEY_VIDEO_ID = "KEY_VIDEO_ID";
 	private final WindowManager.LayoutParams playerViewParams = new WindowManager.LayoutParams(
 			WindowManager.LayoutParams.WRAP_CONTENT,
 			WindowManager.LayoutParams.WRAP_CONTENT,
@@ -39,15 +40,17 @@ public class ExternalPlayerService extends Service {
 	}
 
 
-	public static void startService(Context context) {
+	public static void startService(Context context, String videoId) {
 		Intent intent = new Intent(context, ExternalPlayerService.class);
+		intent.putExtra(KEY_VIDEO_ID, videoId);
 		context.startService(intent);
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Logger.i("startId:%d, intent:%s ", startId, intent);
-		init();
+		String videoId = intent.getStringExtra(KEY_VIDEO_ID);
+		init(videoId);
 		return START_STICKY;
 	}
 
@@ -57,10 +60,11 @@ public class ExternalPlayerService extends Service {
 		}
 	}
 
-	private void init() {
+	private void init(String videoId) {
 		windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 		this.setTheme(R.style.AppTheme);
 		playerView = (PlayerView) LayoutInflater.from(this).inflate(R.layout.view_player, null);
+		playerView.setVideoId(videoId);
 		windowManager.addView(playerView, playerViewParams);
 		new Handler().postDelayed(() -> {
 			Logger.d("delay time has come. removeView");
@@ -74,7 +78,6 @@ public class ExternalPlayerService extends Service {
 	@Override
 	public IBinder onBind(Intent intent) {
 		Logger.d(intent.toString());
-
 		return binder;
 	}
 

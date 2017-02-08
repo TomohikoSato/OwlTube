@@ -37,10 +37,9 @@ public class PlayerActivity extends AppCompatActivity implements PlayerViewAdapt
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Video video = requireNonNull(getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO_ITEM));
+
 		((OwlTubeApp) getApplication()).getComponent().inject(this);
 		setContentView(R.layout.activity_player);
-
 
 /*
 		playerUseCase.addRecentlyWatched(video);
@@ -92,12 +91,13 @@ public class PlayerActivity extends AppCompatActivity implements PlayerViewAdapt
 	@Override
 	protected void onStart() {
 		super.onStart();
-		ExternalPlayerService.startService(this);
+		Video video = requireNonNull(getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO_ITEM));
+		ExternalPlayerService.startService(this, video.videoId);
+		finish();
 	}
 
 	@Override
 	public void onVideoItemSelected(Video item) {
 		startPlayerActivity(this, item);
 	}
-
 }

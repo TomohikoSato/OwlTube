@@ -23,11 +23,16 @@ public class PlayerView extends FrameLayout {
 	private final WindowManager windowManager;
 	private State currentState;
 	private YouTubePlayerView player;
+	private String videoId;
 
 	@Override
 	public void onAttachedToWindow() {
 		super.onAttachedToWindow();
 		setCurrentState(State.FLOAT);
+	}
+
+	public void setVideoId(String videoId) {
+		this.videoId = videoId;
 	}
 
 	enum State {
@@ -56,7 +61,7 @@ public class PlayerView extends FrameLayout {
 		player.initialize(new AbstractYouTubeListener() {
 			@Override
 			public void onReady() {
-				player.loadVideo("6JYIGclVQdw", 0);
+				player.loadVideo(videoId, 0);
 			}
 		}, true);
 	}

@@ -3,7 +3,6 @@ package com.example.tomohiko_sato.owltube.presentation.player;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -24,6 +23,7 @@ public class ExternalPlayerService extends Service {
 	private PlayerView playerView;
 	private TrashView trashView;
 
+/*
 	public static void bind(Context context, ServiceConnection conn) {
 		Intent intent = new Intent(context, ExternalPlayerService.class);
 		context.bindService(intent, conn, Context.BIND_AUTO_CREATE);
@@ -32,6 +32,7 @@ public class ExternalPlayerService extends Service {
 	public static void unbind(Context context, ServiceConnection conn) {
 		context.unbindService(conn);
 	}
+*/
 
 	public static void startService(Context context, Video video) {
 		Intent intent = new Intent(context, ExternalPlayerService.class);
@@ -61,22 +62,25 @@ public class ExternalPlayerService extends Service {
 
 		trashView = (TrashView) LayoutInflater.from(this).inflate(R.layout.view_trash, null);
 
-		windowManager.addView(playerView, playerView.lp);
+//		windowManager.addView(playerView, playerView.lp);
+		windowManager.addView(trashView, trashView.lp);
+
 		new Handler().postDelayed(() -> {
 			Logger.d("delay time has come. removeView");
-			playerView.release();
+//			playerView.release();
 			windowManager.removeView(playerView);
 			playerView = null;
 			stopSelf();
 		}, 15 * 1000);
 	}
 
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		Logger.d(intent.toString());
 		return binder;
 	}
-
+/*
 	@Override
 	public boolean onUnbind(Intent intent) {
 		Logger.d();
@@ -86,5 +90,5 @@ public class ExternalPlayerService extends Service {
 	@Override
 	public void onDestroy() {
 		Logger.i();
-	}
+	}*/
 }

@@ -92,7 +92,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerViewAdapt
 	protected void onStart() {
 		super.onStart();
 		Video video = requireNonNull(getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO_ITEM));
-		ExternalPlayerService.startService(this, video.videoId);
+		ExternalPlayerService.startService(this, video);
 		finish();
 	}
 

@@ -12,13 +12,14 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 
 import com.example.tomohiko_sato.owltube.R;
+import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.util.Logger;
 
 /**
  * WindowManager上で{@link PlayerView}を動かすためのサービス
  */
 public class ExternalPlayerService extends Service {
-	private static final String KEY_VIDEO_ID = "KEY_VIDEO_ID";
+	private static final String KEY_VIDEO = "KEY_VIDEO";
 	private final WindowManager.LayoutParams playerViewParams = new WindowManager.LayoutParams(
 			WindowManager.LayoutParams.WRAP_CONTENT,
 			WindowManager.LayoutParams.WRAP_CONTENT,
@@ -39,18 +40,17 @@ public class ExternalPlayerService extends Service {
 		context.unbindService(conn);
 	}
 
-
-	public static void startService(Context context, String videoId) {
+	public static void startService(Context context, Video video) {
 		Intent intent = new Intent(context, ExternalPlayerService.class);
-		intent.putExtra(KEY_VIDEO_ID, videoId);
+		intent.putExtra(KEY_VIDEO, video);
 		context.startService(intent);
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Logger.i("startId:%d, intent:%s ", startId, intent);
-		String videoId = intent.getStringExtra(KEY_VIDEO_ID);
-		init(videoId);
+		Video video = intent.getParcelableExtra(KEY_VIDEO);
+		init(video);
 		return START_STICKY;
 	}
 
@@ -60,11 +60,11 @@ public class ExternalPlayerService extends Service {
 		}
 	}
 
-	private void init(String videoId) {
+	private void init(Video video) {
 		windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 		this.setTheme(R.style.AppTheme);
 		playerView = (PlayerView) LayoutInflater.from(this).inflate(R.layout.view_player, null);
-		playerView.setVideoId(videoId);
+		playerView.setVideo(video);
 		windowManager.addView(playerView, playerViewParams);
 		new Handler().postDelayed(() -> {
 			Logger.d("delay time has come. removeView");

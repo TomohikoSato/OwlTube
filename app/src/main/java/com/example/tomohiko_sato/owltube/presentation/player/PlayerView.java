@@ -41,7 +41,7 @@ public class PlayerView extends FrameLayout implements PlayerViewAdapter.OnVideo
 	@Override
 	public void onAttachedToWindow() {
 		super.onAttachedToWindow();
-		setCurrentState(State.FLOAT);
+		setCurrentState(State.EXPAND);
 	}
 
 	public void setVideo(Video video) {
@@ -161,7 +161,7 @@ public class PlayerView extends FrameLayout implements PlayerViewAdapter.OnVideo
 
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		return true;
+		return currentState == State.FLOAT;
 	}
 
 	private void updateLayout(int dx, int dy) {

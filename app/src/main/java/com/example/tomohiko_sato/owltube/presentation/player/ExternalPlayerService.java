@@ -30,6 +30,7 @@ public class ExternalPlayerService extends Service {
 	private final ExternalPlayerServiceBinder binder = new ExternalPlayerServiceBinder();
 	private WindowManager windowManager;
 	private PlayerView playerView;
+	private TrashView trashView;
 
 	public static void bind(Context context, ServiceConnection conn) {
 		Intent intent = new Intent(context, ExternalPlayerService.class);
@@ -65,6 +66,9 @@ public class ExternalPlayerService extends Service {
 		this.setTheme(R.style.AppTheme);
 		playerView = (PlayerView) LayoutInflater.from(this).inflate(R.layout.view_player, null);
 		playerView.setVideo(video);
+
+		//trashView = (PlayerView) LayoutInflater.from(this).inflate(R.layout.view_trash, null);
+
 		windowManager.addView(playerView, playerViewParams);
 		new Handler().postDelayed(() -> {
 			Logger.d("delay time has come. removeView");

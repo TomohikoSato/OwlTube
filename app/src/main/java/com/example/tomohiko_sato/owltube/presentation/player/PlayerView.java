@@ -1,6 +1,7 @@
 package com.example.tomohiko_sato.owltube.presentation.player;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -30,6 +31,14 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 public class PlayerView extends FrameLayout implements PlayerViewAdapter.OnVideoItemSelectedListener {
 	private final WindowManager windowManager;
+	final WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+			WindowManager.LayoutParams.WRAP_CONTENT,
+			WindowManager.LayoutParams.WRAP_CONTENT,
+			WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,    // アプリケーションのTOPに配置
+			WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |  // フォーカスを当てない(下の画面の操作がd系なくなるため)
+					WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, // モーダル以外のタッチを背後のウィンドウへ送信
+			PixelFormat.TRANSLUCENT);  // viewを透明にする
+
 	private State currentState;
 	private YouTubePlayerView player;
 	private Video video;
@@ -111,7 +120,6 @@ public class PlayerView extends FrameLayout implements PlayerViewAdapter.OnVideo
 		}
 		findViewById(R.id.for_expand).setVisibility(GONE);
 
-		WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
 		lp.width = getResources().getDimensionPixelSize(R.dimen.player_float_width);
 		lp.height = getResources().getDimensionPixelSize(R.dimen.player_float_height);
 		windowManager.updateViewLayout(this, lp);
@@ -147,7 +155,6 @@ public class PlayerView extends FrameLayout implements PlayerViewAdapter.OnVideo
 		Logger.d(size.toString());
 		int screenWidth = size.x;
 		int screenHeight = size.y;
-		WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
 		lp.width = screenWidth;
 		lp.height = screenHeight;
 		windowManager.updateViewLayout(this, lp);

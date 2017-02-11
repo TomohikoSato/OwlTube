@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.PixelFormat;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -20,13 +19,6 @@ import com.example.tomohiko_sato.owltube.util.Logger;
  */
 public class ExternalPlayerService extends Service {
 	private static final String KEY_VIDEO = "KEY_VIDEO";
-	private final WindowManager.LayoutParams playerViewParams = new WindowManager.LayoutParams(
-			WindowManager.LayoutParams.WRAP_CONTENT,
-			WindowManager.LayoutParams.WRAP_CONTENT,
-			WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,    // アプリケーションのTOPに配置
-			WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |  // フォーカスを当てない(下の画面の操作がd系なくなるため)
-					WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, // モーダル以外のタッチを背後のウィンドウへ送信
-			PixelFormat.TRANSLUCENT);  // viewを透明にする
 	private final ExternalPlayerServiceBinder binder = new ExternalPlayerServiceBinder();
 	private WindowManager windowManager;
 	private PlayerView playerView;
@@ -67,9 +59,9 @@ public class ExternalPlayerService extends Service {
 		playerView = (PlayerView) LayoutInflater.from(this).inflate(R.layout.view_player, null);
 		playerView.setVideo(video);
 
-		//trashView = (PlayerView) LayoutInflater.from(this).inflate(R.layout.view_trash, null);
+		trashView = (TrashView) LayoutInflater.from(this).inflate(R.layout.view_trash, null);
 
-		windowManager.addView(playerView, playerViewParams);
+		windowManager.addView(playerView, playerView.lp);
 		new Handler().postDelayed(() -> {
 			Logger.d("delay time has come. removeView");
 			playerView.release();

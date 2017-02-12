@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.example.tomohiko_sato.owltube.presentation.player.TrashView xmlns:android="http://schemas.android.com/apk/res/android"
-                                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
                                                                  android:layout_width="match_parent"
                                                                  android:layout_height="wrap_content"
                                                                  android:background="@color/red">
@@ -11,6 +10,6 @@
         android:layout_height="56dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/past"
+        android:background="@android:color/holo_blue_bright"
         android:scaleType="fitCenter"/>
 </com.example.tomohiko_sato.owltube.presentation.player.TrashView>

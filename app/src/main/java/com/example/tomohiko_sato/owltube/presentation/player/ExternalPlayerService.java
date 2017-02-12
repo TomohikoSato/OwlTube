@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
@@ -61,8 +63,10 @@ public class ExternalPlayerService extends Service {
 		playerView.setVideo(video);
 
 		trashView = (TrashView) LayoutInflater.from(this).inflate(R.layout.view_trash, null);
+		ImageView image = (ImageView) trashView.findViewById(R.id.imageView);
+		image.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.trash_vector));
 
-//		windowManager.addView(playerView, playerView.lp);
+		windowManager.addView(playerView, playerView.lp);
 		windowManager.addView(trashView, trashView.lp);
 
 		new Handler().postDelayed(() -> {

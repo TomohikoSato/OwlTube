@@ -1,7 +1,6 @@
 package com.example.tomohiko_sato.owltube.di;
 
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
-import com.example.tomohiko_sato.owltube.presentation.player.PlayerView;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchHistoryFragment;
 import com.example.tomohiko_sato.owltube.presentation.top.popular.PopularFragment;
@@ -20,6 +19,4 @@ public interface ApplicationComponent {
 	void inject(PlayerActivity activity);
 
 	void inject(SearchHistoryFragment fragment);
-
-	void inject(PlayerView view);
 }

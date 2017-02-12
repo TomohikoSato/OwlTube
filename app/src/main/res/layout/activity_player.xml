@@ -14,19 +14,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/button_external"
+    <ImageButton
+        android:id="@+id/to_external"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="External"/>
+        app:srcCompat="@drawable/past"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/related_videos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        />
-
+        app:layoutManager="LinearLayoutManager"/>
 </LinearLayout>

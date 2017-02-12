@@ -68,7 +68,7 @@ public class SearchResultFragment extends Fragment implements OnVideoItemSelecte
 		View rootView = inflater.inflate(R.layout.fragment_search_result, container, false);
 
 		progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
-		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+		RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.related_videos);
 		recyclerView.addOnScrollListener(scrollListener);
 		recyclerView.setLayoutManager(new LinearLayoutManager(context));
 		Bundle bundle = getArguments();

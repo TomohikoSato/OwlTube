@@ -39,7 +39,7 @@ public class Logger {
 
 
 	static class TagGenerater {
-		private static final int CALL_STACK_INDEX = 2;
+		private static final int CALL_STACK_INDEX = 1;
 		private static final Pattern ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$");
 		private static final int MAX_TAG_LENGTH = 23;
 

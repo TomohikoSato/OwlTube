@@ -2,6 +2,7 @@ package com.example.tomohiko_sato.owltube.presentation.player;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.WindowManager;
@@ -17,9 +18,9 @@ import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
  * プレイヤー用のビュー。
  * ドラッグできる。
  */
-public class PlayerView extends FrameLayout {
+public class ExternalPlayerView extends FrameLayout {
 	private final WindowManager windowManager;
-	final WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+	private final WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
 			WindowManager.LayoutParams.WRAP_CONTENT,
 			WindowManager.LayoutParams.WRAP_CONTENT,
 			WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,    // アプリケーションのTOPに配置
@@ -28,25 +29,31 @@ public class PlayerView extends FrameLayout {
 			PixelFormat.TRANSLUCENT);  // viewを透明にする
 
 	private Video video;
+	private OnExternalPlayerViewMovedListener listener;
+	private Rect currentRect;
 
-	public void setVideo(Video video) {
-		this.video = video;
-	}
-
-	public PlayerView(Context context, AttributeSet attrs) {
+	public ExternalPlayerView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		lp.width = getResources().getDimensionPixelSize(R.dimen.player_float_width);
 		lp.height = getResources().getDimensionPixelSize(R.dimen.player_float_height);
 		windowManager.addView(this, lp);
+		currentRect = new Rect(0, 0, lp.width, lp.height);
 
 		setOnTouchListener(new TouchEventTranslater((dx, dy) -> {
-			Logger.d("dx:%d, dy:%d", dx, dy);
 			updateLayout(dx, dy);
 		}, () -> {
 			// TODO: たぶんいらない
 			Logger.d("clicked");
 		}));
+	}
+
+	public void setVideo(Video video) {
+		this.video = video;
+	}
+
+	public void setListener(OnExternalPlayerViewMovedListener l) {
+		this.listener = l;
 	}
 
 	@Override
@@ -70,6 +77,7 @@ public class PlayerView extends FrameLayout {
 		return true;
 	}
 
+
 	private void updateLayout(int dx, int dy) {
 		if (!isAttachedToWindow()) {
 			return;
@@ -77,6 +85,37 @@ public class PlayerView extends FrameLayout {
 		WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
 		lp.x += dx;
 		lp.y += dy;
+		currentRect.offset(dx, dy);
+
+		listener.OnPlayerPositionUpdated(MoveState.Moving, currentRect);
 		windowManager.updateViewLayout(this, lp);
+	}
+
+	public Rect getWindowDrawingRect() {
+		if (currentRect != null) {
+			return currentRect;
+		}
+
+		int[] l = new int[2];
+		getLocationInWindow(l);
+
+		int x = l[0];
+		int y = l[1];
+		int w = getWidth();
+		int h = getHeight();
+
+		currentRect = new Rect(x, y, x + w, y + h);
+		Logger.d(currentRect.toString());
+
+		return currentRect;
+	}
+
+	enum MoveState {
+		Moving,
+		NotMoving;
+	}
+
+	interface OnExternalPlayerViewMovedListener {
+		void OnPlayerPositionUpdated(MoveState state, Rect r);
 	}
 }

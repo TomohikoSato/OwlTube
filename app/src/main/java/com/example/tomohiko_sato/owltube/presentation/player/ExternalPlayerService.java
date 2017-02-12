@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
@@ -23,6 +24,7 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	private WindowManager windowManager;
 	private ExternalPlayerView externalPlayerView;
 	private TrashView trashView;
+	private boolean started = false;
 
 	/**
 	 * サービスをスタートする。外部プレイヤーの再生を開始する。既に再生されている場合は新しいビデオの再生に切り替える。
@@ -39,8 +41,13 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Logger.i("startId:%d, intent:%s ", startId, intent);
+		if (started) {
+			return START_STICKY;
+		}
+
 		Video video = intent.getParcelableExtra(KEY_VIDEO);
 		init(video);
+		started = true;
 		return START_STICKY;
 	}
 
@@ -71,7 +78,17 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	@Override
 	public void OnPlayerPositionUpdated(ExternalPlayerView.MoveState state, Rect r) {
 		Logger.d(r.toString());
-		isIntersectWithTrash();
+		if (isIntersectWithTrash()) {
+			Logger.d("ontrash");
+			Toast.makeText(this, "hit", Toast.LENGTH_SHORT).show();
+/*			externalPlayerView.removeAllViews();*/
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		started = false;
 	}
 
 	/**

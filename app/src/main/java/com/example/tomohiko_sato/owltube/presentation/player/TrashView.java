@@ -4,10 +4,10 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.util.Logger;
 
 class TrashView extends RelativeLayout {
@@ -22,8 +22,8 @@ class TrashView extends RelativeLayout {
 
 	public TrashView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		lp.gravity = Gravity.LEFT | Gravity.BOTTOM;
-		lp.height = 400;
+
+		lp.height = getResources().getDimensionPixelSize(R.dimen.trash_height);
 		((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).addView(this, lp);
 	}
 

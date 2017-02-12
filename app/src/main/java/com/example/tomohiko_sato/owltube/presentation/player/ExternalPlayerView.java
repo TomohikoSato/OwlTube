@@ -30,7 +30,7 @@ public class ExternalPlayerView extends FrameLayout {
 
 	private Video video;
 	private OnExternalPlayerViewMovedListener listener;
-	private Rect currentRect;
+	private final Rect currentRect;
 
 	public ExternalPlayerView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -38,7 +38,7 @@ public class ExternalPlayerView extends FrameLayout {
 		lp.width = getResources().getDimensionPixelSize(R.dimen.player_float_width);
 		lp.height = getResources().getDimensionPixelSize(R.dimen.player_float_height);
 		windowManager.addView(this, lp);
-		currentRect = new Rect(0, 0, lp.width, lp.height);
+		currentRect = initCurrentRect();
 
 		setOnTouchListener(new TouchEventTranslater((dx, dy) -> {
 			updateLayout(dx, dy);
@@ -46,6 +46,21 @@ public class ExternalPlayerView extends FrameLayout {
 			// TODO: たぶんいらない
 			Logger.d("clicked");
 		}));
+	}
+
+	private Rect initCurrentRect() {
+		int[] l = new int[2];
+		getLocationInWindow(l);
+
+		int x = l[0];
+		int y = l[1];
+		int w = getWidth();
+		int h = getHeight();
+
+		Rect rect = new Rect(x, y, x + w, y + h);
+		Logger.d(rect.toString());
+
+		return rect;
 	}
 
 	public void setVideo(Video video) {
@@ -92,21 +107,6 @@ public class ExternalPlayerView extends FrameLayout {
 	}
 
 	public Rect getWindowDrawingRect() {
-		if (currentRect != null) {
-			return currentRect;
-		}
-
-		int[] l = new int[2];
-		getLocationInWindow(l);
-
-		int x = l[0];
-		int y = l[1];
-		int w = getWidth();
-		int h = getHeight();
-
-		currentRect = new Rect(x, y, x + w, y + h);
-		Logger.d(currentRect.toString());
-
 		return currentRect;
 	}
 

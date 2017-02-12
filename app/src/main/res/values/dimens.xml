@@ -6,4 +6,6 @@
     <dimen name="text_half_margin">8dp</dimen>
     <dimen name="player_float_width">200dp</dimen>
     <dimen name="player_float_height">110dp</dimen>
+    <dimen name="trash_height">64dp</dimen>
+    <dimen name="trash_icon_height">24dp</dimen>
 </resources>

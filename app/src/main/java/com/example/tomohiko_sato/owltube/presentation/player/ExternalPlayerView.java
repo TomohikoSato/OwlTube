@@ -31,12 +31,14 @@ public class ExternalPlayerView extends FrameLayout {
 		super(context, attrs);
 		wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
-				WindowManager.LayoutParams.MATCH_PARENT,
-				WindowManager.LayoutParams.MATCH_PARENT,
+				WindowManager.LayoutParams.WRAP_CONTENT,
+				WindowManager.LayoutParams.WRAP_CONTENT,
 				WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,    // アプリケーションのTOPに配置
 				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |  // フォーカスを当てない(下の画面の操作が出来なくなるため)
 						WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, // モーダル以外のタッチを背後のウィンドウへ送信
 				PixelFormat.TRANSLUCENT);
+		lp.width = getResources().getDimensionPixelSize(R.dimen.player_float_width);
+		lp.height = getResources().getDimensionPixelSize(R.dimen.player_float_height);
 		lp.gravity = Gravity.START | Gravity.BOTTOM;
 
 		wm.addView(this, lp);

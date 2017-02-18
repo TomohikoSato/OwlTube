@@ -2,8 +2,10 @@ package com.example.tomohiko_sato.owltube.presentation.player;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.WindowManager;
@@ -38,6 +40,17 @@ public class ExternalPlayerView extends FrameLayout {
 		lp.width = getResources().getDimensionPixelSize(R.dimen.player_float_width);
 		lp.height = getResources().getDimensionPixelSize(R.dimen.player_float_height);
 		lp.gravity = Gravity.START | Gravity.BOTTOM;
+
+
+		Display display = windowManager.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int screenWidth = size.x;
+		int screenHeight = size.y;
+		int centerX = (screenWidth - lp.width) / 2;
+		int centerY = (screenHeight - lp.height) / 2;
+		lp.x = centerX;
+		lp.y = centerY;
 
 		windowManager.addView(this, lp);
 		currentRect = initCurrentRect();

@@ -11,8 +11,9 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 
 import com.example.tomohiko_sato.owltube.R;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
-import com.example.tomohiko_sato.owltube.util.Logger;
+
 
 /**
  * WindowManager上で{@link ExternalPlayerView}を動かすためのサービス

@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.owltube.di;
+package com.example.tomohiko_sato.owltube.common.di;
 
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchActivity;

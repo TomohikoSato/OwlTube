@@ -3,7 +3,7 @@ package com.example.tomohiko_sato.owltube.presentation.player;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.tomohiko_sato.owltube.util.Logger;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 /**
  * タッチイベントを解釈し、{@link OnMoveListener}や{@link OnClickedListener} に伝える

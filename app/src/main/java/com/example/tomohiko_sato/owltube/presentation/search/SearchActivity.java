@@ -25,7 +25,7 @@ import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter.OnVideoItemSelectedListener;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
-import com.example.tomohiko_sato.owltube.util.Logger;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 import java.util.List;
 import java.util.Objects;

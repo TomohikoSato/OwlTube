@@ -18,7 +18,7 @@ import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.OnPagingScrollListener;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter.OnVideoItemSelectedListener;
-import com.example.tomohiko_sato.owltube.util.Logger;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 import java.util.ArrayList;
 

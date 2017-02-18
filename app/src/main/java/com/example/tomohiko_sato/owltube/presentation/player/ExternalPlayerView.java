@@ -12,8 +12,8 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.example.tomohiko_sato.owltube.R;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
-import com.example.tomohiko_sato.owltube.util.Logger;
 import com.pierfrancescosoffritti.youtubeplayer.AbstractYouTubeListener;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
 

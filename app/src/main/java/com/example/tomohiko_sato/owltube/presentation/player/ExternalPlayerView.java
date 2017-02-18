@@ -100,7 +100,7 @@ public class ExternalPlayerView extends FrameLayout {
 		}
 		WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
 		lp.x += dx;
-		lp.y += dy;
+		lp.y -= dy; // Gravity.Bottom なので y座標の方向が変わっている
 		currentRect.offset(dx, dy);
 
 		listener.OnPlayerPositionUpdated(MoveState.Moving, currentRect);

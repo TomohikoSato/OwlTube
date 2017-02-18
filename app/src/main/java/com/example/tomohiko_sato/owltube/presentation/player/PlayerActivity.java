@@ -55,7 +55,10 @@ public class PlayerActivity extends AppCompatActivity implements PlayerViewAdapt
 		initYoutubePlayer(video);
 
 		findViewById(R.id.to_external)
-				.setOnClickListener(v -> ExternalPlayerService.startService(PlayerActivity.this, video));
+				.setOnClickListener(v -> {
+					ExternalPlayerService.startService(PlayerActivity.this, video);
+					finish();
+				});
 	}
 
 	private void initYoutubePlayer(Video video) {

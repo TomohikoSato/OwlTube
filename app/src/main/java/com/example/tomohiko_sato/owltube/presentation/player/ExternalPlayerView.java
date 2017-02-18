@@ -22,14 +22,14 @@ import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
  * ドラッグできる。
  */
 public class ExternalPlayerView extends FrameLayout {
-	private final WindowManager windowManager;
-	private final Rect currentRect;
+	private final WindowManager wm;
+	private final Rect currentRect = new Rect();
 	private Video video;
 	private OnExternalPlayerViewMovedListener listener;
 
 	public ExternalPlayerView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
 				WindowManager.LayoutParams.WRAP_CONTENT,
 				WindowManager.LayoutParams.WRAP_CONTENT,
@@ -41,40 +41,23 @@ public class ExternalPlayerView extends FrameLayout {
 		lp.height = getResources().getDimensionPixelSize(R.dimen.player_float_height);
 		lp.gravity = Gravity.START | Gravity.BOTTOM;
 
+		wm.addView(this, lp);
 
-		Display display = windowManager.getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		int screenWidth = size.x;
-		int screenHeight = size.y;
-		int centerX = (screenWidth - lp.width) / 2;
-		int centerY = (screenHeight - lp.height) / 2;
-		lp.x = centerX;
-		lp.y = centerY;
+		setOnTouchListener(new TouchEventTranslater(new TouchEventTranslater.OnMoveListener() {
+			@Override
+			public void onMoving(int dx, int dy) {
+				updateLayout(dx, dy);
+			}
 
-		windowManager.addView(this, lp);
-		currentRect = initCurrentRect();
-
-		setOnTouchListener(new TouchEventTranslater((dx, dy) -> updateLayout(dx, dy),
+			@Override
+			public void onMoveEnd() {
+				listener.OnPlayerPositionUpdated(currentRect);
+			}
+		},
 				() -> {
 					// TODO: たぶんいらない
 					Logger.d("clicked");
 				}));
-	}
-
-	private Rect initCurrentRect() {
-		int[] l = new int[2];
-		getLocationInWindow(l);
-
-		int x = l[0];
-		int y = l[1];
-		int w = getWidth();
-		int h = getHeight();
-
-		Rect rect = new Rect(x, y, x + w, y + h);
-		Logger.d(rect.toString());
-
-		return rect;
 	}
 
 	public void setVideo(Video video) {
@@ -99,6 +82,7 @@ public class ExternalPlayerView extends FrameLayout {
 
 	public void release() {
 		((YouTubePlayerView) findViewById(R.id.youtube_player_view)).release();
+		wm.removeView(this);
 	}
 
 	@Override
@@ -106,6 +90,31 @@ public class ExternalPlayerView extends FrameLayout {
 		return true;
 	}
 
+	@Override
+	public void onAttachedToWindow() {
+		updateLayoutToCenter();
+	}
+
+	private void updateLayoutToCenter() {
+		int w = getResources().getDimensionPixelSize(R.dimen.player_float_width);
+		int h = getResources().getDimensionPixelSize(R.dimen.player_float_height);
+
+		Display display = wm.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int screenW = size.x;
+		int screenH = size.y;
+		int centerX = (screenW - w) / 2;
+		int centerY = (screenH - h) / 2;
+
+		WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
+		lp.x = centerX;
+		lp.y = centerY; // Gravity.Bottom なので y座標の方向が変わっている
+		wm.updateViewLayout(this, lp);
+
+		currentRect.set(new Rect(centerX, centerY, centerX + w, centerY + h));
+		logRect();
+	}
 
 	private void updateLayout(int dx, int dy) {
 		if (!isAttachedToWindow()) {
@@ -115,21 +124,20 @@ public class ExternalPlayerView extends FrameLayout {
 		lp.x += dx;
 		lp.y -= dy; // Gravity.Bottom なので y座標の方向が変わっている
 		currentRect.offset(dx, dy);
-
-		listener.OnPlayerPositionUpdated(MoveState.Moving, currentRect);
-		windowManager.updateViewLayout(this, lp);
+		wm.updateViewLayout(this, lp);
 	}
 
 	public Rect getWindowDrawingRect() {
+		logRect();
 		return currentRect;
 	}
 
-	enum MoveState {
-		Moving,
-		NotMoving;
+	interface OnExternalPlayerViewMovedListener {
+		void OnPlayerPositionUpdated(Rect r);
 	}
 
-	interface OnExternalPlayerViewMovedListener {
-		void OnPlayerPositionUpdated(MoveState state, Rect r);
+	private void logRect() {
+		Rect r = currentRect;
+		Logger.e("[l:" + r.left + " t:" + r.top + " r:" + r.right + " b:" + r.bottom + "]");
 	}
 }

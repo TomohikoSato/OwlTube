@@ -3,11 +3,13 @@ package com.example.tomohiko_sato.owltube.presentation.player;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.tomohiko_sato.owltube.util.Logger;
+
 /**
- * タッチイベントを解釈し、{@link OnMovedListener}や{@link OnClickedListener} に伝える
+ * タッチイベントを解釈し、{@link OnMoveListener}や{@link OnClickedListener} に伝える
  */
 class TouchEventTranslater implements View.OnTouchListener {
-	private final OnMovedListener moved;
+	private final OnMoveListener move;
 	private final OnClickedListener clicked;
 
 	private int downX = 0;
@@ -15,8 +17,8 @@ class TouchEventTranslater implements View.OnTouchListener {
 	private int oldX = 0;
 	private int oldY = 0;
 
-	TouchEventTranslater(OnMovedListener moved, OnClickedListener clicked) {
-		this.moved = moved;
+	TouchEventTranslater(OnMoveListener move, OnClickedListener clicked) {
+		this.move = move;
 		this.clicked = clicked;
 	}
 
@@ -34,21 +36,26 @@ class TouchEventTranslater implements View.OnTouchListener {
 				if (distance < 30) {
 					clicked.onClicked();
 				}
+				move.onMoveEnd();
 				break;
 			default:
+				Logger.e("rawX" + event.getRawX());
+				Logger.e("X" + event.getX());
 				int dx = (int) (event.getRawX() - oldX);
 				int dy = (int) (event.getRawY() - oldY);
 				oldX = (int) event.getRawX();
 				oldY = (int) event.getRawY();
-				moved.onMoved(dx, dy);
+				move.onMoving(dx, dy);
 				break;
 		}
 
-		return false;
+		return true;
 	}
 
-	interface OnMovedListener {
-		void onMoved(int dx, int dy);
+	interface OnMoveListener {
+		void onMoving(int dx, int dy);
+
+		void onMoveEnd();
 	}
 
 	interface OnClickedListener {

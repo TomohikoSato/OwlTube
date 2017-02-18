@@ -4,12 +4,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.example.tomohiko_sato.owltube.R;
@@ -22,7 +20,6 @@ import com.example.tomohiko_sato.owltube.util.Logger;
 public class ExternalPlayerService extends Service implements ExternalPlayerView.OnExternalPlayerViewMovedListener {
 	private static final String KEY_VIDEO = "KEY_VIDEO";
 
-	private WindowManager windowManager;
 	private ExternalPlayerView externalPlayerView;
 	private TrashView trashView;
 
@@ -48,7 +45,6 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	}
 
 	private void init(Video video) {
-		windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 		if (externalPlayerView != null) {
 			return;
 		}
@@ -61,15 +57,11 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 		trashView = (TrashView) LayoutInflater.from(this).inflate(R.layout.view_trash, null);
 		ImageView image = (ImageView) trashView.findViewById(R.id.imageView);
 		image.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.trash_vector));
+	}
 
-		new Handler().postDelayed(() -> {
-			Logger.d("delay time has come. removeView");
-			externalPlayerView.release();
-			trashView.removeAllViews();
-			windowManager.removeView(externalPlayerView);
-			windowManager.removeView(trashView);
-			stopSelf();
-		}, 15 * 1000);
+	private void removeViews() {
+		externalPlayerView.release();
+		trashView.remove();
 	}
 
 	@Override
@@ -78,11 +70,12 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	}
 
 	@Override
-	public void OnPlayerPositionUpdated(ExternalPlayerView.MoveState state, Rect r) {
-		Logger.d(r.toString());
+	public void OnPlayerPositionUpdated(Rect r) {
 		if (isIntersectWithTrash()) {
-			Logger.d("ontrash");
-/*			externalPlayerView.removeAllViews();*/
+			Logger.e("intercect !!!!");
+			Logger.d(r.toString());
+			removeViews();
+			stopSelf();
 		}
 	}
 

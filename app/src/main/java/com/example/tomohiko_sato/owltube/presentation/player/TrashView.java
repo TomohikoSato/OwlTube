@@ -12,6 +12,7 @@ import com.example.tomohiko_sato.owltube.R;
 
 class TrashView extends RelativeLayout {
 	private Rect currentRect;
+	private final WindowManager wm;
 
 	public TrashView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -25,7 +26,8 @@ class TrashView extends RelativeLayout {
 				PixelFormat.TRANSLUCENT);
 		lp.height = getResources().getDimensionPixelSize(R.dimen.trash_height);
 		lp.gravity = Gravity.START | Gravity.BOTTOM;
-		((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).addView(this, lp);
+		wm = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
+		wm.addView(this, lp);
 	}
 
 	public Rect getWindowDrawingRect() {
@@ -43,5 +45,10 @@ class TrashView extends RelativeLayout {
 		currentRect = new Rect(x, y, x + w, y + h);
 
 		return currentRect;
+	}
+
+	public void remove() {
+		removeAllViews();
+		wm.removeView(this);
 	}
 }

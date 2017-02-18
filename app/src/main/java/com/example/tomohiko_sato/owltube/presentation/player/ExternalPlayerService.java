@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -20,9 +21,11 @@ import com.example.tomohiko_sato.owltube.util.Logger;
  */
 public class ExternalPlayerService extends Service implements ExternalPlayerView.OnExternalPlayerViewMovedListener {
 	private static final String KEY_VIDEO = "KEY_VIDEO";
+
 	private WindowManager windowManager;
 	private ExternalPlayerView externalPlayerView;
 	private TrashView trashView;
+
 
 	/**
 	 * サービスをスタートする。外部プレイヤーの再生を開始する。既に再生されている場合は新しいビデオの再生に切り替える。
@@ -62,7 +65,9 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 		new Handler().postDelayed(() -> {
 			Logger.d("delay time has come. removeView");
 			externalPlayerView.release();
+			trashView.removeAllViews();
 			windowManager.removeView(externalPlayerView);
+			windowManager.removeView(trashView);
 			stopSelf();
 		}, 15 * 1000);
 	}
@@ -89,9 +94,11 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 
 	/**
 	 * TrashViewと重なっているかチェックする
+	 * 同じ基準点で{@link Rect}を扱うために、{@link #externalPlayerView}と{@link #trashView}の{@link Gravity}を揃える必要がある
 	 *
 	 * @return TrashViewと重なっている場合はtrue
 	 */
+
 	private boolean isIntersectWithTrash() {
 		// 無効の場合は重なり判定を行わない
 /*

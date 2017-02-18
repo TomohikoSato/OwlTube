@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -20,32 +21,32 @@ import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
  */
 public class ExternalPlayerView extends FrameLayout {
 	private final WindowManager windowManager;
-	private final WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
-			WindowManager.LayoutParams.WRAP_CONTENT,
-			WindowManager.LayoutParams.WRAP_CONTENT,
-			WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,    // アプリケーションのTOPに配置
-			WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |  // フォーカスを当てない(下の画面の操作が出来なくなるため)
-					WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, // モーダル以外のタッチを背後のウィンドウへ送信
-			PixelFormat.TRANSLUCENT);  // viewを透明にする
-
+	private final Rect currentRect;
 	private Video video;
 	private OnExternalPlayerViewMovedListener listener;
-	private final Rect currentRect;
 
 	public ExternalPlayerView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+				WindowManager.LayoutParams.WRAP_CONTENT,
+				WindowManager.LayoutParams.WRAP_CONTENT,
+				WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,    // アプリケーションのTOPに配置
+				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |  // フォーカスを当てない(下の画面の操作が出来なくなるため)
+						WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, // モーダル以外のタッチを背後のウィンドウへ送信
+				PixelFormat.TRANSLUCENT);
 		lp.width = getResources().getDimensionPixelSize(R.dimen.player_float_width);
 		lp.height = getResources().getDimensionPixelSize(R.dimen.player_float_height);
+		lp.gravity = Gravity.START | Gravity.BOTTOM;
+
 		windowManager.addView(this, lp);
 		currentRect = initCurrentRect();
 
-		setOnTouchListener(new TouchEventTranslater((dx, dy) -> {
-			updateLayout(dx, dy);
-		}, () -> {
-			// TODO: たぶんいらない
-			Logger.d("clicked");
-		}));
+		setOnTouchListener(new TouchEventTranslater((dx, dy) -> updateLayout(dx, dy),
+				() -> {
+					// TODO: たぶんいらない
+					Logger.d("clicked");
+				}));
 	}
 
 	private Rect initCurrentRect() {

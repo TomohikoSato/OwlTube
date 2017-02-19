@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.tomohiko_sato.owltube.presentation.player.TrashView xmlns:android="http://schemas.android.com/apk/res/android"
-                                                                 android:layout_width="match_parent"
-                                                                 android:layout_height="wrap_content"
-                                                                 android:background="@color/red">
+<com.example.tomohiko_sato.owltube.presentation.player.TrashView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/gradient"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/trash_height"
+    android:background="@drawable/trash_gradient">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_alignParentTop="true"
+        android:layout_width="@dimen/trash_icon"
+        android:layout_height="@dimen/trash_icon"
         android:layout_centerHorizontal="true"
-        android:background="@android:color/holo_blue_bright"
-        android:scaleType="fitCenter"/>
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/trash_vector"/>
 </com.example.tomohiko_sato.owltube.presentation.player.TrashView>

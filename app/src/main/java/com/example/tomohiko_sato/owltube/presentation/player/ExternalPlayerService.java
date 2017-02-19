@@ -56,7 +56,7 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 		externalPlayerView.setListener(this);
 
 		trashView = (TrashView) LayoutInflater.from(this).inflate(R.layout.view_trash, null);
-		ImageView image = (ImageView) trashView.findViewById(R.id.imageView);
+		ImageView image = (ImageView) trashView.findViewById(R.id.imageView); // serviceでinflateしているからかLayoutでセットしても表示されないのでコード上でセットする
 		image.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.trash_vector));
 	}
 

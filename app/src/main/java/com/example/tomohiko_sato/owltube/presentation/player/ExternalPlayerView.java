@@ -24,6 +24,7 @@ import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
 public class ExternalPlayerView extends FrameLayout {
 	private final WindowManager wm;
 	private final Rect currentRect = new Rect();
+	private final Rect screenBoundsRect;
 	private Video video;
 	private OnExternalPlayerViewMovedListener listener;
 
@@ -42,6 +43,7 @@ public class ExternalPlayerView extends FrameLayout {
 		lp.gravity = Gravity.START | Gravity.BOTTOM;
 
 		wm.addView(this, lp);
+		screenBoundsRect = getScreenRect();
 
 		setOnTouchListener(new TouchEventTranslater(new TouchEventTranslater.OnMoveListener() {
 			@Override
@@ -58,6 +60,16 @@ public class ExternalPlayerView extends FrameLayout {
 					// TODO: たぶんいらない
 					Logger.d("clicked");
 				}));
+	}
+
+	private Rect getScreenRect() {
+		Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int w = size.x;
+		int h = size.y;
+
+		return new Rect(0, 0, w, h);
 	}
 
 	public void setVideo(Video video) {
@@ -95,7 +107,7 @@ public class ExternalPlayerView extends FrameLayout {
 		updateLayoutToCenter();
 	}
 
-	private void updateLayoutToCenter() {
+	private Rect getCenterRect() {
 		int w = getResources().getDimensionPixelSize(R.dimen.player_float_width);
 		int h = getResources().getDimensionPixelSize(R.dimen.player_float_height);
 
@@ -107,19 +119,42 @@ public class ExternalPlayerView extends FrameLayout {
 		int centerX = (screenW - w) / 2;
 		int centerY = (screenH - h) / 2;
 
+		return new Rect(centerX, centerY, centerX + w, centerY + h);
+	}
+
+	private void updateLayoutToCenter() {
+		currentRect.set(getCenterRect());
+
 		WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
-		lp.x = centerX;
-		lp.y = centerY; // Gravity.Bottom なので y座標の方向が変わっている
+		lp.x = currentRect.left;
+		lp.y = currentRect.top; // Gravity.Bottom なので y座標の方向が変わっている
 		wm.updateViewLayout(this, lp);
 
-		currentRect.set(new Rect(centerX, centerY, centerX + w, centerY + h));
 		logRect();
+	}
+
+	private boolean keepInside(Rect floater, Rect bounds) {
+		Logger.e("floater:" + floater.toShortString());
+		Logger.e("bounds:" + bounds.toShortString());
+		if (floater.left < bounds.left || floater.top < bounds.top || bounds.right < floater.right || bounds.bottom < floater.bottom) {
+			if (floater.left < bounds.left) floater.left = bounds.left;
+			if (floater.top < bounds.top) floater.top = bounds.top;
+			if (bounds.right < floater.right) floater.right = bounds.right;
+			if (bounds.bottom < floater.bottom) floater.bottom = bounds.bottom;
+			return true;
+		}
+		return false;
 	}
 
 	private void updateLayout(int dx, int dy) {
 		if (!isAttachedToWindow()) {
 			return;
 		}
+		if (keepInside(currentRect, screenBoundsRect)) {
+			Logger.e("out of bounds!!");
+			return;
+		}
+
 		WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
 		lp.x += dx;
 		lp.y -= dy; // Gravity.Bottom なので y座標の方向が変わっている

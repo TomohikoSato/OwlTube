@@ -23,7 +23,7 @@ import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
  */
 public class ExternalPlayerView extends FrameLayout {
 	private final WindowManager wm;
-	private final Rect currentRect = new Rect();
+	private final Rect playerRect = new Rect();
 	private final Rect screenBoundsRect;
 	private Video video;
 	private OnExternalPlayerViewMovedListener listener;
@@ -53,7 +53,7 @@ public class ExternalPlayerView extends FrameLayout {
 
 			@Override
 			public void onMoveEnd() {
-				listener.OnPlayerPositionUpdated(currentRect);
+				listener.OnPlayerPositionUpdated(playerRect);
 			}
 		},
 				() -> {
@@ -123,24 +123,26 @@ public class ExternalPlayerView extends FrameLayout {
 	}
 
 	private void updateLayoutToCenter() {
-		currentRect.set(getCenterRect());
+		playerRect.set(getCenterRect());
 
 		WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
-		lp.x = currentRect.left;
-		lp.y = currentRect.top; // Gravity.Bottom なので y座標の方向が変わっている
+		lp.x = playerRect.left;
+		lp.y = playerRect.top; // Gravity.Bottom なので y座標の方向が変わっている
 		wm.updateViewLayout(this, lp);
 
-		logRect();
+		Logger.e(playerRect.toShortString());
 	}
 
-	private boolean keepInside(Rect floater, Rect bounds) {
-		Logger.e("floater:" + floater.toShortString());
-		Logger.e("bounds:" + bounds.toShortString());
-		if (floater.left < bounds.left || floater.top < bounds.top || bounds.right < floater.right || bounds.bottom < floater.bottom) {
-			if (floater.left < bounds.left) floater.left = bounds.left;
-			if (floater.top < bounds.top) floater.top = bounds.top;
-			if (bounds.right < floater.right) floater.right = bounds.right;
-			if (bounds.bottom < floater.bottom) floater.bottom = bounds.bottom;
+	private boolean keepPlayerInsideBounds() {
+		Logger.e("player:" + playerRect.toShortString());
+		Logger.e("bounds:" + screenBoundsRect.toShortString());
+		if (playerRect.left < screenBoundsRect.left || playerRect.top < screenBoundsRect.top || screenBoundsRect.right < playerRect.right || screenBoundsRect.bottom < playerRect.bottom) {
+			if (playerRect.left < screenBoundsRect.left) playerRect.left = screenBoundsRect.left;
+			if (playerRect.top < screenBoundsRect.top) playerRect.top = screenBoundsRect.top;
+			if (screenBoundsRect.right < playerRect.right)
+				playerRect.right = screenBoundsRect.right;
+			if (screenBoundsRect.bottom < playerRect.bottom)
+				playerRect.bottom = screenBoundsRect.bottom;
 			return true;
 		}
 		return false;
@@ -150,7 +152,7 @@ public class ExternalPlayerView extends FrameLayout {
 		if (!isAttachedToWindow()) {
 			return;
 		}
-		if (keepInside(currentRect, screenBoundsRect)) {
+		if (keepPlayerInsideBounds()) {
 			Logger.e("out of bounds!!");
 			return;
 		}
@@ -158,21 +160,16 @@ public class ExternalPlayerView extends FrameLayout {
 		WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
 		lp.x += dx;
 		lp.y -= dy; // Gravity.Bottom なので y座標の方向が変わっている
-		currentRect.offset(dx, dy);
+		playerRect.offset(dx, dy);
 		wm.updateViewLayout(this, lp);
 	}
 
 	public Rect getWindowDrawingRect() {
-		logRect();
-		return currentRect;
+		Logger.e(playerRect.toShortString());
+		return playerRect;
 	}
 
 	interface OnExternalPlayerViewMovedListener {
 		void OnPlayerPositionUpdated(Rect r);
-	}
-
-	private void logRect() {
-		Rect r = currentRect;
-		Logger.e("[l:" + r.left + " t:" + r.top + " r:" + r.right + " b:" + r.bottom + "]");
 	}
 }

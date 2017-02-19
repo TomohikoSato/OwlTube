@@ -45,7 +45,7 @@ class TouchEventTranslater implements View.OnTouchListener {
 				int dy = (int) (event.getRawY() - oldY);
 				oldX = (int) event.getRawX();
 				oldY = (int) event.getRawY();
-				move.onMoving(dx, dy);
+				move.onMoving(dx, (-1) * dy); // Gravity.Bottom なので y座標の方向が変わっている
 				break;
 		}
 

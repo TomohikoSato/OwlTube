@@ -92,7 +92,6 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	 *
 	 * @return TrashViewと重なっている場合はtrue
 	 */
-
 	private boolean isIntersectWithTrash() {
 		// 無効の場合は重なり判定を行わない
 /*

@@ -1,5 +1,7 @@
 package com.example.tomohiko_sato.owltube.presentation.player;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
+import com.example.tomohiko_sato.owltube.presentation.top.TopActivity;
 
 
 /**
@@ -20,6 +23,7 @@ import com.example.tomohiko_sato.owltube.domain.data.Video;
  */
 public class ExternalPlayerService extends Service implements ExternalPlayerView.OnExternalPlayerViewMovedListener {
 	private static final String KEY_VIDEO = "KEY_VIDEO";
+	private static final int ONGOING_NOTIFICATION_ID = 234;
 
 	private ExternalPlayerView externalPlayerView;
 	private TrashView trashView;
@@ -42,6 +46,19 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 		Logger.i("startId:%d, intent:%s ", startId, intent);
 		Video video = intent.getParcelableExtra(KEY_VIDEO);
 		init(video);
+
+		Intent notificationIntent = new Intent(this, TopActivity.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+		Notification.Builder builder = new Notification.Builder(this);
+		builder.setContentTitle("title");
+		builder.setContentText("content title");
+		builder.setSmallIcon(R.drawable.trash_vector);
+		builder.setContentIntent(pendingIntent);
+		Notification notification = builder.build();
+
+		startForeground(ONGOING_NOTIFICATION_ID, notification);
+
 		return START_STICKY;
 	}
 

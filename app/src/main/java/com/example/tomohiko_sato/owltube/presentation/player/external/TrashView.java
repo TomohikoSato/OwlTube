@@ -7,8 +7,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -16,14 +16,19 @@ import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 class TrashView extends RelativeLayout {
+	private static final int ANIMATION_DURATION = 150;
 	private final WindowManager wm;
+
+
+	public boolean isTrashEnabled = false;
 	private Rect currentRect;
+
 
 	public static TrashView Initialize(Context context) {
 		TrashView trashView = (TrashView) LayoutInflater.from(context).inflate(R.layout.view_trash, null);
 		ImageView image = (ImageView) trashView.findViewById(R.id.imageView); // serviceでinflateしているからかLayoutでセットしても表示されないのでコード上でセットする
 		image.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.trash_vector));
-		trashView.setVisibility(View.INVISIBLE);
+		trashView.setAlpha(0);
 		return trashView;
 	}
 
@@ -67,7 +72,8 @@ class TrashView extends RelativeLayout {
 
 	public void appear() {
 		Logger.d("appear");
-		this.setVisibility(View.VISIBLE);
+		animate().alpha(1).setDuration(ANIMATION_DURATION).setInterpolator(new AccelerateDecelerateInterpolator());
+		isTrashEnabled = true;
 	}
 
 	public void expand() {
@@ -76,6 +82,7 @@ class TrashView extends RelativeLayout {
 
 	public void disappear() {
 		Logger.d("disappear");
-		this.setVisibility(View.INVISIBLE);
+		animate().alpha(0).setDuration(ANIMATION_DURATION);
+		isTrashEnabled = false;
 	}
 }

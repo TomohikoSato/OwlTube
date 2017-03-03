@@ -112,11 +112,10 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	 */
 	private boolean isIntersectWithTrash() {
 		// 無効の場合は重なり判定を行わない
-/*
-		if (!trashView.isTrashEnabled()) {
+		if (!trashView.isTrashEnabled) {
 			return false;
 		}
-*/
+
 		// INFO:TrashViewとFloatingViewは同じGravityにする必要がある
 		return Rect.intersects(externalPlayerView.getWindowDrawingRect(), trashView.getWindowDrawingRect());
 	}

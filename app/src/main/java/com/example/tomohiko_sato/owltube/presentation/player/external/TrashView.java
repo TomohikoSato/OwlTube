@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,13 +16,14 @@ import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 class TrashView extends RelativeLayout {
-	private Rect currentRect;
 	private final WindowManager wm;
+	private Rect currentRect;
 
 	public static TrashView Initialize(Context context) {
 		TrashView trashView = (TrashView) LayoutInflater.from(context).inflate(R.layout.view_trash, null);
 		ImageView image = (ImageView) trashView.findViewById(R.id.imageView); // serviceでinflateしているからかLayoutでセットしても表示されないのでコード上でセットする
 		image.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.trash_vector));
+		trashView.setVisibility(View.INVISIBLE);
 		return trashView;
 	}
 
@@ -65,6 +67,7 @@ class TrashView extends RelativeLayout {
 
 	public void appear() {
 		Logger.d("appear");
+		this.setVisibility(View.VISIBLE);
 	}
 
 	public void expand() {
@@ -73,5 +76,6 @@ class TrashView extends RelativeLayout {
 
 	public void disappear() {
 		Logger.d("disappear");
+		this.setVisibility(View.INVISIBLE);
 	}
 }

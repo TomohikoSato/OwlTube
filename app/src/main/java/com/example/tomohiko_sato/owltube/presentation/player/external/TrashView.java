@@ -97,6 +97,6 @@ class TrashView extends RelativeLayout {
 		int height = (int) getResources().getDimension(R.dimen.trash_height);
 		int iconMargin = (int) getResources().getDimension(R.dimen.trash_icon_margin_top);
 		int iconSize = (int) getResources().getDimension(R.dimen.trash_icon_size);
-		return height - (iconMargin / 2) + iconSize;
+		return iconMargin - (height / 2) + (iconSize / 2);
 	}
 }

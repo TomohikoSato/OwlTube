@@ -42,6 +42,7 @@ class TrashView extends RelativeLayout {
 		wm = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
 		wm.addView(this, lp);
 
+		setAlpha(0);
 		centerYMargin = getCenterYMargin();
 	}
 
@@ -76,19 +77,18 @@ class TrashView extends RelativeLayout {
 
 
 	public void appear() {
-		Logger.d("appear");
 		animate().alpha(1).setDuration(ANIMATION_DURATION).setInterpolator(new AccelerateDecelerateInterpolator());
-		trashIcon.animate().translationYBy(-1 * centerYMargin);
+		trashIcon.animate().translationYBy(-1 * centerYMargin).setStartDelay(100L);
 		isTrashEnabled = true;
 	}
 
 	public void expand() {
 		Logger.d("expand");
+
 	}
 
 	public void disappear() {
-		Logger.d("disappear");
-		animate().alpha(0).setDuration(ANIMATION_DURATION);
+		animate().alpha(0).setDuration(ANIMATION_DURATION).setStartDelay(100L);
 		trashIcon.animate().translationYBy(centerYMargin);
 		isTrashEnabled = false;
 	}

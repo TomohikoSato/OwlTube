@@ -8,11 +8,11 @@
     android:background="@drawable/trash_gradient">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="@dimen/trash_icon"
-        android:layout_height="@dimen/trash_icon"
+        android:id="@+id/trash_icon"
+        android:layout_width="@dimen/trash_icon_size"
+        android:layout_height="@dimen/trash_icon_size"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="@dimen/trash_icon_margin_top"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/trash_vector"/>
 </com.example.tomohiko_sato.owltube.presentation.player.external.TrashView>

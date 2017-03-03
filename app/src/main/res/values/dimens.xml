@@ -7,6 +7,6 @@
     <dimen name="player_float_width">200dp</dimen>
     <dimen name="player_float_height">110dp</dimen>
     <dimen name="trash_height">64dp</dimen>
-    <dimen name="trash_icon_height">24dp</dimen>
-    <dimen name="trash_icon">24dp</dimen>
+    <dimen name="trash_icon_size">24dp</dimen>
+    <dimen name="trash_icon_margin_top">70dp</dimen>
 </resources>

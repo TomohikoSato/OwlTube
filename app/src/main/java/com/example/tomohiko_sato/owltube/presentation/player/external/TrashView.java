@@ -3,16 +3,27 @@ package com.example.tomohiko_sato.owltube.presentation.player.external;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.tomohiko_sato.owltube.R;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 class TrashView extends RelativeLayout {
 	private Rect currentRect;
 	private final WindowManager wm;
+
+	public static TrashView Initialize(Context context) {
+		TrashView trashView = (TrashView) LayoutInflater.from(context).inflate(R.layout.view_trash, null);
+		ImageView image = (ImageView) trashView.findViewById(R.id.imageView); // serviceでinflateしているからかLayoutでセットしても表示されないのでコード上でセットする
+		image.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.trash_vector));
+		return trashView;
+	}
 
 	public TrashView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -53,12 +64,14 @@ class TrashView extends RelativeLayout {
 	}
 
 	public void appear() {
-
+		Logger.d("appear");
 	}
 
 	public void expand() {
+		Logger.d("expand");
 	}
 
 	public void disappear() {
+		Logger.d("disappear");
 	}
 }

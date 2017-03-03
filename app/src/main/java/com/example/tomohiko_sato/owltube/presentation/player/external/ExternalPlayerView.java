@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -15,7 +16,6 @@ import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.presentation.player.external.ExternalPlayerView.OnExternalPlayerViewMovedListener.Status;
-import com.example.tomohiko_sato.owltube.presentation.player.external.TouchEventTranslater;
 import com.pierfrancescosoffritti.youtubeplayer.AbstractYouTubeListener;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
 
@@ -29,6 +29,13 @@ public class ExternalPlayerView extends FrameLayout {
 	private final Rect screenBoundsRect;
 	private Video video;
 	private OnExternalPlayerViewMovedListener listener;
+
+	static ExternalPlayerView initialize(Context context, Video video, OnExternalPlayerViewMovedListener listener) {
+		ExternalPlayerView externalPlayerView = (ExternalPlayerView) LayoutInflater.from(context).inflate(R.layout.view_player, null);
+		externalPlayerView.setVideo(video);
+		externalPlayerView.setListener(listener);
+		return externalPlayerView;
+	}
 
 	public ExternalPlayerView(Context context, AttributeSet attrs) {
 		super(context, attrs);

@@ -7,20 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.IBinder;
-import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.widget.ImageView;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
-import com.example.tomohiko_sato.owltube.presentation.player.TrashView;
 import com.example.tomohiko_sato.owltube.presentation.top.TopActivity;
 
 
 /**
- * WindowManager上で{@link ExternalPlayerView}を動かすためのサービス
+ * WindowManager上で{@link ExternalPlayerView}と{@link TrashView}を動かすサービス
  */
 public class ExternalPlayerService extends Service implements ExternalPlayerView.OnExternalPlayerViewMovedListener {
 	private static final String KEY_VIDEO = "KEY_VIDEO";
@@ -29,12 +25,8 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	private ExternalPlayerView externalPlayerView;
 	private TrashView trashView;
 
-
 	/**
 	 * サービスをスタートする。外部プレイヤーの再生を開始する。既に再生されている場合は新しいビデオの再生に切り替える。
-	 *
-	 * @param context
-	 * @param video
 	 */
 	public static void startService(Context context, Video video) {
 		Intent intent = new Intent(context, ExternalPlayerService.class);
@@ -45,22 +37,20 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Logger.i("startId:%d, intent:%s ", startId, intent);
-		Video video = intent.getParcelableExtra(KEY_VIDEO);
-		initView(video);
-		startForeground();
+		initView(intent.getParcelableExtra(KEY_VIDEO));
+		showForgroundNotification();
 		return START_STICKY;
 	}
 
-	private void startForeground() {
-		Intent notificationIntent = new Intent(this, TopActivity.class);
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+	private void showForgroundNotification() {
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, TopActivity.class), 0);
 
-		Notification.Builder builder = new Notification.Builder(this);
-		builder.setContentTitle("title");
-		builder.setContentText("content title");
-		builder.setSmallIcon(R.drawable.trash_vector);
-		builder.setContentIntent(pendingIntent);
-		Notification notification = builder.build();
+		Notification notification = new Notification.Builder(this)
+				.setContentTitle("title")
+				.setContentText("content title")
+				.setSmallIcon(R.drawable.trash_vector)
+				.setContentIntent(pendingIntent)
+				.build();
 
 		startForeground(ONGOING_NOTIFICATION_ID, notification);
 	}
@@ -71,13 +61,8 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 		}
 
 		this.setTheme(R.style.AppTheme);
-		externalPlayerView = (ExternalPlayerView) LayoutInflater.from(this).inflate(R.layout.view_player, null);
-		externalPlayerView.setVideo(video);
-		externalPlayerView.setListener(this);
-
-		trashView = (TrashView) LayoutInflater.from(this).inflate(R.layout.view_trash, null);
-		ImageView image = (ImageView) trashView.findViewById(R.id.imageView); // serviceでinflateしているからかLayoutでセットしても表示されないのでコード上でセットする
-		image.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.trash_vector));
+		externalPlayerView = ExternalPlayerView.initialize(this, video, this);
+		trashView = TrashView.Initialize(this);
 	}
 
 	private void removeViews() {

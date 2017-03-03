@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.owltube.presentation.player;
+package com.example.tomohiko_sato.owltube.presentation.player.external;
 
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,6 +30,7 @@ class TouchEventTranslater implements View.OnTouchListener {
 				downY = (int) event.getRawY();
 				oldX = downX;
 				oldY = downY;
+				move.onMoveStart();
 				break;
 			case MotionEvent.ACTION_UP:
 				int distance = (int) Math.sqrt(((event.getRawX() - downX) * (event.getRawX() - downX) + (event.getRawY() - downY) * (event.getRawY() - downY)));
@@ -53,6 +54,8 @@ class TouchEventTranslater implements View.OnTouchListener {
 	}
 
 	interface OnMoveListener {
+		void onMoveStart();
+
 		void onMoving(int dx, int dy);
 
 		void onMoveEnd();

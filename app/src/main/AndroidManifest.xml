@@ -35,7 +35,7 @@
             android:screenOrientation="portrait"/>
 
         <service
-            android:name=".presentation.player.ExternalPlayerService"
+            android:name=".presentation.player.external.ExternalPlayerService"
             android:enabled="true"
             android:exported="true"/>
 

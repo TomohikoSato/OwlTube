@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.owltube.presentation.player;
+package com.example.tomohiko_sato.owltube.presentation.player.external;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
+import com.example.tomohiko_sato.owltube.presentation.player.TrashView;
 import com.example.tomohiko_sato.owltube.presentation.top.TopActivity;
 
 
@@ -45,8 +46,12 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Logger.i("startId:%d, intent:%s ", startId, intent);
 		Video video = intent.getParcelableExtra(KEY_VIDEO);
-		init(video);
+		initView(video);
+		startForeground();
+		return START_STICKY;
+	}
 
+	private void startForeground() {
 		Intent notificationIntent = new Intent(this, TopActivity.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
@@ -58,11 +63,9 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 		Notification notification = builder.build();
 
 		startForeground(ONGOING_NOTIFICATION_ID, notification);
-
-		return START_STICKY;
 	}
 
-	private void init(Video video) {
+	private void initView(Video video) {
 		if (externalPlayerView != null) {
 			return;
 		}
@@ -88,13 +91,28 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	}
 
 	@Override
-	public void OnPlayerPositionUpdated(Rect r) {
-		if (isIntersectWithTrash()) {
-			Logger.e("intercect !!!!");
-			Logger.d(r.toString());
-			removeViews();
-			stopSelf();
+	public void OnPlayerPositionUpdated(Rect r, Status status) {
+		switch (status) {
+			case BEGIN_MOVE:
+				trashView.appear();
+				break;
+			case MOVING:
+				if (isIntersectWithTrash()) {
+					trashView.expand();
+				}
+				break;
+			case END_MOVE:
+				if (isIntersectWithTrash()) {
+					Logger.e("intercect !!!!");
+					Logger.d(r.toString());
+					removeViews();
+					stopSelf();
+				} else {
+					trashView.disappear();
+				}
+				break;
 		}
+
 	}
 
 	@Override

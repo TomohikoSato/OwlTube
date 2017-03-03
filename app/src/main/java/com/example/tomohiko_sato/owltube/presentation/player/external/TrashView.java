@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.owltube.presentation.player;
+package com.example.tomohiko_sato.owltube.presentation.player.external;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -50,5 +50,15 @@ class TrashView extends RelativeLayout {
 	public void remove() {
 		removeAllViews();
 		wm.removeView(this);
+	}
+
+	public void appear() {
+
+	}
+
+	public void expand() {
+	}
+
+	public void disappear() {
 	}
 }

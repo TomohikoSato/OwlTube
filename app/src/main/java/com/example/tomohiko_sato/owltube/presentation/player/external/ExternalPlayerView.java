@@ -1,4 +1,4 @@
-package com.example.tomohiko_sato.owltube.presentation.player;
+package com.example.tomohiko_sato.owltube.presentation.player.external;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
+import com.example.tomohiko_sato.owltube.presentation.player.external.ExternalPlayerView.OnExternalPlayerViewMovedListener.Status;
+import com.example.tomohiko_sato.owltube.presentation.player.external.TouchEventTranslater;
 import com.pierfrancescosoffritti.youtubeplayer.AbstractYouTubeListener;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
 
@@ -47,13 +49,19 @@ public class ExternalPlayerView extends FrameLayout {
 
 		setOnTouchListener(new TouchEventTranslater(new TouchEventTranslater.OnMoveListener() {
 			@Override
+			public void onMoveStart() {
+				listener.OnPlayerPositionUpdated(playerRect, Status.BEGIN_MOVE);
+			}
+
+			@Override
 			public void onMoving(int dx, int dy) {
 				updateLayout(dx, dy);
+				listener.OnPlayerPositionUpdated(playerRect, Status.MOVING);
 			}
 
 			@Override
 			public void onMoveEnd() {
-				listener.OnPlayerPositionUpdated(playerRect);
+				listener.OnPlayerPositionUpdated(playerRect, Status.END_MOVE);
 			}
 		},
 				() -> {
@@ -170,6 +178,12 @@ public class ExternalPlayerView extends FrameLayout {
 	}
 
 	interface OnExternalPlayerViewMovedListener {
-		void OnPlayerPositionUpdated(Rect r);
+		void OnPlayerPositionUpdated(Rect r, Status status);
+
+		enum Status {
+			BEGIN_MOVE,
+			MOVING,
+			END_MOVE;
+		}
 	}
 }

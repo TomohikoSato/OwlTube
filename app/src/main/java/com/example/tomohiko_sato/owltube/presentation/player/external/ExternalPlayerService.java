@@ -1,7 +1,5 @@
 package com.example.tomohiko_sato.owltube.presentation.player.external;
 
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +7,13 @@ import android.graphics.Rect;
 import android.os.IBinder;
 import android.view.Gravity;
 
+import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
-import com.example.tomohiko_sato.owltube.presentation.top.TopActivity;
+import com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier;
+
+import javax.inject.Inject;
 
 
 /**
@@ -25,6 +26,9 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	private ExternalPlayerView externalPlayerView;
 	private TrashView trashView;
 
+	@Inject
+	PlayerNotifier notifier;
+
 	/**
 	 * サービスをスタートする。外部プレイヤーの再生を開始する。既に再生されている場合は新しいビデオの再生に切り替える。
 	 */
@@ -35,24 +39,18 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	}
 
 	@Override
+	public void onCreate() {
+		super.onCreate();
+		((OwlTubeApp) getApplication()).getComponent().inject(this);
+	}
+
+
+	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Logger.i("startId:%d, intent:%s ", startId, intent);
 		initView(intent.getParcelableExtra(KEY_VIDEO));
-		showForgroundNotification();
+		startForeground(ONGOING_NOTIFICATION_ID, notifier.createForegroundNotification());
 		return START_STICKY;
-	}
-
-	private void showForgroundNotification() {
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, TopActivity.class), 0);
-
-		Notification notification = new Notification.Builder(this)
-				.setContentTitle("title")
-				.setContentText("content title")
-				.setSmallIcon(R.drawable.trash_vector)
-				.setContentIntent(pendingIntent)
-				.build();
-
-		startForeground(ONGOING_NOTIFICATION_ID, notification);
 	}
 
 	private void initView(Video video) {

@@ -2,7 +2,7 @@ package com.example.tomohiko_sato.owltube.common.di;
 
 import android.content.Context;
 
-import com.example.tomohiko_sato.owltube.common.util.Logger;
+import com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
 import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.owltube.domain.recently_watched.RecentlyWatchedUseCase;
@@ -35,28 +35,31 @@ public class ApplicationModule {
 	@Provides
 	@Reusable
 	Context provideContext() {
-		Logger.d("provicdeContext");
 		return context;
 	}
 
 	@Provides
 	@Reusable
 	PopularUseCase providePopularUseCase(YoutubeRequest youtubeRequest) {
-		Logger.d("provicdePopularUseCase");
 		return new PopularUseCase(youtubeRequest);
 	}
 
 	@Provides
 	@Reusable
+	PlayerNotifier providePlayerNotifier(Context context) {
+		return new PlayerNotifier(context);
+	}
+
+
+	@Provides
+	@Reusable
 	RecentlyWatchedUseCase provideRecentlyWatchedUseCase(RecentlyWatchedDao recentlyWatchedDao) {
-		Logger.d("provicdeRecentlyWatchedUseCase");
 		return new RecentlyWatchedUseCase(recentlyWatchedDao);
 	}
 
 	@Provides
 	@Reusable
 	PlayerUseCase providePlayerUseCase(RecentlyWatchedDao dao, YoutubeRequest request) {
-		Logger.d("provicdePlayerUseCase");
 		return new PlayerUseCase(dao, request);
 	}
 
@@ -64,21 +67,18 @@ public class ApplicationModule {
 	@Provides
 	@Reusable
 	SearchUseCase provideSearchUseCase(YoutubeRequest youtubeRequest, GoogleRequest googleRequest, SearchHistoryDao dao) {
-		Logger.d("provideSearchUseCase");
 		return new SearchUseCase(youtubeRequest, googleRequest, dao);
 	}
 
 	@Provides
 	@Reusable
 	YoutubeRequest provideYoutubeRequest(YoutubeAPI api) {
-		Logger.d("provideYoutubeRequest");
 		return new YoutubeRequest(api);
 	}
 
 	@Provides
 	@Reusable
 	YoutubeAPI provideYoutubeAPI() {
-		Logger.d("provideYoutubeAPI");
 		return new Retrofit.Builder()
 				.baseUrl("https://www.googleapis.com/youtube/v3/")
 				.addConverterFactory(GsonConverterFactory.create())
@@ -90,14 +90,12 @@ public class ApplicationModule {
 	@Provides
 	@Reusable
 	GoogleRequest provideGoogleRequest() {
-		Logger.d("provideGoogleRequest");
 		return new GoogleRequest();
 	}
 
 	@Provides
 	@Reusable
 	GoogleAPI provideGoogleAPI() {
-		Logger.d("provideGoogleAPI");
 		return new Retrofit.Builder()
 				.baseUrl("http://suggestqueries.google.com/complete/")
 				.addConverterFactory(GsonConverterFactory.create())
@@ -107,22 +105,18 @@ public class ApplicationModule {
 	@Provides
 	@Reusable
 	RecentlyWatchedDao provideRecentlyWatchedDao(DefaultDBHelper helper) {
-		Logger.d("provideRecentlyWatchedDao");
 		return new RecentlyWatchedDao(helper);
 	}
 
 	@Provides
 	@Reusable
 	DefaultDBHelper provideDefaultDBHelper() {
-		Logger.d("provideDefaultDBHelper");
 		return new DefaultDBHelper(context);
 	}
 
 	@Provides
 	@Reusable
 	SearchHistoryDao provideSearcHistoryDao(DefaultDBHelper helper) {
-		Logger.d("provideSearcHistoryDao");
 		return new SearchHistoryDao(helper);
 	}
-
 }

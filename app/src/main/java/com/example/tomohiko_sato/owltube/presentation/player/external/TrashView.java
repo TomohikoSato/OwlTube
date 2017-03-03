@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -22,6 +23,7 @@ class TrashView extends RelativeLayout {
 	public boolean isTrashEnabled = false;
 	private Rect currentRect;
 	private ImageView trashIcon;
+	private final Interpolator animateInterpolator = new AccelerateDecelerateInterpolator();
 
 	public static TrashView Initialize(Context context) {
 		return (TrashView) LayoutInflater.from(context).inflate(R.layout.view_trash, null);
@@ -77,8 +79,8 @@ class TrashView extends RelativeLayout {
 
 
 	public void appear() {
-		animate().alpha(1).setDuration(ANIMATION_DURATION).setInterpolator(new AccelerateDecelerateInterpolator());
-		trashIcon.animate().translationYBy(-1 * centerYMargin).setStartDelay(100L);
+		animate().alpha(1).setDuration(ANIMATION_DURATION).setInterpolator(animateInterpolator);
+		trashIcon.animate().translationYBy(-1 * centerYMargin).setStartDelay(100L).setInterpolator(animateInterpolator);
 		isTrashEnabled = true;
 	}
 
@@ -88,8 +90,8 @@ class TrashView extends RelativeLayout {
 	}
 
 	public void disappear() {
-		animate().alpha(0).setDuration(ANIMATION_DURATION).setStartDelay(100L);
-		trashIcon.animate().translationYBy(centerYMargin);
+		animate().alpha(0).setDuration(ANIMATION_DURATION).setStartDelay(150L).setInterpolator(animateInterpolator);
+		trashIcon.animate().translationYBy(centerYMargin).setInterpolator(animateInterpolator);
 		isTrashEnabled = false;
 	}
 

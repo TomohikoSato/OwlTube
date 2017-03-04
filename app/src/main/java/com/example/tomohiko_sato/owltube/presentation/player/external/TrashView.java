@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
@@ -30,6 +31,7 @@ class TrashView extends RelativeLayout {
 	private final WindowManager wm;
 	private final Interpolator appearInterpolator = new OvershootInterpolator();
 	private final Interpolator disappearInterpolator = new DecelerateInterpolator();
+	private final Interpolator expandInterpolator = new AccelerateDecelerateInterpolator();
 	private final float appearY;
 	private final float disappearY;
 	private Rect currentRect;
@@ -100,8 +102,13 @@ class TrashView extends RelativeLayout {
 	private boolean intersecting = false;
 
 	void setIntersecting(boolean intersecting) {
-		if (this.intersecting != intersecting && intersecting) {
-			performHapticFeedback(LONG_PRESS);
+		if (this.intersecting != intersecting) {
+			if (intersecting) {
+				performHapticFeedback(LONG_PRESS);
+				trashIcon.animate().scaleX(1.5F).scaleY(1.5F).setDuration(80).setInterpolator(expandInterpolator);
+			} else {
+				trashIcon.animate().scaleX(1).scaleY(1).setDuration(80).setInterpolator(expandInterpolator);
+			}
 		}
 		this.intersecting = intersecting;
 	}

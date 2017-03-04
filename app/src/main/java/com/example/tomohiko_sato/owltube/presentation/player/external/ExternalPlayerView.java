@@ -119,6 +119,7 @@ public class ExternalPlayerView extends FrameLayout {
 
 	@Override
 	public void onAttachedToWindow() {
+		super.onAttachedToWindow();
 		updateLayoutToCenter();
 	}
 

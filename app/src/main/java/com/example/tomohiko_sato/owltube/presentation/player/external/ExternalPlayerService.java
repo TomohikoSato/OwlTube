@@ -12,6 +12,7 @@ import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier;
+import com.example.tomohiko_sato.owltube.presentation.util.ServiceUtil;
 
 import javax.inject.Inject;
 
@@ -25,6 +26,7 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 
 	private ExternalPlayerView externalPlayerView;
 	private TrashView trashView;
+	private boolean hasStarted = false;
 
 	@Inject
 	PlayerNotifier notifier;
@@ -38,34 +40,38 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 		context.startService(intent);
 	}
 
+	public static void stopIfRunning(Context context) {
+		if (ServiceUtil.isServiceRunning(ExternalPlayerService.class, context)) {
+			context.stopService(new Intent(context, ExternalPlayerService.class));
+		}
+	}
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		((OwlTubeApp) getApplication()).getComponent().inject(this);
 	}
 
-
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Logger.i("startId:%d, intent:%s ", startId, intent);
-		initView(intent.getParcelableExtra(KEY_VIDEO));
-		startForeground(ONGOING_NOTIFICATION_ID, notifier.createForegroundNotification());
+		Video video = intent.getParcelableExtra(KEY_VIDEO);
+
+		if (hasStarted) {
+			externalPlayerView.setVideo(video);
+		} else {
+			initViews(video);
+			startForeground(ONGOING_NOTIFICATION_ID, notifier.createForegroundNotification());
+			hasStarted = true;
+		}
+
 		return START_STICKY;
 	}
 
-	private void initView(Video video) {
-		if (externalPlayerView != null) {
-			return;
-		}
-
+	private void initViews(Video video) {
 		this.setTheme(R.style.AppTheme);
-		externalPlayerView = ExternalPlayerView.initialize(this, video, this);
 		trashView = TrashView.Initialize(this);
-	}
-
-	private void removeViews() {
-		externalPlayerView.release();
-		trashView.remove();
+		externalPlayerView = ExternalPlayerView.initialize(this, video, this);
 	}
 
 	@Override
@@ -85,8 +91,6 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 			case END_MOVE:
 				if (isIntersectWithTrash()) {
 					Logger.e("intercect !!!!");
-					Logger.d(r.toString());
-					removeViews();
 					stopSelf();
 				} else {
 					trashView.disappear();
@@ -99,7 +103,8 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		externalPlayerView = null;
+		externalPlayerView.release();
+		trashView.remove();
 	}
 
 	/**
@@ -109,7 +114,6 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	 * @return TrashViewと重なっている場合はtrue
 	 */
 	private boolean isIntersectWithTrash() {
-		// 無効の場合は重なり判定を行わない
 		if (!trashView.isTrashEnabled()) {
 			return false;
 		}
@@ -117,4 +121,6 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 		// INFO:TrashViewとFloatingViewは同じGravityにする必要がある
 		return Rect.intersects(externalPlayerView.getWindowDrawingRect(), trashView.getWindowDrawingRect());
 	}
+
+
 }

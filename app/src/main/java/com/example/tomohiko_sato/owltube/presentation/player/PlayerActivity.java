@@ -33,6 +33,8 @@ public class PlayerActivity extends AppCompatActivity implements PlayerViewAdapt
 	PlayerUseCase playerUseCase;
 
 	public static void startPlayerActivity(@NonNull Context context, @NonNull Video video) {
+		ExternalPlayerService.stopIfRunning(context);
+
 		Intent intent = new Intent(context, PlayerActivity.class);
 		intent.putExtra(KEY_INTENT_EXTRA_VIDEO, video);
 		context.startActivity(intent);

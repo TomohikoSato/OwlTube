@@ -80,9 +80,7 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 				trashView.appear();
 				break;
 			case MOVING:
-				if (isIntersectWithTrash()) {
-					trashView.expand();
-				}
+				trashView.setIntersecting(isIntersectWithTrash());
 				break;
 			case END_MOVE:
 				if (isIntersectWithTrash()) {

@@ -15,7 +15,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.tomohiko_sato.owltube.R;
-import com.example.tomohiko_sato.owltube.common.util.Logger;
+
+import static android.view.HapticFeedbackConstants.LONG_PRESS;
 
 class TrashView extends RelativeLayout {
 	private static final int ANIMATION_DURATION = 150;
@@ -91,15 +92,20 @@ class TrashView extends RelativeLayout {
 		isTrashEnabled = true;
 	}
 
-	public void expand() {
-		Logger.d("expand");
+	private boolean intersecting = false;
 
+	void setIntersecting(boolean intersecting) {
+		if (this.intersecting != intersecting && intersecting) {
+			performHapticFeedback(LONG_PRESS);
+		}
+		this.intersecting = intersecting;
 	}
 
 	public void disappear() {
 		animate().alpha(0).setDuration(ANIMATION_DURATION).setStartDelay(150L).setInterpolator(disappearInterpolator);
 		trashIcon.animate().translationY(disappearY).setInterpolator(disappearInterpolator);
 		isTrashEnabled = false;
+		intersecting = false;
 	}
 
 	private int getCenterYMargin() {

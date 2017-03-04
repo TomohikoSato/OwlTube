@@ -15,13 +15,13 @@ import com.example.tomohiko_sato.owltube.infra.dao.RecentlyWatchedDao;
 import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDao;
 import com.example.tomohiko_sato.owltube.infra.db.DefaultDBHelper;
 import com.example.tomohiko_sato.owltube.util.StethoWrapper;
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module

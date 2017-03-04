@@ -8,8 +8,9 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -18,12 +19,16 @@ import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 class TrashView extends RelativeLayout {
 	private static final int ANIMATION_DURATION = 150;
-	private final WindowManager wm;
-	private final int centerYMargin;
 	public boolean isTrashEnabled = false;
+
+	private final WindowManager wm;
+	private final Interpolator appearInterpolator = new OvershootInterpolator();
+	private final Interpolator disappearInterpolator = new DecelerateInterpolator();
+	private final float appearY;
+	private final float disappearY;
 	private Rect currentRect;
 	private ImageView trashIcon;
-	private final Interpolator animateInterpolator = new AccelerateDecelerateInterpolator();
+
 
 	public static TrashView Initialize(Context context) {
 		return (TrashView) LayoutInflater.from(context).inflate(R.layout.view_trash, null);
@@ -45,7 +50,9 @@ class TrashView extends RelativeLayout {
 		wm.addView(this, lp);
 
 		setAlpha(0);
-		centerYMargin = getCenterYMargin();
+
+		appearY = getY() - getCenterYMargin();
+		disappearY = getY();
 	}
 
 	public void onAttachedToWindow() {
@@ -79,8 +86,8 @@ class TrashView extends RelativeLayout {
 
 
 	public void appear() {
-		animate().alpha(1).setDuration(ANIMATION_DURATION).setInterpolator(animateInterpolator);
-		trashIcon.animate().translationYBy(-1 * centerYMargin).setStartDelay(100L).setInterpolator(animateInterpolator);
+		animate().alpha(1).setDuration(ANIMATION_DURATION).setInterpolator(appearInterpolator);
+		trashIcon.animate().translationY(appearY).setStartDelay(70L).setInterpolator(appearInterpolator);
 		isTrashEnabled = true;
 	}
 
@@ -90,8 +97,8 @@ class TrashView extends RelativeLayout {
 	}
 
 	public void disappear() {
-		animate().alpha(0).setDuration(ANIMATION_DURATION).setStartDelay(150L).setInterpolator(animateInterpolator);
-		trashIcon.animate().translationYBy(centerYMargin).setInterpolator(animateInterpolator);
+		animate().alpha(0).setDuration(ANIMATION_DURATION).setStartDelay(150L).setInterpolator(disappearInterpolator);
+		trashIcon.animate().translationY(disappearY).setInterpolator(disappearInterpolator);
 		isTrashEnabled = false;
 	}
 

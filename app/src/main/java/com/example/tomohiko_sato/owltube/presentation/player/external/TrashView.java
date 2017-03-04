@@ -16,11 +16,16 @@ import android.widget.RelativeLayout;
 
 import com.example.tomohiko_sato.owltube.R;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import static android.view.HapticFeedbackConstants.LONG_PRESS;
 
 class TrashView extends RelativeLayout {
 	private static final int ANIMATION_DURATION = 150;
-	public boolean isTrashEnabled = false;
+
+	@Getter(AccessLevel.PACKAGE)
+	private boolean isTrashEnabled = false;
 
 	private final WindowManager wm;
 	private final Interpolator appearInterpolator = new OvershootInterpolator();

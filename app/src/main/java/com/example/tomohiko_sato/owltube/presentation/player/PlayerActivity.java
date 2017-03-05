@@ -49,8 +49,15 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVi
 		super.onCreate(savedInstanceState);
 		((OwlTubeApp) getApplication()).getComponent().inject(this);
 		setContentView(R.layout.activity_player);
+		setupVideo(requireNonNull(getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO)));
+	}
 
-		Video video = requireNonNull(getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO));
+	@Override
+	public void onNewIntent(Intent intent) {
+		setupVideo(requireNonNull(intent.getParcelableExtra(KEY_INTENT_EXTRA_VIDEO)));
+	}
+
+	private void setupVideo(Video video) {
 		playerUseCase.addRecentlyWatched(video);
 		disposer.add(playerUseCase.fetchRelatedVideo(video.videoId)
 				.observeOn(AndroidSchedulers.mainThread())
@@ -58,9 +65,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVi
 								.setAdapter(new PlayerRelatedVideoAdapter(this, this, video, relatedVideos))
 						, Throwable::printStackTrace
 				));
-
 		setupYoutubePlayer(video);
-
 		findViewById(R.id.to_external)
 				.setOnClickListener(v -> {
 					ExternalPlayerService.startService(PlayerActivity.this, video);

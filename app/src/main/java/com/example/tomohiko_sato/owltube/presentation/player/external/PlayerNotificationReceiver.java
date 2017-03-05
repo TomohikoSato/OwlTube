@@ -25,14 +25,14 @@ public class PlayerNotificationReceiver extends BroadcastReceiver {
 
 		PlayerNotifier.State state = Objects.requireNonNull(
 				(PlayerNotifier.State) intent.getSerializableExtra(PlayerNotifier.State.INTENT_KEY));
-		rxBus.send(new PlayerStateChangeEvent(state));
+		rxBus.send(new PlayerNotificationStateChangedEvent(state));
 	}
 
-	public static class PlayerStateChangeEvent implements RxBus.Event {
+	public static class PlayerNotificationStateChangedEvent implements RxBus.Event {
 		@Getter
 		private PlayerNotifier.State state;
 
-		public PlayerStateChangeEvent(PlayerNotifier.State state) {
+		public PlayerNotificationStateChangedEvent(PlayerNotifier.State state) {
 			this.state = state;
 		}
 	}

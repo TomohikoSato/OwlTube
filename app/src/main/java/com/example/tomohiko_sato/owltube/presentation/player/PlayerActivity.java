@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import lombok.Getter;
 
 import static java.util.Objects.requireNonNull;
 
@@ -69,12 +70,48 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVi
 				});
 	}
 
+	public enum YoutubePlayerState {
+		UNSTARTED(-1),
+		ENDED(0),
+		PLAYING(1),
+		PAUSED(2),
+		BUFFERING(3),
+		VIDEO_CUED(5);
+
+		private final int id;
+
+		YoutubePlayerState(int id) {
+			this.id = id;
+		}
+
+		static YoutubePlayerState from(int id) {
+			for (YoutubePlayerState value : values()) {
+				if (value.id == id) return value;
+			}
+			throw new IllegalArgumentException("illegal argument: " + Integer.toString(id));
+		}
+	}
+
+	public static class PlayerViewStateChangedEvent implements RxBus.Event {
+		@Getter
+		private final YoutubePlayerState state;
+
+		PlayerViewStateChangedEvent(YoutubePlayerState state) {
+			this.state = state;
+		}
+	}
+
 	private void setupYoutubePlayer(Video video) {
 		YouTubePlayerView youTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 		youTubePlayerView.initialize(new AbstractYouTubeListener() {
 			@Override
 			public void onReady() {
 				youTubePlayerView.loadVideo(video.videoId, 0);
+			}
+
+			@Override
+			public void onStateChange(int state) {
+				rxBus.send(new PlayerViewStateChangedEvent(YoutubePlayerState.from(state)));
 			}
 		}, true);
 
@@ -93,7 +130,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVi
 				fullScreenManager.exitFullScreen();
 			}
 		});
-		rxBus.register(PlayerNotificationReceiver.PlayerStateChangeEvent.class, (event) -> {
+		rxBus.register(PlayerNotificationReceiver.PlayerNotificationStateChangedEvent.class, (event) -> {
 			switch (event.getState()) {
 				case PLAY:
 					youTubePlayerView.playVideo();

@@ -9,9 +9,11 @@ import android.view.Gravity;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
+import com.example.tomohiko_sato.owltube.common.rx.RxBus;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier;
+import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.presentation.util.ServiceUtil;
 
 import javax.inject.Inject;
@@ -33,6 +35,9 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 
 	@Inject
 	PlayerNotifier notifier;
+
+	@Inject
+	RxBus rxBus;
 
 	/**
 	 * サービスをスタートする。外部プレイヤーの再生を開始する。既に再生されている場合は新しいビデオの再生に切り替える。
@@ -68,6 +73,19 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 					(notification) -> startForeground(ONGOING_NOTIFICATION_ID, notification)));
 			hasStarted = true;
 		}
+
+		disposer.add(rxBus.register(PlayerActivity.PlayerViewStateChangedEvent.class, (event) -> {
+			switch (event.getState()) {
+				case PLAYING:
+					notifier.createNotification(video, PlayerNotifier.State.PLAY);
+					break;
+				case PAUSED:
+					notifier.createNotification(video, PlayerNotifier.State.PAUSE);
+					break;
+				default:
+					break;
+			}
+		}));
 
 		return START_STICKY;
 	}

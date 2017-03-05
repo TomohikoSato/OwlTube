@@ -5,7 +5,8 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.support.v7.app.NotificationCompat;
 
 import com.example.tomohiko_sato.owltube.R;
@@ -26,8 +27,30 @@ public class PlayerNotifier {
 	private final Context context;
 
 	public enum State {
-		PLAY, PAUSE;
+		PLAY(R.drawable.notification_play, R.string.notification_play), PAUSE(R.drawable.notification_pause, R.string.notification_pause);
 		public static final String INTENT_KEY = "StateKey";
+
+		@DrawableRes
+		private int icon;
+
+		@StringRes
+		private int message;
+
+		State(int icon, int message) {
+			this.icon = icon;
+			this.message = message;
+		}
+
+		public NotificationCompat.Action createAction(Context context) {
+			return new NotificationCompat.Action.Builder(icon, context.getString(message), createPendingIntent(context)).build();
+		}
+
+		private PendingIntent createPendingIntent(Context context) {
+			Intent intent = new Intent(context, PlayerNotificationReceiver.class);
+			intent.putExtra(INTENT_KEY, this);
+
+			return PendingIntent.getBroadcast(context, REQUEST_CODE_PLAYER_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		}
 	}
 
 	@Inject
@@ -41,33 +64,23 @@ public class PlayerNotifier {
 				.subscribeOn(Schedulers.io());
 	}
 
-/*
-	public void changeNotificationState(Notification notification, State state) {
-		create()
+	public Single<Notification> createNotification(Video video, State state) {
+		return Single.fromCallable(() -> create(video, state))
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeOn(Schedulers.io());
 	}
-*/
 
 
 	private Notification create(Video video, State state) throws IOException {
-		PendingIntent pi = PendingIntent.getBroadcast(context, REQUEST_CODE_PLAYER_NOTIFICATION, new Intent(context,
-				PlayerNotificationReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
-		Bitmap artwork = Picasso.with(context).load(video.thumbnailUrl).get();
-
-		NotificationCompat.Action playAction = new NotificationCompat.Action.Builder(R.drawable.notification_play, "再生", pi).build();
-		//NotificationCompat.Action pauseAction = new NotificationCompat.Action.Builder(R.drawable.notification_pause, "一時停止", pi).build();
-//		NotificationCompat.Action nextAction = new NotificationCompat.Action.Builder(R.drawable.notification_next, "次へ", pi).build();
-//		NotificationCompat.Action prevAction = new NotificationCompat.Action.Builder(R.drawable.notification_prev, "戻る", pi).build();
-
-		NotificationCompat.MediaStyle mediaStyle = new NotificationCompat.MediaStyle();
-
 		return new NotificationCompat.Builder(context)
 				.setContentTitle(String.format("%sを再生中", video.title))
 				.setContentText("content text")
 				.setSmallIcon(R.drawable.trash_vector)
-				.setLargeIcon(artwork)
-				.setStyle(mediaStyle)
-				.addAction(playAction)
+				.setLargeIcon(Picasso.with(context).load(video.thumbnailUrl).get())
+				.setStyle(new NotificationCompat.MediaStyle())
+				.addAction(state.createAction(context))
 				.build();
 	}
+
+
 }

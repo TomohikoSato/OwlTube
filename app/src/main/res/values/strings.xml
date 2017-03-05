@@ -5,4 +5,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="popular">Popular</string>
     <string name="recently_watched">Recently Watched</string>
+    <string name="notification_play">再生</string>
+    <string name="notification_pause">一時停止</string>
 </resources>

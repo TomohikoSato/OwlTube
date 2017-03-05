@@ -37,7 +37,6 @@ class TrashView extends RelativeLayout {
 	private Rect currentRect;
 	private ImageView trashIcon;
 
-
 	public static TrashView Initialize(Context context) {
 		return (TrashView) LayoutInflater.from(context).inflate(R.layout.view_trash, null);
 	}

@@ -26,6 +26,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".presentation.player.PlayerActivity"
+            android:launchMode="singleTop"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:screenOrientation="portrait"/>
         <activity

@@ -3,8 +3,6 @@ package com.example.tomohiko_sato.owltube.presentation.player.external;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.tomohiko_sato.owltube.common.util.Logger;
-
 /**
  * タッチイベントを解釈し、{@link OnMoveListener}や{@link OnClickedListener} に伝える
  */
@@ -40,8 +38,6 @@ class TouchEventTranslater implements View.OnTouchListener {
 				move.onMoveEnd();
 				break;
 			default:
-				Logger.e("rawX" + event.getRawX());
-				Logger.e("X" + event.getX());
 				int dx = (int) (event.getRawX() - oldX);
 				int dy = (int) (event.getRawY() - oldY);
 				oldX = (int) event.getRawX();

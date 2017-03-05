@@ -15,7 +15,6 @@ import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.recently_watched.RecentlyWatchedUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter.OnVideoItemSelectedListener;
-import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +72,6 @@ public class RecentlyWatchedFragment extends Fragment {
 					adapter.notifyDataSetChanged();
 				}, t -> {
 					t.printStackTrace();
-					Logger.e("fetch RecentlyWatched onFailure");
 				}));
 	}
 

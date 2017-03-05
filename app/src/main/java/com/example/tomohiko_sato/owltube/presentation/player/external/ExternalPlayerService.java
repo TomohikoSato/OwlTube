@@ -13,12 +13,14 @@ import com.example.tomohiko_sato.owltube.common.rx.RxBus;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier;
-import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.presentation.util.ServiceUtil;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+
+import static com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier.State.PAUSE;
+import static com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier.State.PLAY;
 
 
 /**
@@ -74,15 +76,17 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 			hasStarted = true;
 		}
 
-		disposer.add(rxBus.register(PlayerActivity.PlayerViewStateChangedEvent.class, (event) -> {
+		disposer.add(rxBus.register(PlayerNotificationReceiver.PlayerNotificationStateChangedEvent.class, (event) -> {
 			switch (event.getState()) {
-				case PLAYING:
-					notifier.createNotification(video, PlayerNotifier.State.PLAY);
+				case PLAY:
+					disposer.add(notifier.createNotification(video, PLAY).subscribe(
+							(notification) -> startForeground(ONGOING_NOTIFICATION_ID, notification)));
+					externalPlayerView.play();
 					break;
-				case PAUSED:
-					notifier.createNotification(video, PlayerNotifier.State.PAUSE);
-					break;
-				default:
+				case PAUSE:
+					disposer.add(notifier.createNotification(video, PAUSE).subscribe(
+							(notification) -> startForeground(ONGOING_NOTIFICATION_ID, notification)));
+					externalPlayerView.pause();
 					break;
 			}
 		}));
@@ -112,7 +116,6 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 				break;
 			case END_MOVE:
 				if (isIntersectWithTrash()) {
-					Logger.e("intercect !!!!");
 					stopSelf();
 				} else {
 					trashView.disappear();
@@ -127,6 +130,7 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 		super.onDestroy();
 		externalPlayerView.release();
 		trashView.remove();
+		disposer.dispose();
 	}
 
 	/**

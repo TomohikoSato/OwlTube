@@ -45,9 +45,20 @@ public class PlayerNotifier {
 			return new NotificationCompat.Action.Builder(icon, context.getString(message), createPendingIntent(context)).build();
 		}
 
+		State opposite(State state) {
+			switch (state) {
+				case PAUSE:
+					return PLAY;
+				case PLAY:
+					return PAUSE;
+				default:
+					throw new IllegalArgumentException(state.toString());
+			}
+		}
+
 		private PendingIntent createPendingIntent(Context context) {
 			Intent intent = new Intent(context, PlayerNotificationReceiver.class);
-			intent.putExtra(INTENT_KEY, this);
+			intent.putExtra(INTENT_KEY, opposite(this));
 
 			return PendingIntent.getBroadcast(context, REQUEST_CODE_PLAYER_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		}

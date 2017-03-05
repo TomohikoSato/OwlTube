@@ -17,6 +17,8 @@ import com.example.tomohiko_sato.owltube.infra.dao.SearchHistoryDao;
 import com.example.tomohiko_sato.owltube.infra.db.DefaultDBHelper;
 import com.example.tomohiko_sato.owltube.util.StethoWrapper;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
@@ -122,7 +124,7 @@ public class ApplicationModule {
 	}
 
 	@Provides
-	@Reusable
+	@Singleton
 	RxBus provideRxBus() {
 		return new RxBus();
 	}

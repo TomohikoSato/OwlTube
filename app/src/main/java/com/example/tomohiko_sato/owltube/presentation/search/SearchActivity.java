@@ -21,11 +21,11 @@ import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.search.SearchUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter.OnVideoItemSelectedListener;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
-import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 import java.util.List;
 import java.util.Objects;
@@ -190,7 +190,6 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 					nextPageToken = videoResponse.pageToken;
 					searchResultFragment.addVideoItems(videoResponse.videos);
 				}, throwable -> {
-					Logger.e("Search onFailure " + throwable);
 					Toast.makeText(SearchActivity.this, "検索結果の取得に失敗しました", Toast.LENGTH_LONG).show();
 				}));
 	}

@@ -19,6 +19,8 @@ import com.example.tomohiko_sato.owltube.presentation.player.external.ExternalPl
 import com.pierfrancescosoffritti.youtubeplayer.AbstractYouTubeListener;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
 
+import lombok.Getter;
+
 /**
  * プレイヤー用のビュー。
  * ドラッグできる。
@@ -29,6 +31,9 @@ public class ExternalPlayerView extends FrameLayout {
 	private final Rect screenBoundsRect;
 	private Video video;
 	private OnExternalPlayerViewMovedListener listener;
+
+	@Getter(lazy = true)
+	private final YouTubePlayerView playerView = (YouTubePlayerView) findViewById(R.id.youtube_player_view);
 
 	static ExternalPlayerView initialize(Context context, Video video, OnExternalPlayerViewMovedListener listener) {
 		ExternalPlayerView externalPlayerView = (ExternalPlayerView) LayoutInflater.from(context).inflate(R.layout.view_player, null);
@@ -98,18 +103,25 @@ public class ExternalPlayerView extends FrameLayout {
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		YouTubePlayerView player = (YouTubePlayerView) findViewById(R.id.youtube_player_view);
-		player.initialize(new AbstractYouTubeListener() {
+		getPlayerView().initialize(new AbstractYouTubeListener() {
 			@Override
 			public void onReady() {
-				player.loadVideo(video.videoId, 0);
+				getPlayerView().loadVideo(video.videoId, 0);
 			}
 		}, true);
 	}
 
 	public void release() {
-		((YouTubePlayerView) findViewById(R.id.youtube_player_view)).release();
+		getPlayerView().release();
 		wm.removeView(this);
+	}
+
+	public void pause() {
+		getPlayerView().pauseVideo();
+	}
+
+	public void play() {
+		getPlayerView().playVideo();
 	}
 
 	@Override
@@ -145,13 +157,9 @@ public class ExternalPlayerView extends FrameLayout {
 		lp.x = playerRect.left;
 		lp.y = playerRect.top; // Gravity.Bottom なので y座標の方向が変わっている
 		wm.updateViewLayout(this, lp);
-
-		Logger.e(playerRect.toShortString());
 	}
 
 	private boolean keepPlayerInsideBounds() {
-		Logger.e("player:" + playerRect.toShortString());
-		Logger.e("bounds:" + screenBoundsRect.toShortString());
 		if (playerRect.left < screenBoundsRect.left || playerRect.top < screenBoundsRect.top || screenBoundsRect.right < playerRect.right || screenBoundsRect.bottom < playerRect.bottom) {
 			if (playerRect.left < screenBoundsRect.left) playerRect.left = screenBoundsRect.left;
 			if (playerRect.top < screenBoundsRect.top) playerRect.top = screenBoundsRect.top;
@@ -169,7 +177,6 @@ public class ExternalPlayerView extends FrameLayout {
 			return;
 		}
 		if (keepPlayerInsideBounds()) {
-			Logger.e("out of bounds!!");
 			return;
 		}
 
@@ -181,7 +188,6 @@ public class ExternalPlayerView extends FrameLayout {
 	}
 
 	public Rect getWindowDrawingRect() {
-		Logger.e(playerRect.toShortString());
 		return playerRect;
 	}
 

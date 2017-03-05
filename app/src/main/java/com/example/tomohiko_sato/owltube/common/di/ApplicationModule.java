@@ -2,6 +2,7 @@ package com.example.tomohiko_sato.owltube.common.di;
 
 import android.content.Context;
 
+import com.example.tomohiko_sato.owltube.common.rx.RxBus;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
 import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
@@ -118,5 +119,11 @@ public class ApplicationModule {
 	@Reusable
 	SearchHistoryDao provideSearcHistoryDao(DefaultDBHelper helper) {
 		return new SearchHistoryDao(helper);
+	}
+
+	@Provides
+	@Reusable
+	RxBus provideRxBus() {
+		return new RxBus();
 	}
 }

@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
-
     <application
         android:name=".OwlTubeApp"
         android:allowBackup="true"
@@ -15,22 +14,20 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".presentation.top.TopActivity"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".presentation.search.SearchActivity"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".presentation.player.PlayerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".presentation.setting.SettingActivity"
             android:screenOrientation="portrait"/>
@@ -40,5 +37,11 @@
             android:enabled="true"
             android:exported="true"/>
 
+        <receiver
+            android:name=".presentation.player.external.PlayerNotificationReceiver"
+            android:enabled="true"
+            android:exported="true">
+        </receiver>
     </application>
+
 </manifest>

@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-class PlayerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
+class PlayerRelatedVideoAdapter extends RecyclerView.Adapter<ViewHolder> {
 	interface OnVideoItemSelectedListener {
 		void onVideoItemSelected(Video item);
 	}
@@ -69,7 +69,7 @@ class PlayerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
 	@NonNull
 	private final OnVideoItemSelectedListener listener;
 
-	PlayerViewAdapter(@NonNull Context context, @NonNull OnVideoItemSelectedListener listener, @NonNull Video headerItem, @NonNull List<Video> bodyItems) {
+	PlayerRelatedVideoAdapter(@NonNull Context context, @NonNull OnVideoItemSelectedListener listener, @NonNull Video headerItem, @NonNull List<Video> bodyItems) {
 		this.context = context;
 		this.listener = listener;
 		this.headerItem = headerItem;

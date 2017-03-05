@@ -10,9 +10,11 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
+import com.example.tomohiko_sato.owltube.common.rx.RxBus;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
 import com.example.tomohiko_sato.owltube.presentation.player.external.ExternalPlayerService;
+import com.example.tomohiko_sato.owltube.presentation.player.external.PlayerNotificationReceiver;
 import com.pierfrancescosoffritti.youtubeplayer.AbstractYouTubeListener;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
@@ -24,13 +26,16 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import static java.util.Objects.requireNonNull;
 
-public class PlayerActivity extends AppCompatActivity implements PlayerViewAdapter.OnVideoItemSelectedListener {
+public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVideoAdapter.OnVideoItemSelectedListener {
 	private static final String KEY_INTENT_EXTRA_VIDEO = "KEY_INTENT_EXTRA_VIDEO";
 	@NonNull
-	private final CompositeDisposable disposables = new CompositeDisposable();
+	private final CompositeDisposable disposer = new CompositeDisposable();
 
 	@Inject
 	PlayerUseCase playerUseCase;
+
+	@Inject
+	RxBus rxBus;
 
 	public static void startPlayerActivity(@NonNull Context context, @NonNull Video video) {
 		ExternalPlayerService.stopIfRunning(context);
@@ -48,14 +53,14 @@ public class PlayerActivity extends AppCompatActivity implements PlayerViewAdapt
 
 		Video video = requireNonNull(getIntent().getParcelableExtra(KEY_INTENT_EXTRA_VIDEO));
 		playerUseCase.addRecentlyWatched(video);
-		disposables.add(playerUseCase.fetchRelatedVideo(video.videoId)
+		disposer.add(playerUseCase.fetchRelatedVideo(video.videoId)
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(relatedVideos -> ((RecyclerView) findViewById(R.id.related_videos))
-								.setAdapter(new PlayerViewAdapter(this, this, video, relatedVideos))
+								.setAdapter(new PlayerRelatedVideoAdapter(this, this, video, relatedVideos))
 						, Throwable::printStackTrace
 				));
 
-		initYoutubePlayer(video);
+		setupYoutubePlayer(video);
 
 		findViewById(R.id.to_external)
 				.setOnClickListener(v -> {
@@ -64,7 +69,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerViewAdapt
 				});
 	}
 
-	private void initYoutubePlayer(Video video) {
+	private void setupYoutubePlayer(Video video) {
 		YouTubePlayerView youTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 		youTubePlayerView.initialize(new AbstractYouTubeListener() {
 			@Override
@@ -88,13 +93,23 @@ public class PlayerActivity extends AppCompatActivity implements PlayerViewAdapt
 				fullScreenManager.exitFullScreen();
 			}
 		});
+		rxBus.register(PlayerNotificationReceiver.PlayerStateChangeEvent.class, (event) -> {
+			switch (event.getState()) {
+				case PLAY:
+					youTubePlayerView.playVideo();
+					break;
+				case PAUSE:
+					youTubePlayerView.pauseVideo();
+					break;
+			}
+		});
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		((YouTubePlayerView) findViewById(R.id.youtube_player)).release();
-		disposables.dispose();
+		disposer.dispose();
 	}
 
 	@Override

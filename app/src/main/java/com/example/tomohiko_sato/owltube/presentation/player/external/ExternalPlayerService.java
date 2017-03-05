@@ -16,6 +16,8 @@ import com.example.tomohiko_sato.owltube.presentation.util.ServiceUtil;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 
 /**
  * WindowManager上で{@link ExternalPlayerView}と{@link TrashView}を動かすサービス
@@ -27,6 +29,7 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 	private ExternalPlayerView externalPlayerView;
 	private TrashView trashView;
 	private boolean hasStarted = false;
+	private CompositeDisposable disposer = new CompositeDisposable();
 
 	@Inject
 	PlayerNotifier notifier;
@@ -60,15 +63,16 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 		if (hasStarted) {
 			externalPlayerView.setVideo(video);
 		} else {
-			initViews(video);
-			startForeground(ONGOING_NOTIFICATION_ID, notifier.createForegroundNotification());
+			setupViews(video);
+			disposer.add(notifier.createNotification(video).subscribe(
+					(notification) -> startForeground(ONGOING_NOTIFICATION_ID, notification)));
 			hasStarted = true;
 		}
 
 		return START_STICKY;
 	}
 
-	private void initViews(Video video) {
+	private void setupViews(Video video) {
 		this.setTheme(R.style.AppTheme);
 		trashView = TrashView.Initialize(this);
 		externalPlayerView = ExternalPlayerView.initialize(this, video, this);
@@ -121,6 +125,4 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 		// INFO:TrashViewとFloatingViewは同じGravityにする必要がある
 		return Rect.intersects(externalPlayerView.getWindowDrawingRect(), trashView.getWindowDrawingRect());
 	}
-
-
 }

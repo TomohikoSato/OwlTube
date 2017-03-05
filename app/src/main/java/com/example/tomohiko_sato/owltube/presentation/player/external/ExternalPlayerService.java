@@ -96,8 +96,8 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 
 	private void setupViews(Video video) {
 		this.setTheme(R.style.AppTheme);
-		trashView = TrashView.Initialize(this);
 		externalPlayerView = ExternalPlayerView.initialize(this, video, this);
+		trashView = TrashView.Initialize(this);
 	}
 
 	@Override

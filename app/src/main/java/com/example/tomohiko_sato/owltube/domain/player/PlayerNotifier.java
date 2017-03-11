@@ -83,12 +83,15 @@ public class PlayerNotifier {
 
 
 	private Notification create(Video video, State state) throws IOException {
+		NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle();
+		style.setShowActionsInCompactView(0);
+
 		return new NotificationCompat.Builder(context)
 				.setContentTitle(String.format("%sを再生中", video.title))
 				.setContentText("content text")
 				.setSmallIcon(R.drawable.trash_vector)
 				.setLargeIcon(Picasso.with(context).load(video.thumbnailUrl).get())
-				.setStyle(new NotificationCompat.MediaStyle())
+				.setStyle(style)
 				.addAction(state.createAction(context))
 				.build();
 	}

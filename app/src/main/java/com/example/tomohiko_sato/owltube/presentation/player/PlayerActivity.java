@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.common.rx.RxBus;
+import com.example.tomohiko_sato.owltube.domain.common.PermissionHandler;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
+import com.example.tomohiko_sato.owltube.presentation.common_component.dialog.OkCancelDialogFragment;
 import com.example.tomohiko_sato.owltube.presentation.player.external.ExternalPlayerService;
 import com.pierfrancescosoffritti.youtubeplayer.AbstractYouTubeListener;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerFullScreenListener;
@@ -25,7 +28,7 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import static java.util.Objects.requireNonNull;
 
-public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVideoAdapter.OnVideoItemSelectedListener {
+public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVideoAdapter.OnVideoItemSelectedListener, OkCancelDialogFragment.DialogInteractionListener {
 	private static final String KEY_INTENT_EXTRA_VIDEO = "KEY_INTENT_EXTRA_VIDEO";
 	@NonNull
 	private final CompositeDisposable disposer = new CompositeDisposable();
@@ -35,6 +38,9 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVi
 
 	@Inject
 	RxBus rxBus;
+
+	@Inject
+	PermissionHandler permissionHandler;
 
 	public static void startPlayerActivity(@NonNull Context context, @NonNull Video video) {
 		ExternalPlayerService.stopIfRunning(context);
@@ -68,8 +74,12 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVi
 		setupYoutubePlayer(video);
 		findViewById(R.id.to_external)
 				.setOnClickListener(v -> {
-					ExternalPlayerService.startService(PlayerActivity.this, video);
-					finish();
+					if (permissionHandler.hasPermission()) {
+						ExternalPlayerService.startService(PlayerActivity.this, video);
+						finish();
+					} else {
+						new OkCancelDialogFragment().show(getSupportFragmentManager(), "tag");
+					}
 				});
 	}
 
@@ -109,5 +119,15 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVi
 	@Override
 	public void onVideoItemSelected(Video item) {
 		startPlayerActivity(this, item);
+	}
+
+	@Override
+	public void onOkClicked() {
+		Toast.makeText(this, "okClicked", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onCancelClicked() {
+		Toast.makeText(this, "onCancelClicked", Toast.LENGTH_SHORT).show();
 	}
 }

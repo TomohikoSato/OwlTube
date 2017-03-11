@@ -3,6 +3,7 @@ package com.example.tomohiko_sato.owltube.common.di;
 import android.content.Context;
 
 import com.example.tomohiko_sato.owltube.common.rx.RxBus;
+import com.example.tomohiko_sato.owltube.domain.common.PermissionHandler;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
 import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
@@ -127,5 +128,11 @@ public class ApplicationModule {
 	@Singleton
 	RxBus provideRxBus() {
 		return new RxBus();
+	}
+
+	@Provides
+	@Reusable
+	PermissionHandler providePermissionHandler(Context context) {
+		return new PermissionHandler(context);
 	}
 }

@@ -7,4 +7,5 @@
     <string name="recently_watched">Recently Watched</string>
     <string name="notification_play">再生</string>
     <string name="notification_pause">一時停止</string>
+    <string name="dialog_message_request_permission">オーバレイして動画を表示するため、\n権限の許可が必要です。</string>
 </resources>

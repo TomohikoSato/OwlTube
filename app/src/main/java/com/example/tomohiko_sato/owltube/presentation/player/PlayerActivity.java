@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static android.support.design.widget.Snackbar.LENGTH_LONG;
 import static java.util.Objects.requireNonNull;
 
 public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVideoAdapter.OnVideoItemSelectedListener, OkCancelDialogFragment.DialogInteractionListener {
@@ -78,7 +80,9 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVi
 						ExternalPlayerService.startService(PlayerActivity.this, video);
 						finish();
 					} else {
-						new OkCancelDialogFragment().show(getSupportFragmentManager(), "tag");
+						Snackbar.make(findViewById(android.R.id.content)
+								, R.string.dialog_message_request_permission, LENGTH_LONG)
+								.setAction("許可する", v1 -> permissionHandler.requestPermission()).show();
 					}
 				});
 	}

@@ -82,7 +82,8 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVi
 					} else {
 						Snackbar.make(findViewById(android.R.id.content)
 								, R.string.dialog_message_request_permission, LENGTH_LONG)
-								.setAction("許可する", v1 -> permissionHandler.requestPermission()).show();
+								.setAction("許可する", v1 -> permissionHandler.requestPermission())
+								.show();
 					}
 				});
 	}

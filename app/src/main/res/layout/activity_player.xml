@@ -12,13 +12,15 @@
     <com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView
         android:id="@+id/youtube_player"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
 
-    <ImageButton
-        android:id="@+id/to_external"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/past"/>
+        <ImageButton
+            android:id="@+id/to_external"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            app:srcCompat="@drawable/past"/>
+    </com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/related_videos"

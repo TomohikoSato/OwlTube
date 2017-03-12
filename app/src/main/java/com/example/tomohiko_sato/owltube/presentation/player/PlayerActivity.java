@@ -17,6 +17,7 @@ import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.domain.player.PlayerUseCase;
 import com.example.tomohiko_sato.owltube.presentation.player.external.ExternalPlayerService;
 import com.pierfrancescosoffritti.youtubeplayer.AbstractYouTubeListener;
+import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayer;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.youtubeplayer.YouTubePlayerView;
 
@@ -92,6 +93,16 @@ public class PlayerActivity extends AppCompatActivity implements PlayerRelatedVi
 			@Override
 			public void onReady() {
 				youTubePlayerView.loadVideo(video.videoId, 0);
+			}
+
+			@Override
+			public void onStateChange(int state) {
+//				YouTubePlayer.State.YouTubePlayerState.ENDED
+				switch (state) {
+					case YouTubePlayer.State.ENDED:
+				}
+
+
 			}
 		}, true);
 

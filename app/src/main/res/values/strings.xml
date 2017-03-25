@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">owl tube</string>
 
-    <string name="popular">Popular</string>
-    <string name="recently_watched">Recently Watched</string>
+    <string name="popular">人気</string>
+    <string name="recently_watched">最近見た動画</string>
     <string name="notification_play">再生</string>
     <string name="notification_pause">一時停止</string>
     <string name="snackbar_request_permission">オーバレイして動画を表示するため、\n権限の許可が必要です。</string>

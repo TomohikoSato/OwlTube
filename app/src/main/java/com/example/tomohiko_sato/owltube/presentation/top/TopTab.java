@@ -49,7 +49,7 @@ enum TopTab {
 				return value;
 			}
 		}
-		throw new IllegalArgumentException();
+		throw new IllegalArgumentException("illegal position: " + position);
 	}
 
 	public static TopTab from(TabLayout.Tab tab) {

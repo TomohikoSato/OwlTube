@@ -12,6 +12,8 @@ import com.example.tomohiko_sato.owltube.presentation.top.recently_watched.Recen
 
 import java.util.Objects;
 
+import lombok.Getter;
+
 enum TopTab {
 	POPULAR(0, R.string.popular, R.drawable.main_tab_popular) {
 		@Override
@@ -27,8 +29,11 @@ enum TopTab {
 	};
 
 	private final int position;
+
 	@StringRes
-	final int title;
+	@Getter
+	private final int title;
+
 	@DrawableRes
 	private final int icon;
 

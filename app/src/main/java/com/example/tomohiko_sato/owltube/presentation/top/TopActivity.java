@@ -1,6 +1,5 @@
 package com.example.tomohiko_sato.owltube.presentation.top;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -40,7 +39,7 @@ public class TopActivity extends AppCompatActivity implements VideoItemViewAdapt
 
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		tabLayout.setupWithViewPager(viewPager);
-		tabLayout.addOnTabSelectedListener(new TitleChanger(this.getSupportActionBar(), this));
+		tabLayout.addOnTabSelectedListener(new TitleChanger(this.getSupportActionBar()));
 
 		TopTab.initialize(tabLayout);
 	}
@@ -73,17 +72,13 @@ public class TopActivity extends AppCompatActivity implements VideoItemViewAdapt
 		@NonNull
 		private final ActionBar bar;
 
-		@NonNull
-		private final Context context;
-
-		TitleChanger(@NonNull ActionBar bar, @NonNull Context context) {
+		TitleChanger(@NonNull ActionBar bar) {
 			this.bar = Objects.requireNonNull(bar);
-			this.context = context;
 		}
 
 		@Override
 		public void onTabSelected(Tab tab) {
-			bar.setTitle(context.getString(TopTab.from(tab).title));
+			bar.setTitle(TopTab.from(tab).getTitle());
 		}
 
 		@Override
@@ -92,7 +87,7 @@ public class TopActivity extends AppCompatActivity implements VideoItemViewAdapt
 
 		@Override
 		public void onTabReselected(Tab tab) {
-			bar.setTitle(context.getString(TopTab.from(tab).title));
+			bar.setTitle(TopTab.from(tab).getTitle());
 		}
 	}
 

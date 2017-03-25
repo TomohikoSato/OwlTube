@@ -10,8 +10,6 @@ import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.presentation.top.popular.PopularFragment;
 import com.example.tomohiko_sato.owltube.presentation.top.recently_watched.RecentlyWatchedFragment;
 
-import java.util.Objects;
-
 import lombok.Getter;
 
 enum TopTab {
@@ -59,12 +57,10 @@ enum TopTab {
 	public abstract Fragment getFragment();
 
 	static void initialize(TabLayout layout) {
-		for (TopTab value : values()) {
-			TabLayout.Tab tab = Objects.requireNonNull(layout.getTabAt(value.position));
-			tab.setIcon(value.icon);
-			if (value == TopTab.POPULAR) {
-				tab.select();
-			}
+		for (TopTab tab : values()) {
+			layout.getTabAt(tab.position).setIcon(tab.icon);
 		}
+
+		layout.getTabAt(TopTab.POPULAR.position).select();
 	}
 }

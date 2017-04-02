@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.common.util.Logger;
@@ -25,7 +27,7 @@ import lombok.Getter;
  * プレイヤー用のビュー。
  * ドラッグできる。
  */
-public class ExternalPlayerView extends FrameLayout {
+public class ExternalPlayerView extends RelativeLayout {
 	private final WindowManager wm;
 	private final Rect playerRect = new Rect();
 	private final Rect screenBoundsRect;
@@ -34,6 +36,9 @@ public class ExternalPlayerView extends FrameLayout {
 
 	@Getter(lazy = true)
 	private final YouTubePlayerView playerView = (YouTubePlayerView) findViewById(R.id.youtube_player_view);
+
+	@Getter(lazy = true)
+	private final ProgressBar progress = (ProgressBar) findViewById(R.id.progress);
 
 	static ExternalPlayerView initialize(Context context, Video video, OnExternalPlayerViewMovedListener listener) {
 		ExternalPlayerView externalPlayerView = (ExternalPlayerView) LayoutInflater.from(context).inflate(R.layout.view_player, null);
@@ -103,10 +108,18 @@ public class ExternalPlayerView extends FrameLayout {
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
+		getPlayerView().hideUI(true);
 		getPlayerView().initialize(new AbstractYouTubeListener() {
 			@Override
 			public void onReady() {
 				getPlayerView().loadVideo(video.videoId, 0);
+			}
+
+			@Override
+			public void onStateChange(int state) {
+				if (state == 1) { //PLAYING https://github.com/PierfrancescoSoffritti/AndroidYouTubePlayer/blob/master/YouTubePlayer/src/main/java/com/pierfrancescosoffritti/youtubeplayer/YouTubePlayer.java
+					getProgress().setVisibility(GONE);
+				}
 			}
 		}, true);
 	}

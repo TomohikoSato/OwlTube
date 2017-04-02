@@ -19,8 +19,8 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-import static com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier.State.PAUSE;
-import static com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier.State.PLAY;
+import static com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier.State.PAUSING;
+import static com.example.tomohiko_sato.owltube.domain.player.PlayerNotifier.State.PLAYING;
 
 
 /**
@@ -78,13 +78,13 @@ public class ExternalPlayerService extends Service implements ExternalPlayerView
 
 		disposer.add(rxBus.register(PlayerNotificationReceiver.PlayerNotificationStateChangedEvent.class, (event) -> {
 			switch (event.getState()) {
-				case PLAY:
-					disposer.add(notifier.createNotification(video, PLAY).subscribe(
+				case PLAYING:
+					disposer.add(notifier.createNotification(video, PLAYING).subscribe(
 							(notification) -> startForeground(ONGOING_NOTIFICATION_ID, notification)));
 					externalPlayerView.play();
 					break;
-				case PAUSE:
-					disposer.add(notifier.createNotification(video, PAUSE).subscribe(
+				case PAUSING:
+					disposer.add(notifier.createNotification(video, PAUSING).subscribe(
 							(notification) -> startForeground(ONGOING_NOTIFICATION_ID, notification)));
 					externalPlayerView.pause();
 					break;

@@ -27,7 +27,7 @@ public class PlayerNotifier {
 	private final Context context;
 
 	public enum State {
-		PLAY(R.drawable.notification_play, R.string.notification_play), PAUSE(R.drawable.notification_pause, R.string.notification_pause);
+		PLAYING(R.drawable.notification_pause, R.string.notification_pause), PAUSING(R.drawable.notification_play, R.string.notification_play);
 		public static final String INTENT_KEY = "StateKey";
 
 		@DrawableRes
@@ -47,10 +47,10 @@ public class PlayerNotifier {
 
 		State opposite(State state) {
 			switch (state) {
-				case PAUSE:
-					return PLAY;
-				case PLAY:
-					return PAUSE;
+				case PAUSING:
+					return PLAYING;
+				case PLAYING:
+					return PAUSING;
 				default:
 					throw new IllegalArgumentException(state.toString());
 			}
@@ -70,7 +70,7 @@ public class PlayerNotifier {
 	}
 
 	public Single<Notification> createNotification(Video video) {
-		return Single.fromCallable(() -> create(video, State.PLAY))
+		return Single.fromCallable(() -> create(video, State.PLAYING))
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribeOn(Schedulers.io());
 	}
@@ -80,7 +80,6 @@ public class PlayerNotifier {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribeOn(Schedulers.io());
 	}
-
 
 	private Notification create(Video video, State state) throws IOException {
 		NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle();
@@ -95,6 +94,4 @@ public class PlayerNotifier {
 				.addAction(state.createAction(context))
 				.build();
 	}
-
-
 }

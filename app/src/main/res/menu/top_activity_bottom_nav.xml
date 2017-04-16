@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_popular"
+        android:icon="@drawable/vec_popular_24"
+        android:title="@string/popular"/>
+    <item
+        android:id="@+id/menu_recently_watched"
+        android:icon="@drawable/vec_recently_watched_24"
+        android:title="@string/recently_watched"/>
+    <item
+        android:id="@+id/menu_setting"
+        android:icon="@drawable/vec_setting_24"
+        android:title="@string/setting"/>
+</menu>

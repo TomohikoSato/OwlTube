@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.tomohiko_sato.owltube.presentation.top.TopActivity">
 
-
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/overview_coordinator_layout"
         android:layout_width="match_parent"
@@ -26,7 +25,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:theme="@style/ToolBarStyle"/>
+                app:theme="@style/ToolBar"/>
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"
@@ -34,9 +33,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tool_bar"
                 android:background="?attr/colorPrimary"
-                app:tabSelectedTextColor="@color/tabSelected"
-                app:tabTextColor="@color/tabUnselected"
-                app:theme="@style/TabBarStyle"
+                app:tabSelectedTextColor="@color/primary"
+                app:tabTextColor="@color/gray"
+                app:theme="@style/TabLayout"
                 />
         </android.support.design.widget.AppBarLayout>
 
@@ -47,5 +46,16 @@
             android:layout_below="@+id/app_bar"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             />
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            app:itemIconTint="@color/gray"
+            app:itemTextColor="@color/gray"
+            app:menu="@menu/top_activity_bottom_nav"
+            tools:targetApi="lollipop"/>
     </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

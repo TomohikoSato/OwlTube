@@ -36,7 +36,9 @@ public class TopActivity extends AppCompatActivity implements VideoItemViewAdapt
 		Toolbar toolBar = (Toolbar) findViewById(R.id.tool_bar);
 		setSupportActionBar(toolBar);
 
-		((BottomNavigationView) findViewById(R.id.bottom_nav)).setOnNavigationItemSelectedListener((item) -> {
+		initFragments(savedInstanceState);
+		BottomNavigationView bottomNavi = (BottomNavigationView) findViewById(R.id.bottom_nav);
+		bottomNavi.setOnNavigationItemSelectedListener((item) -> {
 			toolBar.setTitle(item.getTitle());
 			item.setChecked(true);
 			switch (item.getItemId()) {
@@ -52,9 +54,8 @@ public class TopActivity extends AppCompatActivity implements VideoItemViewAdapt
 			}
 			return false;
 		});
-
-
-		initFragments(savedInstanceState);
+		setSupportActionBar(toolBar);
+		bottomNavi.setSelectedItemId(R.id.menu_popular);
 	}
 
 	private void initFragments(Bundle savedInstanceState) {

@@ -29,12 +29,12 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager"
+        <FrameLayout
+            android:id="@+id/content_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/app_bar"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_above="@+id/bottom_nav"
+            android:layout_below="@id/app_bar"
             />
 
         <android.support.design.widget.BottomNavigationView

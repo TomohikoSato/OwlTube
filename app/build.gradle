@@ -53,13 +53,13 @@ android {
 }
 
 ext {
-    SL_VERSION = "25.2.0"
+    SL_VERSION = "25.3.1"
     LEAK_CANARY_VERSION = "1.5"
     DAGGER_VERSION = "2.8"
     RETROFIT_VERSION = "2.2.0"
     DEXMAKER_VERSION = "1.4"
     TESTRUNNER_VERSION = "0.5"
-    STETHO_VERSION ="1.4.2"
+    STETHO_VERSION = "1.4.2"
 }
 
 dependencies {
@@ -75,26 +75,17 @@ dependencies {
     compile "com.android.support:design:$SL_VERSION"
     compile "com.android.support:support-vector-drawable:$SL_VERSION"
     compile "com.google.dagger:dagger:$DAGGER_VERSION"
-    compile 'io.reactivex.rxjava2:rxjava:2.0.3'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
     compile "com.squareup.retrofit2:adapter-rxjava2:$RETROFIT_VERSION"
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:0.7.7'
     debugCompile "com.facebook.stetho:stetho:$STETHO_VERSION"
     debugCompile "com.facebook.stetho:stetho-okhttp3:$STETHO_VERSION"
     debugCompile "com.squareup.leakcanary:leakcanary-android:$LEAK_CANARY_VERSION"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$LEAK_CANARY_VERSION"
-    provided "org.projectlombok:lombok:1.12.6"
 
-    testCompile 'org.mockito:mockito-core:1.10.19'
-    testCompile 'junit:junit:4.12'
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$LEAK_CANARY_VERSION"
 
     androidTestCompile "com.android.support:support-annotations:$SL_VERSION"
-    androidTestCompile 'org.mockito:mockito-core:1.10.19'
     androidTestCompile "com.crittercism.dexmaker:dexmaker:$DEXMAKER_VERSION"
     androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:$DEXMAKER_VERSION"
     androidTestCompile "com.crittercism.dexmaker:dexmaker-mockito:$DEXMAKER_VERSION"
@@ -102,4 +93,14 @@ dependencies {
     androidTestCompile "com.android.support.test:rules:$TESTRUNNER_VERSION"
 
     annotationProcessor "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
+    compile 'io.reactivex.rxjava2:rxjava:2.0.3'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:0.7.7'
+    compile 'com.android.support:support-v4:25.3.1'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+    provided 'org.projectlombok:lombok:1.12.6'
 }

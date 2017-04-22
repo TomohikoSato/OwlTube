@@ -13,12 +13,12 @@ import android.widget.Toast;
 
 import com.example.tomohiko_sato.owltube.OwlTubeApp;
 import com.example.tomohiko_sato.owltube.R;
+import com.example.tomohiko_sato.owltube.common.util.Logger;
 import com.example.tomohiko_sato.owltube.domain.data.VideoResponse;
 import com.example.tomohiko_sato.owltube.domain.popular.PopularUseCase;
 import com.example.tomohiko_sato.owltube.presentation.common_component.OnPagingScrollListener;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter.OnVideoItemSelectedListener;
-import com.example.tomohiko_sato.owltube.common.util.Logger;
 
 import java.util.ArrayList;
 
@@ -36,6 +36,8 @@ import io.reactivex.observers.DisposableSingleObserver;
  * </p>
  */
 public class PopularFragment extends Fragment {
+	public static final String TAG = PopularFragment.class.getSimpleName();
+
 	private final CompositeDisposable disposables = new CompositeDisposable();
 	private OnVideoItemSelectedListener listener;
 	private VideoItemViewAdapter adapter;

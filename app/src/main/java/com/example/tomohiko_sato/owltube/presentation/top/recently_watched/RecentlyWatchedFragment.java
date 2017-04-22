@@ -30,6 +30,8 @@ import io.reactivex.disposables.CompositeDisposable;
  * interface.
  */
 public class RecentlyWatchedFragment extends Fragment {
+	public static final String TAG = RecentlyWatchedFragment.class.getSimpleName();
+
 	private OnVideoItemSelectedListener listener;
 	@Inject
 	RecentlyWatchedUseCase recentlyWatchedUC;

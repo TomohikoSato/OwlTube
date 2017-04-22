@@ -16,7 +16,6 @@ import com.example.tomohiko_sato.owltube.domain.data.Video;
 import com.example.tomohiko_sato.owltube.presentation.common_component.VideoItemViewAdapter;
 import com.example.tomohiko_sato.owltube.presentation.player.PlayerActivity;
 import com.example.tomohiko_sato.owltube.presentation.search.SearchActivity;
-import com.example.tomohiko_sato.owltube.presentation.setting.SettingActivity;
 import com.example.tomohiko_sato.owltube.presentation.setting.SettingFragment;
 import com.example.tomohiko_sato.owltube.presentation.top.popular.PopularFragment;
 import com.example.tomohiko_sato.owltube.presentation.top.recently_watched.RecentlyWatchedFragment;
@@ -124,9 +123,6 @@ public class TopActivity extends AppCompatActivity implements VideoItemViewAdapt
 		switch (item.getItemId()) {
 			case R.id.menu_main_search:
 				SearchActivity.startSearchActivity(this);
-				return true;
-			case R.id.menu_main_setting:
-				SettingActivity.startSettingActivity(this);
 				return true;
 		}
 		return false;

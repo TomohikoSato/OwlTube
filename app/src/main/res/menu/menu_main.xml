@@ -6,12 +6,6 @@
         android:id="@+id/menu_main_search"
         android:actionViewClass="android.support.v7.widget.SearchView"
         android:icon="@drawable/search_white"
-        android:title="Search"
-        app:showAsAction="ifRoom"
-        />
-
-    <item
-        android:id="@+id/menu_main_setting"
-        android:icon="@drawable/setting"
-        android:title="setting"/>
+        android:title="@string/icon_search_title"
+        app:showAsAction="ifRoom"/>
 </menu>

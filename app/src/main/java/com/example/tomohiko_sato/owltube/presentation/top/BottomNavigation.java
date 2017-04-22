@@ -6,7 +6,7 @@ import com.example.tomohiko_sato.owltube.R;
 enum BottomNavigation {
 	POPULAR(R.id.menu_popular, "popular"),
 	RECENTLY_WATCHED(R.id.menu_recently_watched, "recently_watched"),
-	SETTING(R.id.menu_main_setting, "setting");
+	SETTING(R.id.menu_setting, "setting");
 
 	private final int menuId;
 	private final String tag;

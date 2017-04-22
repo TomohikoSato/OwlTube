@@ -2,6 +2,7 @@ package com.example.tomohiko_sato.owltube.presentation.top;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.Tab;
 import android.support.v4.app.Fragment;
@@ -40,6 +41,18 @@ public class TopActivity extends AppCompatActivity implements VideoItemViewAdapt
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		tabLayout.setupWithViewPager(viewPager);
 		tabLayout.addOnTabSelectedListener(new TitleChanger(this.getSupportActionBar()));
+
+		((BottomNavigationView) findViewById(R.id.bottom_nav)).setOnNavigationItemSelectedListener((item) -> {
+			switch (item.getItemId()) {
+				case R.id.menu_popular:
+					break;
+				case R.id.menu_recently_watched:
+					break;
+				case R.id.menu_setting:
+					break;
+			}
+			return true;
+		});
 
 		TopTab.initialize(tabLayout);
 	}

@@ -93,7 +93,7 @@ public class SearchActivity extends AppCompatActivity implements OnVideoItemSele
 		searchView = (SearchView) findViewById(R.id.search_search_view);
 		searchView.setIconifiedByDefault(false);
 		searchView.setFocusable(true);
-		searchView.setQueryHint("Search Music");
+		searchView.setQueryHint(getString(R.string.search_query_hint));
 		//TODO: 検索履歴画面の時だけ見せたい
 		searchView.requestFocusFromTouch();
 

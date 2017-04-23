@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.tomohiko_sato.owltube.R;
 import com.example.tomohiko_sato.owltube.domain.data.Video;
@@ -33,13 +34,10 @@ public class TopActivity extends AppCompatActivity implements VideoItemViewAdapt
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_top);
-		Toolbar toolBar = (Toolbar) findViewById(R.id.tool_bar);
-		setSupportActionBar(toolBar);
-
 		initFragments(savedInstanceState);
 		BottomNavigationView bottomNavi = (BottomNavigationView) findViewById(R.id.bottom_nav);
 		bottomNavi.setOnNavigationItemSelectedListener((item) -> {
-			toolBar.setTitle(item.getTitle());
+			((TextView) findViewById(R.id.title)).setText(item.getTitle());
 			item.setChecked(true);
 			switch (item.getItemId()) {
 				case R.id.menu_popular:
@@ -54,7 +52,7 @@ public class TopActivity extends AppCompatActivity implements VideoItemViewAdapt
 			}
 			return false;
 		});
-		setSupportActionBar(toolBar);
+		setSupportActionBar((Toolbar) findViewById(R.id.tool_bar));
 		bottomNavi.setSelectedItemId(R.id.menu_popular);
 	}
 

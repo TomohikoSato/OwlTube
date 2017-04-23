@@ -47,6 +47,7 @@
             app:itemIconTint="@color/bottom_nav_color_selector"
             app:itemTextColor="@color/bottom_nav_color_selector"
             app:menu="@menu/top_activity_bottom_nav"
+            app:layout_behavior="com.example.tomohiko_sato.owltube.presentation.top.BottomNavigationBehavior"
             tools:targetApi="lollipop"/>
     </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

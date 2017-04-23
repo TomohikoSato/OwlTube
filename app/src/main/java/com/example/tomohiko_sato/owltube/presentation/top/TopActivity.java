@@ -3,6 +3,7 @@ package com.example.tomohiko_sato.owltube.presentation.top;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -56,6 +57,12 @@ public class TopActivity extends AppCompatActivity implements VideoItemViewAdapt
 		});
 		setSupportActionBar(toolBar);
 		bottomNavi.setSelectedItemId(R.id.menu_popular);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Snackbar.make(findViewById(android.R.id.content), "hogehoge", Snackbar.LENGTH_SHORT).show();
 	}
 
 	private void initFragments(Bundle savedInstanceState) {

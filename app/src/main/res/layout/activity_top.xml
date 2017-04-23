@@ -35,8 +35,7 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_nav"
             android:layout_below="@id/app_bar"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_nav"
@@ -47,7 +46,6 @@
             app:itemIconTint="@color/bottom_nav_color_selector"
             app:itemTextColor="@color/bottom_nav_color_selector"
             app:menu="@menu/top_activity_bottom_nav"
-            app:layout_behavior="com.example.tomohiko_sato.owltube.presentation.top.BottomNavigationBehavior"
             tools:targetApi="lollipop"/>
     </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

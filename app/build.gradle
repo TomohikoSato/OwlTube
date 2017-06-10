@@ -25,6 +25,13 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        def properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        // local.propertiesのapi_keyに定義されている値を読み込む
+        def API_KEY = properties.getProperty("api_key")
+        // ついでにbuildConfigFieldに定義
+        buildConfigField("String", "API_KEY", "\"${API_KEY}\"")
     }
     buildTypes {
         debug {

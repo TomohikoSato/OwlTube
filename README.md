@@ -9,14 +9,13 @@ OwlTube is an android app for watching youtube
 
 2) Open the project in Android Studio
 
-
-3) Get your Youtube API KEY
+3) Get your Youtube Data API KEY
 
 cf. https://developers.google.com/youtube/v3/getting-started
 
-4) Fill the KEY in the following file
+4) Fill the KEY in the local.properties
 
-https://github.com/TomohikoSato/OwlTube/blob/master/app/src/main/java/com/example/tomohiko_sato/owltube/infra/api/youtube/config/Api.java
+api_key = /** your api key */
 
 5) Compile and run the app
 

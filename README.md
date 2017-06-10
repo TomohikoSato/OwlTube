@@ -19,7 +19,7 @@ cf. https://developers.google.com/youtube/v3/getting-started
 
 4) Fill the KEY in the local.properties
 
-api_key = /** your api key */
+``` api_key = /** your api key */ ```
 
 5) Compile and run the app
 
